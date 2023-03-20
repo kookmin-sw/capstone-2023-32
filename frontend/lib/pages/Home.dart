@@ -1,141 +1,372 @@
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
+final List<String> imgList = [
+  '../assets/images/paris.jpg',
+  '../assets/images/jeju.jpg',
+];
 
-class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
+class HomePage extends StatefulWidget {
+  const HomePage({
+    Key? key,
+  }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        MainPage(),
-        Slider(),
-      ],
-    );
-  }
+  State<HomePage> createState() => _HomePageState();
 }
 
-class MainPage extends StatelessWidget {
-  const MainPage({Key? key}) : super(key: key);
-
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 50),
-      height: MediaQuery.of(context).size.height * 0.5, // 화면 크기의 절반
-      decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/flutter.png'), // 배경 이미지
-            fit:BoxFit.cover,
-          )
-      ),
-      child: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.all(20),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded (
-                  child: Image.asset(   // 로고이미지
-                    'assets/flutter.png',
-                    width: 200,
-                    height: 100,
-                    alignment: Alignment.topLeft,
-                  ),
-                ),
-                IconButton(
-                    onPressed: (){},
-                    icon: Icon(Icons.search),
-                    alignment: Alignment.topRight
-                ),
-                IconButton(
-                    onPressed: (){},
-                    icon: Icon(Icons.notifications),
-                    alignment: Alignment.topRight
-                ),
-              ],
-            ),
-          ),
-          Container(
-            height: 180,    // 반응형 디자인 적용 필요
-            alignment: Alignment.bottomCenter,
-            child: ElevatedButton(
-                onPressed: (){},
-                child: Text('새로운 Plan 시작하기')
-            ),
-          ),
-        ],
-      ),
-
-    );
-  }
-}
-
-class Slider extends StatefulWidget {
-  const Slider({Key? key}) : super(key: key);
-
-
-  @override
-  State<Slider> createState() => _SliderState();
-}
-
-var heading1 = TextStyle(
-  fontWeight: FontWeight.bold,
-  fontSize: 20,
-);
-
-class _SliderState extends State<Slider> {
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 50),
-      child: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.only(left: 10),
-            margin: EdgeInsets.only(bottom: 20),
-            alignment: Alignment.topLeft,
-            child: Text(
-              '오늘의 Place',
-              textAlign: TextAlign.left,
-              style: heading1,
-            ),
-          ),
-          CarouselSlider(
-            options: CarouselOptions(
-              height: 200.0,
-              autoPlay: true,
-            ),
-            items: [1,2,3,4,5].map((i) {
-              return Builder(
-                builder: (BuildContext context) {
-                  return Container(
-                      width: MediaQuery.of(context).size.width,
-                      margin: EdgeInsets.symmetric(horizontal: 5.0),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          width: 3,
-                          color: Colors.grey,
-                        ),
-                        borderRadius: BorderRadius.circular(16.0),
+    return MaterialApp(
+      home: Scaffold(
+        backgroundColor: Colors.white,
+        body: ListView(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.notifications_none),
+                        iconSize: 20,
+                        color: Colors.black,
                       ),
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(16.0),
-                          child: Image.asset(
-                            'assets/flutter.png',
-                            fit: BoxFit.fill,
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.search),
+                        iconSize: 20,
+                        color: Colors.black,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 100,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextButton(
+                        onPressed: () {},
+                        style: TextButton.styleFrom(
+                          backgroundColor: const Color(0xFF9CC4FF),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 10,
+                            horizontal: 20,
+                          ),
+                          child: Row(
+                            children: [
+                              SvgPicture.asset(
+                                '../assets/icons/plane_trip_icon.svg',
+                                width: 30,
+                                height: 30,
+                                color: Colors.white,
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              const Text(
+                                '새로운',
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              const Text(
+                                'Plan',
+                                style: TextStyle(
+                                  fontSize: 27,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              const Text(
+                                '시작하기',
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      const Text(
+                        '게스트',
+                        style: TextStyle(
+                          fontSize: 22,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 7,
+                      ),
+                      const Text(
+                        '님을 위한',
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      TextButton(
+                        onPressed: () {},
+                        style: TextButton.styleFrom(
+                          minimumSize: Size.zero,
+                          padding: EdgeInsets.zero,
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                        child: const Text(
+                          '로그인',
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Color(0xFFB4B4B4),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    width: 1000,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFCAE6FF),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 10,
+                        horizontal: 20,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              SvgPicture.asset(
+                                '../assets/icons/partly_cloudy_day.svg',
+                                width: 20,
+                                height: 20,
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              const Text(
+                                '4º',
+                                style: TextStyle(
+                                  fontSize: 22,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const Text(
+                            '서울특별시 성북구',
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 35,
+                  ),
+                  Row(
+                    children: const [
+                      Text(
+                        '오늘의',
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 7,
+                      ),
+                      Text(
+                        'Food',
+                        style: TextStyle(
+                          fontSize: 22,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    children: [
+                      Column(
+                        children: [
+                          Container(
+                            width: 100,
+                            height: 100,
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage(
+                                  'assets/images/eclair.jpg',
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          const Text(
+                            '시금치 딸기샐러드, 딸기청, 딸기...',
+                            style: TextStyle(
+                              fontSize: 8,
+                              color: Color(0xFF6A91F5),
+                            ),
                           )
-                      )
-                  );
-                },
-              );
-            }).toList(),
-          ),
-          Text('설명글'),
-        ],
+                        ],
+                      ),
+                      const SizedBox(
+                        width: 15,
+                      ),
+                      Column(
+                        children: [
+                          Container(
+                            width: 100,
+                            height: 100,
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage(
+                                  'assets/images/mugwort.jpg',
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          const Text(
+                            '쑥국, 쑥설기, 쑥해물튀김, 쑥송...',
+                            style: TextStyle(
+                              fontSize: 8,
+                              color: Color(0xFF6A91F5),
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 35,
+                  ),
+                  Row(
+                    children: const [
+                      Text(
+                        '오늘의',
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 7,
+                      ),
+                      Text(
+                        'Place',
+                        style: TextStyle(
+                          fontSize: 22,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                        width: 100,
+                        height: 100,
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage(
+                              'assets/images/jeju.jpg',
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 15,
+                      ),
+                      Container(
+                        width: 100,
+                        height: 100,
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage(
+                              'assets/images/paris.jpg',
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  /*Swiper(
+                    itemBuilder: (BuildContext context, int index) {
+                      return Image.asset(imgList[index]);
+                    },
+                    itemCount: 2,
+                    itemWidth: 30,
+                    pagination: const SwiperPagination(),
+                    control: const SwiperControl(),
+                  ),*/
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
