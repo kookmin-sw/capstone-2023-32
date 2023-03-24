@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 final List<String> imgList = [
   '../assets/images/paris.jpg',
@@ -61,23 +60,22 @@ class _HomePageState extends State<HomePage> {
                             borderRadius: BorderRadius.circular(25),
                           ),
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 10,
-                            horizontal: 20,
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(
+                            //vertical: 5,
+                            horizontal: 10,
                           ),
                           child: Row(
                             children: [
-                              SvgPicture.asset(
-                                '../assets/icons/plane_trip_icon.svg',
-                                width: 30,
-                                height: 30,
+                              Icon(
+                                Icons.travel_explore_sharp,
                                 color: Colors.white,
+                                size: 40,
                               ),
-                              const SizedBox(
+                              SizedBox(
                                 width: 10,
                               ),
-                              const Text(
+                              Text(
                                 '새로운',
                                 style: TextStyle(
                                   fontSize: 17,
@@ -85,10 +83,10 @@ class _HomePageState extends State<HomePage> {
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
-                              const SizedBox(
+                              SizedBox(
                                 width: 8,
                               ),
-                              const Text(
+                              Text(
                                 'Plan',
                                 style: TextStyle(
                                   fontSize: 27,
@@ -96,10 +94,10 @@ class _HomePageState extends State<HomePage> {
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
-                              const SizedBox(
+                              SizedBox(
                                 width: 8,
                               ),
-                              const Text(
+                              Text(
                                 '시작하기',
                                 style: TextStyle(
                                   fontSize: 17,
@@ -169,8 +167,8 @@ class _HomePageState extends State<HomePage> {
                       color: const Color(0xFFCAE6FF),
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(
                         vertical: 10,
                         horizontal: 20,
                       ),
@@ -179,25 +177,25 @@ class _HomePageState extends State<HomePage> {
                         children: [
                           Row(
                             children: [
-                              SvgPicture.asset(
-                                '../assets/icons/partly_cloudy_day.svg',
-                                width: 20,
-                                height: 20,
+                              Icon(
+                                Icons.wb_sunny_sharp,
+                                color: Colors.black,
+                                size: 20,
                               ),
-                              const SizedBox(
+                              SizedBox(
                                 width: 10,
                               ),
-                              const Text(
+                              Text(
                                 '4º',
                                 style: TextStyle(
-                                  fontSize: 22,
+                                  fontSize: 20,
                                   color: Colors.black,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
                             ],
                           ),
-                          const Text(
+                          Text(
                             '서울특별시 성북구',
                             style: TextStyle(
                               fontSize: 15,
@@ -210,10 +208,10 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   const SizedBox(
-                    height: 35,
+                    height: 25,
                   ),
-                  Row(
-                    children: const [
+                  const Row(
+                    children: [
                       Text(
                         '오늘의',
                         style: TextStyle(
@@ -236,22 +234,60 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          Container(
-                            width: 100,
-                            height: 100,
-                            decoration: const BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage(
-                                  'assets/images/eclair.jpg',
+                          Stack(
+                            children: [
+                              Container(
+                                width: 180,
+                                height: 120,
+                                decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                    image: AssetImage(
+                                      'assets/images/eclair.jpg',
+                                    ),
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               ),
-                            ),
+                              Positioned(
+                                bottom: 5,
+                                right: 5,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                    vertical: 5,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFCAE6FF),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: const Row(
+                                    children: [
+                                      Icon(
+                                        Icons.location_on_sharp,
+                                        color: Color(0xFF329EFF),
+                                        size: 10,
+                                      ),
+                                      Text(
+                                        '딸기',
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w600,
+                                          color: Color(0xFF329EFF),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                           const SizedBox(
                             height: 5,
@@ -259,27 +295,81 @@ class _HomePageState extends State<HomePage> {
                           const Text(
                             '시금치 딸기샐러드, 딸기청, 딸기...',
                             style: TextStyle(
-                              fontSize: 8,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
                               color: Color(0xFF6A91F5),
                             ),
-                          )
-                        ],
-                      ),
-                      const SizedBox(
-                        width: 15,
-                      ),
-                      Column(
-                        children: [
-                          Container(
-                            width: 100,
-                            height: 100,
-                            decoration: const BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage(
-                                  'assets/images/mugwort.jpg',
-                                ),
+                          ),
+                          const SizedBox(
+                            height: 2,
+                          ),
+                          TextButton(
+                            onPressed: () {},
+                            style: TextButton.styleFrom(
+                              minimumSize: Size.zero,
+                              padding: EdgeInsets.zero,
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            ),
+                            child: const Text(
+                              '더보기',
+                              style: TextStyle(
+                                fontSize: 11,
+                                color: Color(0xFFB4B4B4),
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Stack(
+                            children: [
+                              Container(
+                                width: 180,
+                                height: 120,
+                                decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                    image: AssetImage(
+                                      'assets/images/mugwort.jpg',
+                                    ),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                bottom: 5,
+                                right: 5,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                    vertical: 5,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFCAE6FF),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: const Row(
+                                    children: [
+                                      Icon(
+                                        Icons.location_on_sharp,
+                                        color: Color(0xFF329EFF),
+                                        size: 10,
+                                      ),
+                                      Text(
+                                        '쑥',
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w600,
+                                          color: Color(0xFF329EFF),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                           const SizedBox(
                             height: 5,
@@ -287,19 +377,39 @@ class _HomePageState extends State<HomePage> {
                           const Text(
                             '쑥국, 쑥설기, 쑥해물튀김, 쑥송...',
                             style: TextStyle(
-                              fontSize: 8,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
                               color: Color(0xFF6A91F5),
                             ),
-                          )
+                          ),
+                          const SizedBox(
+                            height: 2,
+                          ),
+                          TextButton(
+                            onPressed: () {},
+                            style: TextButton.styleFrom(
+                              minimumSize: Size.zero,
+                              padding: EdgeInsets.zero,
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            ),
+                            child: const Text(
+                              '더보기',
+                              style: TextStyle(
+                                fontSize: 11,
+                                color: Color(0xFFB4B4B4),
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ],
                   ),
                   const SizedBox(
-                    height: 35,
+                    height: 25,
                   ),
-                  Row(
-                    children: const [
+                  const Row(
+                    children: [
                       Text(
                         '오늘의',
                         style: TextStyle(
@@ -322,46 +432,107 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
-                        width: 100,
-                        height: 100,
-                        decoration: const BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage(
-                              'assets/images/jeju.jpg',
+                      Stack(
+                        children: [
+                          Container(
+                            width: 180,
+                            height: 120,
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage(
+                                  'assets/images/jeju.jpg',
+                                ),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 15,
-                      ),
-                      Container(
-                        width: 100,
-                        height: 100,
-                        decoration: const BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage(
-                              'assets/images/paris.jpg',
+                          Positioned(
+                            bottom: 5,
+                            right: 5,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 5,
+                              ),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFCAE6FF),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: const Row(
+                                children: [
+                                  Icon(
+                                    Icons.location_on_sharp,
+                                    color: Color(0xFF329EFF),
+                                    size: 10,
+                                  ),
+                                  Text(
+                                    '제주',
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w600,
+                                      color: Color(0xFF329EFF),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
+                        ],
+                      ),
+                      Stack(
+                        children: [
+                          Container(
+                            width: 180,
+                            height: 120,
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage(
+                                  'assets/images/paris.jpg',
+                                ),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 5,
+                            right: 5,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 5,
+                              ),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFCAE6FF),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: const Row(
+                                children: [
+                                  Icon(
+                                    Icons.location_on_sharp,
+                                    color: Color(0xFF329EFF),
+                                    size: 10,
+                                  ),
+                                  Text(
+                                    '파리(프랑스)',
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w600,
+                                      color: Color(0xFF329EFF),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                  /*Swiper(
-                    itemBuilder: (BuildContext context, int index) {
-                      return Image.asset(imgList[index]);
-                    },
-                    itemCount: 2,
-                    itemWidth: 30,
-                    pagination: const SwiperPagination(),
-                    control: const SwiperControl(),
-                  ),*/
                 ],
               ),
             ),
