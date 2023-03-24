@@ -1,4 +1,5 @@
 import 'package:fasttrip/pages/Home.dart';
+import 'package:fasttrip/pages/search.dart';
 import 'package:flutter/material.dart';
 import './style.dart' as theme;
 
@@ -19,7 +20,6 @@ class MyApp extends StatelessWidget {
           body: TabBarView(
             children: [
               HomePage(),
-              Text('여행'),
               Text('피드'),
               Text('마이페이지'),
             ],
