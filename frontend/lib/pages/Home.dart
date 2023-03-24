@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import './search.dart';
 
 final List<String> imgList = [
   '../assets/images/paris.jpg',
@@ -40,7 +38,12 @@ class _HomePageState extends State<HomePage> {
                       const SizedBox(
                         width: 10,
                       ),
-                      SearchPage(),
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.search),
+                        iconSize: 20,
+                        color: Colors.black,
+                      ),
                     ],
                   ),
                   const SizedBox(

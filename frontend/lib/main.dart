@@ -1,8 +1,6 @@
 import 'package:fasttrip/pages/Home.dart';
-import 'package:fasttrip/pages/search.dart';
 import 'package:flutter/material.dart';
 import './style.dart' as theme;
-
 
 void main() {
   runApp(MaterialApp(theme: theme.mainTheme, home: const MyApp()));
@@ -14,21 +12,22 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const DefaultTabController(
-        length: 4,
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          body: TabBarView(
-            children: [
-              HomePage(),
-              Text('피드'),
-              Text('마이페이지'),
-            ],
-          ),
-          bottomNavigationBar: BottomBar(),
-        ));
+      length: 4,
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: TabBarView(
+          children: [
+            HomePage(),
+            Text('여행'),
+            Text('피드'),
+            Text('마이페이지'),
+          ],
+        ),
+        bottomNavigationBar: BottomBar(),
+      ),
+    );
   }
 }
-
 
 // 하단 바 커스텀
 class BottomBar extends StatelessWidget {
@@ -75,7 +74,7 @@ class BottomBar extends StatelessWidget {
                 size: 20,
               ),
               text: '마이페이지',
-            )
+            ),
           ],
         ),
       ),
