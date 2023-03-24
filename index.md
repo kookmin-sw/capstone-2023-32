@@ -1,27 +1,37 @@
-## Welcome to FastTrip
----
-### 1. 프로젝트 소개
-#### 손쉽고 빠르고 성향에 맞는 여행계획을 세울 수 있는 어플리케이션을 목표로 하고 있습니다.
-1. 로그인 없이 바로 계획을 세울 수 있는 간편함
-2. 간단한 취향조사로 자신에게 맞는 계획을 추천 
----
-### 2. Abstract
----
+## Welcome to GitHub Pages
 
-### 3. 소개 영상
+You can use the [editor on GitHub](https://github.com/kookmin-sw/cap-template/edit/master/index.md) to maintain and preview the content for your website in Markdown files.
 
-#### 현재 준비중입니다.
----
-### 4. 팀 소개
-|프로필|이름|학번|역활|
-|--|--|--|--|
-|--|이준모 |0000****| 팀장 / 백앤드|
-|--|정해준 |0000****| 백앤드|
-|--|홍철웅 |0000****| 프론트앤드|
-|--|임지원 |0000****| 프론트앤드|
+Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 
----
-### 5. 사용법
-#### 현재 준비중입니다.
----
-### 6. 기타
+### Markdown
+
+Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+
+```markdown
+Syntax highlighted code block
+
+# Header 1
+## Header 2
+### Header 3
+
+- Bulleted
+- List
+
+1. Numbered
+2. List
+
+**Bold** and _Italic_ and `Code` text
+
+[Link](url) and ![Image](src)
+```
+
+For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+
+### Jekyll Themes
+
+Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/kookmin-sw/cap-template/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+
+### Support or Contact
+
+Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
