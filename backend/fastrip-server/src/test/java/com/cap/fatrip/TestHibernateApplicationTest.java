@@ -1,4 +1,4 @@
-package com.example.testhibernate;
+package com.cap.fatrip;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
