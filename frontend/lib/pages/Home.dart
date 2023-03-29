@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fasttrip/pages/Login.dart';
 
 final List<String> imgList = [
   '../assets/images/paris.jpg',
@@ -140,7 +141,13 @@ class _HomePageState extends State<HomePage> {
                         width: 10,
                       ),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const LogIn()),
+                          );
+                        },
                         style: TextButton.styleFrom(
                           minimumSize: Size.zero,
                           padding: EdgeInsets.zero,
