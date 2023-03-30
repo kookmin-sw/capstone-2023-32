@@ -5,6 +5,7 @@ create table user(
 	id varchar(20) primary key,
     password varchar(20) not null,
     name varchar(20) not null,
+    nickname varchar(20) not null,
     gender tinyint not null check(gender in (0, 1, 2)) default 0,
     birthday varchar(20),
     phone varchar(20),
