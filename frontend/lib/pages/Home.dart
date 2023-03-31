@@ -1,3 +1,4 @@
+import 'package:fasttrip/pages/search.dart';
 import 'package:flutter/material.dart';
 import 'package:fasttrip/pages/Login.dart';
 
@@ -40,7 +41,12 @@ class _HomePageState extends State<HomePage> {
                         width: 10,
                       ),
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => SearchPage()),
+                          );
+                        },
                         icon: const Icon(Icons.search),
                         iconSize: 20,
                         color: Colors.black,
@@ -61,7 +67,7 @@ class _HomePageState extends State<HomePage> {
                             borderRadius: BorderRadius.circular(25),
                           ),
                         ),
-                        child: const Padding(
+                        child: Padding(
                           padding: EdgeInsets.symmetric(
                             //vertical: 5,
                             horizontal: 10,
@@ -174,7 +180,7 @@ class _HomePageState extends State<HomePage> {
                       color: const Color(0xFFCAE6FF),
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: const Padding(
+                    child: Padding(
                       padding: EdgeInsets.symmetric(
                         vertical: 10,
                         horizontal: 20,
@@ -217,7 +223,7 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(
                     height: 25,
                   ),
-                  const Row(
+                  Row(
                     children: [
                       Text(
                         '오늘의',
@@ -275,7 +281,7 @@ class _HomePageState extends State<HomePage> {
                                     color: const Color(0xFFCAE6FF),
                                     borderRadius: BorderRadius.circular(20),
                                   ),
-                                  child: const Row(
+                                  child:Row(
                                     children: [
                                       Icon(
                                         Icons.location_on_sharp,
@@ -357,7 +363,7 @@ class _HomePageState extends State<HomePage> {
                                     color: const Color(0xFFCAE6FF),
                                     borderRadius: BorderRadius.circular(20),
                                   ),
-                                  child: const Row(
+                                  child:Row(
                                     children: [
                                       Icon(
                                         Icons.location_on_sharp,
@@ -415,7 +421,7 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(
                     height: 25,
                   ),
-                  const Row(
+                  Row(
                     children: [
                       Text(
                         '오늘의',
@@ -470,7 +476,7 @@ class _HomePageState extends State<HomePage> {
                                 color: const Color(0xFFCAE6FF),
                                 borderRadius: BorderRadius.circular(20),
                               ),
-                              child: const Row(
+                              child:Row(
                                 children: [
                                   Icon(
                                     Icons.location_on_sharp,
@@ -517,7 +523,7 @@ class _HomePageState extends State<HomePage> {
                                 color: const Color(0xFFCAE6FF),
                                 borderRadius: BorderRadius.circular(20),
                               ),
-                              child: const Row(
+                              child: Row(
                                 children: [
                                   Icon(
                                     Icons.location_on_sharp,
