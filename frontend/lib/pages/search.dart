@@ -1,10 +1,6 @@
+import 'package:fasttrip/style.dart';
 import 'package:flutter/material.dart';
 import 'package:fasttrip/pages/searchResult.dart';
-
-
-// 연한 글씨 스타일
-var lightText = TextStyle(color: Colors.grey.shade500);
-
 
 class SearchPage extends StatelessWidget {
   const SearchPage({Key? key}) : super(key: key);

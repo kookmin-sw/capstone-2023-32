@@ -15,7 +15,7 @@ class SearchResultsPage extends StatelessWidget {
       ),
       body: Center(
         child: Text(
-          'Search results for: $searchTerm',
+          '$searchTerm 검색 결과',
           style: TextStyle(fontSize: 18),
         ),
       ),
