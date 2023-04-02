@@ -1,6 +1,6 @@
 package com.cap.fatrip.dto;
 
-import com.cap.fatrip.entity.MemberEntity;
+import com.cap.fatrip.entity.UserEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,12 +15,12 @@ public class MemberDto {
     private String memberPassword;
     private String memberName;
 
-    public static MemberDto toMemberDto(MemberEntity memberEntity) {
+    public static MemberDto toMemberDto(UserEntity userEntity) {
         MemberDto memberDto = new MemberDto();
-        memberDto.setId(memberEntity.getId());
-        memberDto.setMemberEmail(memberEntity.getMemberEmail());
-        memberDto.setMemberPassword(memberEntity.getMemberPassword());
-        memberDto.setMemberName(memberEntity.getMemberName());
+        memberDto.setId(userEntity.getId());
+        memberDto.setMemberEmail(userEntity.getMemberEmail());
+        memberDto.setMemberPassword(userEntity.getMemberPassword());
+        memberDto.setMemberName(userEntity.getMemberName());
 
         return memberDto;
     }

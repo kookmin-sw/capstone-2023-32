@@ -1,6 +1,5 @@
 package com.cap.fatrip.repository;
 
-import com.cap.fatrip.entity.MemberEntity;
 import com.cap.fatrip.entity.OAuthUserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 

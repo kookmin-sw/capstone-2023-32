@@ -1,6 +1,6 @@
 package com.cap.fatrip.service;
 
-import com.cap.fatrip.entity.MemberEntity;
+import com.cap.fatrip.entity.UserEntity;
 import com.cap.fatrip.repository.MemberRepository;
 import com.cap.fatrip.dto.MemberDto;
 import lombok.RequiredArgsConstructor;
@@ -17,18 +17,18 @@ public class MemberService {
     //1.dto->entity 변환
     //2.repository의 save 메소드 호출
     public void save(MemberDto memberDto){
-        MemberEntity memberEntity = MemberEntity.toMemberEntity(memberDto);
-        memberRepository.save(memberEntity);
+        UserEntity userEntity = UserEntity.toUserEntity(memberDto);
+        memberRepository.save(userEntity);
     }
 
     public MemberDto login(MemberDto memberDto) {
-        Optional<MemberEntity> byMemberEmail = memberRepository.findByMemberEmail(memberDto.getMemberEmail());
+        Optional<UserEntity> byMemberEmail = memberRepository.findByMemberEmail(memberDto.getMemberEmail());
         if (byMemberEmail.isPresent()){
             //조회결과 있음
-            MemberEntity memberEntity = byMemberEmail.get();
-            if(memberEntity.getMemberPassword().equals(memberEntity.getMemberPassword())) {
+            UserEntity userEntity = byMemberEmail.get();
+            if(userEntity.getMemberPassword().equals(userEntity.getMemberPassword())) {
                 //비밀번호 일치
-                MemberDto dto = MemberDto.toMemberDto(memberEntity);
+                MemberDto dto = MemberDto.toMemberDto(userEntity);
 
                 return dto;
             } else {
@@ -42,17 +42,17 @@ public class MemberService {
     }
 
     public List<MemberDto> findAll() {
-        List<MemberEntity> memberEntityList = memberRepository.findAll();
+        List<UserEntity> userEntityList = memberRepository.findAll();
         List<MemberDto> memberDtoList = new ArrayList<>();
 
-        for(MemberEntity memberEntity: memberEntityList) {
-            memberDtoList.add(MemberDto.toMemberDto(memberEntity));
+        for(UserEntity userEntity : userEntityList) {
+            memberDtoList.add(MemberDto.toMemberDto(userEntity));
         }
         return memberDtoList;
     }
 
     public MemberDto findById(Long id) {
-        Optional<MemberEntity> optionalMemberEntity = memberRepository.findById(id);
+        Optional<UserEntity> optionalMemberEntity = memberRepository.findById(id);
         if(optionalMemberEntity.isPresent()) {
             return MemberDto.toMemberDto((optionalMemberEntity.get()));
         } else {
@@ -61,7 +61,7 @@ public class MemberService {
     }
 
     public MemberDto updateForm(String myEamil) {
-        Optional<MemberEntity> optionalMemberEntity = memberRepository.findByMemberEmail(myEamil);
+        Optional<UserEntity> optionalMemberEntity = memberRepository.findByMemberEmail(myEamil);
         if(optionalMemberEntity.isPresent()) {
             return MemberDto.toMemberDto(optionalMemberEntity.get());
         } else {
@@ -70,7 +70,7 @@ public class MemberService {
     }
 
     public void update(MemberDto memberDto) {
-        memberRepository.save(MemberEntity.toUpdateMemberEntity(memberDto));
+        memberRepository.save(UserEntity.toUpdateUserEntity(memberDto));
     }
 
     public void deleteById(Long id) {
