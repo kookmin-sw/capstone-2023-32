@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fasttrip/pages/Signup.dart';
 
 class LogIn extends StatefulWidget {
   const LogIn({Key? key}) : super(key: key);
@@ -43,7 +44,7 @@ class _LogInState extends State<LogIn> {
                     keyboardType: TextInputType.text,
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 30,
                   ),
                   const TextField(
                     decoration: InputDecoration(
@@ -53,7 +54,7 @@ class _LogInState extends State<LogIn> {
                     obscureText: true,
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 20,
                   ),
                   Padding(
                     padding: const EdgeInsets.all(10),
@@ -93,7 +94,13 @@ class _LogInState extends State<LogIn> {
                           ),
                         ),
                         TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const SignUp()),
+                            );
+                          },
                           style: TextButton.styleFrom(
                             minimumSize: Size.zero,
                             padding: EdgeInsets.zero,
@@ -111,9 +118,11 @@ class _LogInState extends State<LogIn> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 180),
+                  const SizedBox(height: 100),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFCAE6FF),
                       padding: const EdgeInsets.symmetric(

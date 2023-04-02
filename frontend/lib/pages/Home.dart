@@ -1,11 +1,14 @@
 import 'package:fasttrip/pages/search.dart';
 import 'package:flutter/material.dart';
 import 'package:fasttrip/pages/Login.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 final List<String> imgList = [
   '../assets/images/paris.jpg',
   '../assets/images/jeju.jpg',
 ];
+
+final List<String> list = List.generate(10, (index) => "Text $index");
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -29,27 +32,37 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.notifications_none),
-                        iconSize: 20,
-                        color: Colors.black,
+                      Image.asset(
+                        'assets/icons/logo.png',
+                        width: 50,
                       ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => SearchPage()),
-                          );
-                        },
-                        icon: const Icon(Icons.search),
-                        iconSize: 20,
-                        color: Colors.black,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          IconButton(
+                            onPressed: () {},
+                            icon: const Icon(Icons.notifications_none),
+                            iconSize: 20,
+                            color: Colors.black,
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const SearchPage()),
+                              );
+                            },
+                            icon: const Icon(Icons.search),
+                            iconSize: 20,
+                            color: Colors.black,
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -68,21 +81,19 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         child: Padding(
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                             //vertical: 5,
                             horizontal: 10,
                           ),
                           child: Row(
                             children: [
-                              Icon(
-                                Icons.travel_explore_sharp,
-                                color: Colors.white,
-                                size: 40,
+                              SvgPicture.asset(
+                                'assets/icons/plane_trip_icon.svg',
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 10,
                               ),
-                              Text(
+                              const Text(
                                 '새로운',
                                 style: TextStyle(
                                   fontSize: 17,
@@ -90,10 +101,10 @@ class _HomePageState extends State<HomePage> {
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 8,
                               ),
-                              Text(
+                              const Text(
                                 'Plan',
                                 style: TextStyle(
                                   fontSize: 27,
@@ -101,10 +112,10 @@ class _HomePageState extends State<HomePage> {
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 8,
                               ),
-                              Text(
+                              const Text(
                                 '시작하기',
                                 style: TextStyle(
                                   fontSize: 17,
@@ -180,7 +191,7 @@ class _HomePageState extends State<HomePage> {
                       color: const Color(0xFFCAE6FF),
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: Padding(
+                    child: const Padding(
                       padding: EdgeInsets.symmetric(
                         vertical: 10,
                         horizontal: 20,
@@ -190,10 +201,10 @@ class _HomePageState extends State<HomePage> {
                         children: [
                           Row(
                             children: [
-                              Icon(
-                                Icons.wb_sunny_sharp,
-                                color: Colors.black,
-                                size: 20,
+                              Image(
+                                image: AssetImage(
+                                  'assets/icons/partly_cloudy_day.png',
+                                ),
                               ),
                               SizedBox(
                                 width: 10,
@@ -223,7 +234,7 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(
                     height: 25,
                   ),
-                  Row(
+                  const Row(
                     children: [
                       Text(
                         '오늘의',
@@ -281,7 +292,7 @@ class _HomePageState extends State<HomePage> {
                                     color: const Color(0xFFCAE6FF),
                                     borderRadius: BorderRadius.circular(20),
                                   ),
-                                  child:Row(
+                                  child: const Row(
                                     children: [
                                       Icon(
                                         Icons.location_on_sharp,
@@ -363,7 +374,7 @@ class _HomePageState extends State<HomePage> {
                                     color: const Color(0xFFCAE6FF),
                                     borderRadius: BorderRadius.circular(20),
                                   ),
-                                  child:Row(
+                                  child: const Row(
                                     children: [
                                       Icon(
                                         Icons.location_on_sharp,
@@ -421,7 +432,7 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(
                     height: 25,
                   ),
-                  Row(
+                  const Row(
                     children: [
                       Text(
                         '오늘의',
@@ -476,7 +487,7 @@ class _HomePageState extends State<HomePage> {
                                 color: const Color(0xFFCAE6FF),
                                 borderRadius: BorderRadius.circular(20),
                               ),
-                              child:Row(
+                              child: const Row(
                                 children: [
                                   Icon(
                                     Icons.location_on_sharp,
@@ -523,7 +534,7 @@ class _HomePageState extends State<HomePage> {
                                 color: const Color(0xFFCAE6FF),
                                 borderRadius: BorderRadius.circular(20),
                               ),
-                              child: Row(
+                              child: const Row(
                                 children: [
                                   Icon(
                                     Icons.location_on_sharp,
