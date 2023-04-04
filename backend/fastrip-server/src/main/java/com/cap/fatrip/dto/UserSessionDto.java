@@ -18,7 +18,7 @@ public class UserSessionDto implements Serializable {
 	/* Entity -> dto */
 	public UserSessionDto(OAuthUserEntity user) {
 		this.id = user.getId();
-		this.username = user.getUsername();
+		this.username = user.getName();
 		this.nickname = user.getNickname();
 		this.email = user.getEmail();
 		this.role = user.getRole();
