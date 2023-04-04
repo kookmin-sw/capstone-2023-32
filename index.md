@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![](imgs/logo.png)
+![](https://cdn.discordapp.com/attachments/868797447680434181/1092134378194354306/logo.png)
 
 </div>
 
