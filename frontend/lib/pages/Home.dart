@@ -1,4 +1,4 @@
-import 'package:fasttrip/pages/search.dart';
+import 'package:fasttrip/pages/Search.dart';
 import 'package:flutter/material.dart';
 import 'package:fasttrip/pages/Login.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -191,7 +191,7 @@ class _HomePageState extends State<HomePage> {
                       color: const Color(0xFFCAE6FF),
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: const Padding(
+                    child: Padding(
                       padding: EdgeInsets.symmetric(
                         vertical: 10,
                         horizontal: 20,
@@ -234,7 +234,7 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(
                     height: 25,
                   ),
-                  const Row(
+                   Row(
                     children: [
                       Text(
                         '오늘의',
@@ -292,7 +292,7 @@ class _HomePageState extends State<HomePage> {
                                     color: const Color(0xFFCAE6FF),
                                     borderRadius: BorderRadius.circular(20),
                                   ),
-                                  child: const Row(
+                                  child: Row(
                                     children: [
                                       Icon(
                                         Icons.location_on_sharp,
@@ -374,7 +374,7 @@ class _HomePageState extends State<HomePage> {
                                     color: const Color(0xFFCAE6FF),
                                     borderRadius: BorderRadius.circular(20),
                                   ),
-                                  child: const Row(
+                                  child:  Row(
                                     children: [
                                       Icon(
                                         Icons.location_on_sharp,
@@ -432,7 +432,7 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(
                     height: 25,
                   ),
-                  const Row(
+                   Row(
                     children: [
                       Text(
                         '오늘의',
@@ -487,7 +487,7 @@ class _HomePageState extends State<HomePage> {
                                 color: const Color(0xFFCAE6FF),
                                 borderRadius: BorderRadius.circular(20),
                               ),
-                              child: const Row(
+                              child: Row(
                                 children: [
                                   Icon(
                                     Icons.location_on_sharp,
@@ -534,7 +534,7 @@ class _HomePageState extends State<HomePage> {
                                 color: const Color(0xFFCAE6FF),
                                 borderRadius: BorderRadius.circular(20),
                               ),
-                              child: const Row(
+                              child: Row(
                                 children: [
                                   Icon(
                                     Icons.location_on_sharp,
