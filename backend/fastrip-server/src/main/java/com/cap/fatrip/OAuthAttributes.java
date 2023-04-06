@@ -1,6 +1,6 @@
 package com.cap.fatrip;
 
-import com.cap.fatrip.entity.OAuthUserEntity;
+import com.cap.fatrip.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,7 +18,7 @@ public class OAuthAttributes {
     private String username;
     private String nickname;
     private String email;
-    private Role role;
+    private UserEntity.Role role;
 
     public static OAuthAttributes of(String registrationId,
                                      String userNameAttributeName,
@@ -39,12 +39,12 @@ public class OAuthAttributes {
                 .build();
     }
 
-    public OAuthUserEntity toEntity() {
-        return OAuthUserEntity.builder()
+    public UserEntity toEntity() {
+        return UserEntity.builder()
                 .name(email)
                 .email(email)
                 .nickname(nickname)
-                .role(Role.SOCIAL)
+                .role(UserEntity.Role.USER)
                 .build();
     }
 }

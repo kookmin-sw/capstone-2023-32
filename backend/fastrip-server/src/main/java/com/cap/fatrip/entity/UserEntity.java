@@ -1,48 +1,102 @@
 package com.cap.fatrip.entity;
 
-import com.cap.fatrip.dto.MemberDto;
-import lombok.Getter;
-import lombok.Setter;
+import com.cap.fatrip.dto.UserDto;
+import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.util.Date;
 
-@Entity
-@Setter
-@Getter
-@Table(name = "user")
-public class UserEntity {
-    //자동 번호 선정
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@NoArgsConstructor(access = AccessLevel.PROTECTED) //기본 생성자 만들어줌
+@AllArgsConstructor(access = AccessLevel.PROTECTED) //기본 생성자 만들어줌
+@Builder
+@DynamicUpdate //update 할때 실제 값이 변경됨 컬럼으로만 update 쿼리를 만듬
+@Entity //JPA Entity 임을 명시
+@Getter //Lombok 어노테이션으로 getter
+@Table(name = "user", uniqueConstraints = {@UniqueConstraint(name = "email", columnNames = {"email"})}) //테이블 관련 설정 어노테이션
+public class UserEntity extends TimeEntity {
+	@Id
+	@Column(name = "id")
+	private String id;
 
-    @Column(unique = true) //unique제약 조건
-    private String memberEmail;
+	@Column(name = "password", nullable = false, length = 30)
+	private String password;
 
-    @Column
-    private String memberPassword;
+	@Column(name = "name", nullable = false, length = 20)
+	private String name;
 
-    @Column
-    private String memberName;
+	@Column(name = "nickname", nullable = false, length = 20)
+	private String nickname;
 
-    @Column
-    private String phoneNumber;
+	@Column(name = "gender", columnDefinition = "tinyint not null default 0")
+	private int gender;
 
-    public static UserEntity toUserEntity(MemberDto memberDto){
-        UserEntity userEntity = new UserEntity();
-        userEntity.setMemberEmail(memberDto.getMemberEmail());
-        userEntity.setMemberPassword(memberDto.getMemberPassword());
-        userEntity.setMemberName(memberDto.getMemberName());
-        return userEntity;
-    }
+	@Column(name = "birthday")
+	private Date birthday;
 
-    public static UserEntity toUpdateUserEntity(MemberDto memberDto){
-        UserEntity userEntity = new UserEntity();
-        userEntity.setId(memberDto.getId());
-        userEntity.setMemberEmail(memberDto.getMemberEmail());
-        userEntity.setMemberPassword(memberDto.getMemberPassword());
-        userEntity.setMemberName(memberDto.getMemberName());
-        return userEntity;
-    }
+	@Column(name = "phone", length = 40)
+	private String phone;
 
+	@Column(name = "email", nullable = false)
+	private String email;
+
+	@Column(name = "svc_use_pcy_agmt_yn", columnDefinition = "tinyint not null default 0")
+	private int svc_use_pcy_agmt_yn;
+
+	@Column(name = "ps_info_proc_agmt_yn", columnDefinition = "tinyint not null default 0")
+	private int ps_info_proc_agmt_yn;
+
+	@Column(name = "loc_base_svc_agmt_yn", columnDefinition = "tinyint not null default 0")
+	private int loc_base_svc_agmt_yn;
+
+	@Column(name = "sub_yn", columnDefinition = "tinyint not null default 0")
+	private int sub_yn;
+
+	@Column(name = "locked_yn", columnDefinition = "tinyint not null default 0")
+	private int locked_yn;
+
+	@Column(name = "last_connection", nullable = false)
+	private Date last_connection;
+
+	@Column(name = "location")
+	private String location;
+
+	@Column(name = "report_cnt", columnDefinition = "int not null default 0")
+	private int report_cnt;
+
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private Role role;
+
+	/* 소셜로그인시 이미 등록된 회원이라면 수정날짜만 업데이트하고
+	 * 기존 데이터는 그대로 보존하도록 예외처리 */
+	public UserEntity updateModifiedDate() {
+		this.onPreUpdate();
+		return this;
+	}
+
+	public String getRoleValue() {
+		return this.role.getValue();
+	}
+
+	@Getter
+	@RequiredArgsConstructor
+	public enum Role {
+		USER("ROLE_USER"),
+		ADMIN("ROLE_ADMIN");
+	//	SOCIAL("ROLE_SOCIAL"); // OAuth
+
+		private final String value;
+	}
+
+	public static UserEntity toUserEntity(UserDto userDto){
+		UserEntity userEntity = new UserEntity();
+		userEntity.id = userDto.getId();
+		userEntity.password = userDto.getPassword();
+		userEntity.name = userDto.getName();
+		userEntity.email = userDto.getEmail();
+		userEntity.phone = userDto.getPhone();
+		userEntity.last_connection = userDto.getLast_connection();
+		return userEntity;
+	}
 }
