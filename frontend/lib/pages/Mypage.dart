@@ -127,10 +127,7 @@ class _MyPageState extends State<MyPage> {
           right: 0,
           child: InkWell(
             onTap: () {
-              showModalBottomSheet(
-                context: context,
-                builder: ((builder) => bottomSheet()),
-              );
+              bottomSheet(context);
             },
             child: const Icon(
               Icons.camera_alt,
@@ -149,59 +146,62 @@ class _MyPageState extends State<MyPage> {
     );
   }
 
-  Widget bottomSheet() {
-    return Dialog(
-      elevation: 0,
-      backgroundColor: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextButton(
-            onPressed: () {
-              getImage(ImageSource.gallery);
-              Navigator.of(context).pop();
-            },
-            child: const Text(
-              '앨범에서 사진 선택',
-              style: TextStyle(
-                fontSize: 20,
+  Future<dynamic> bottomSheet(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        actions: <Widget>[
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              TextButton(
+                onPressed: () {
+                  getImage(ImageSource.gallery);
+                  Navigator.of(context).pop();
+                },
+                child: const Text(
+                  '앨범에서 사진 선택',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Color(0xFF329EFF),
+                  ),
+                ),
               ),
-            ),
-          ),
-          const Divider(
-            height: 1,
-          ),
-          TextButton(
-            onPressed: () {
-              getImage(ImageSource.camera);
-              Navigator.of(context).pop();
-            },
-            child: const Text(
-              '카메라 불러오기',
-              style: TextStyle(
-                fontSize: 20,
+              const Divider(
+                height: 1,
               ),
-            ),
-          ),
-          const Divider(
-            height: 1,
-          ),
-          TextButton(
-            onPressed: () {
-              setState(() {
-                _imageFile = null;
-              });
-              Navigator.of(context).pop();
-            },
-            child: const Text(
-              '사진 삭제',
-              style: TextStyle(
-                fontSize: 20,
+              TextButton(
+                onPressed: () {
+                  getImage(ImageSource.camera);
+                  Navigator.of(context).pop();
+                },
+                child: const Text(
+                  '카메라 불러오기',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Color(0xFF329EFF),
+                  ),
+                ),
               ),
-            ),
+              const Divider(
+                height: 1,
+              ),
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    _imageFile = null;
+                  });
+                  Navigator.of(context).pop();
+                },
+                child: const Text(
+                  '사진 삭제',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Color(0xFF329EFF),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
