@@ -29,6 +29,7 @@ public class UserDto implements Serializable {
 	private int locked_yn;
 	private Date last_connection;
 	private String location;
+	private String picture;
 	private int report_cnt;
 	private UserEntity.Role role;
 

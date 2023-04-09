@@ -1,10 +1,9 @@
 package com.cap.fatrip;
 
-import com.cap.fatrip.dto.UserDto;
 import com.cap.fatrip.entity.UserEntity;
 import com.cap.fatrip.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -19,6 +18,7 @@ import java.util.Collections;
 
 @RequiredArgsConstructor
 @Service
+@Log4j2
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     private final UserRepository userRepository;
@@ -37,21 +37,25 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 .getUserInfoEndpoint().getUserNameAttributeName();
 
         /* OAuth2UserService */
-        OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
+        OAuth2Attribute attributes = OAuth2Attribute.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
 
-        UserEntity user = saveOrUpdate(attributes);
+        log.info("{}", attributes);
 
-        /* 세션 정보를 저장하는 직렬화된 dto 클래스*/
-        session.setAttribute("user", UserDto.toUserDto(user));
+//        UserEntity user = saveOrUpdate(attributes);
 
+//        return new DefaultOAuth2User(
+//                Collections.singleton(new SimpleGrantedAuthority(user.getRoleValue())),
+//                attributes.getAttributes(),
+//                attributes.getNameAttributeKey());
         return new DefaultOAuth2User(
-                Collections.singleton(new SimpleGrantedAuthority(user.getRoleValue())),
-                attributes.getAttributes(),
-                attributes.getNameAttributeKey());
+                Collections.singleton(new SimpleGrantedAuthority(UserEntity.Role.USER.getValue())),
+                attributes.convertToMap(),
+                "email");
+
     }
 
     /* 소셜로그인시 기존 회원이 존재하면 수정날짜 정보만 업데이트해 기존의 데이터는 그대로 보존 */
-    private UserEntity saveOrUpdate(OAuthAttributes attributes) {
+    private UserEntity saveOrUpdate(OAuth2Attribute attributes) {
         UserEntity user = userRepository.findByEmail(attributes.getEmail())
                 .map(UserEntity::updateModifiedDate)
                 .orElse(attributes.toEntity());
