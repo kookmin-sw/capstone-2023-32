@@ -1,5 +1,6 @@
 import 'package:fasttrip/pages/Feed.dart';
 import 'package:fasttrip/pages/Home.dart';
+import 'package:fasttrip/pages/Trip.dart';
 import 'package:flutter/material.dart';
 import './style.dart' as theme;
 
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
         body: TabBarView(
           children: [
             HomePage(),
-            Text('여행'),
+            TripPage(),
             FeedPage(),
             Text('마이페이지'),
           ],
