@@ -1,6 +1,6 @@
 import 'package:fasttrip/pages/Feed.dart';
 import 'package:fasttrip/pages/Home.dart';
-import 'package:fasttrip/pages/Trip.dart';
+import 'package:fasttrip/pages/Mypage.dart';
 import 'package:flutter/material.dart';
 import './style.dart' as theme;
 
@@ -19,13 +19,13 @@ class MyApp extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         body: TabBarView(
           children: [
-            HomePage(),
-            TripPage(),
+            const HomePage(),
+            const Text('여행'),
             FeedPage(),
-            Text('마이페이지'),
+            const MyPage(),
           ],
         ),
-        bottomNavigationBar: BottomBar(),
+        bottomNavigationBar: const BottomBar(),
       ),
     );
   }
