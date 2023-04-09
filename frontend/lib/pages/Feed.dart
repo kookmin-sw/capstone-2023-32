@@ -1,13 +1,9 @@
+import 'package:fasttrip/Data/PostData.dart';
+import 'package:fasttrip/pages/PostDetailPage.dart';
 import 'package:flutter/material.dart';
 import 'package:fasttrip/style.dart';
 
-class Post {
-  final String imageUrl;
-  final String title;
-  final List<String> tags;
 
-  Post({required this.imageUrl, required this.title, required this.tags});
-}
 
 class FeedPage extends StatefulWidget {
   @override
@@ -15,25 +11,7 @@ class FeedPage extends StatefulWidget {
 }
 
 class _FeedPageState extends State<FeedPage> {
-  final List<Post> _data = [
-    Post(
-      imageUrl: 'https://images.unsplash.com/photo-1583265266785-aab9e443ee68?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1374&q=80',
-      title: '파리 여행은 에펠탑부터',
-      tags: ['계획', '프랑스', '유럽여행', '혼자'],
-    ),
-    Post(
-      imageUrl: 'https://images.unsplash.com/photo-1553195029-754fbd369560?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1476&q=80',
-      title: '휴양지하면 보라카이',
-      tags: ['계획', '보라카이', '휴가', '가족'],
-    ),
-    Post(
-      imageUrl: 'https://images.unsplash.com/photo-1590253230532-a67f6bc61c9e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1431&q=80',
-      title: 'Chainsawman 님의 여행 계획',
-      tags: ['모집', '일본', '오사카', '단체(혼성)'],
-    ),
 
-    // ...
-  ];
 
   List<Post> _filteredData = [];
   String _searchText = '';
@@ -43,7 +21,7 @@ class _FeedPageState extends State<FeedPage> {
   @override
   void initState() {
     super.initState();
-    _filteredData = _data;
+    _filteredData = data;
   }
 
   void _applyFilter(String filter) {
@@ -55,9 +33,9 @@ class _FeedPageState extends State<FeedPage> {
       }
 
       if (_selectedFilters.isEmpty) {
-        _filteredData = _data;
+        _filteredData = data;
       } else {
-        _filteredData = _data
+        _filteredData = data
             .where((post) => _selectedFilters.every((tag) => post.tags.contains(tag)))
             .toList();
       }
@@ -67,7 +45,7 @@ class _FeedPageState extends State<FeedPage> {
   void _search(String searchText) {
     setState(() {
       _searchText = searchText;
-      _filteredData = _data
+      _filteredData = data
           .where((post) =>
       post.title.toLowerCase().contains(_searchText.toLowerCase()) &&
           (_selectedFilters.isEmpty || post.tags.any((tag) => _selectedFilters.contains(tag))))
@@ -309,21 +287,3 @@ class FilterButton extends StatelessWidget {
   }
 }
 
-// 게시물 상세 페이지
-class PostDetailPage extends StatelessWidget {
-  final Post post;
-
-  PostDetailPage({required this.post});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('게시물 상세'),
-      ),
-      body: Center(
-        child: Text('제목 : ${post.title}'),
-      ),
-    );
-  }
-}
