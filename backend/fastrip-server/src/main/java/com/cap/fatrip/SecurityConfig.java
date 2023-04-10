@@ -50,7 +50,7 @@ public class SecurityConfig {
 
     /* static 관련설정은 무시 */
     @Bean
-    public WebSecurityCustomizer configure() throws Exception {
+    public WebSecurityCustomizer webSecurityCustomizer() throws Exception {
         return web -> web.ignoring().antMatchers(
                 "/css/**",
                 "/js/**",
@@ -66,7 +66,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
+    protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

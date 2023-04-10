@@ -3,7 +3,6 @@ package com.cap.fatrip.controller;
 import com.cap.fatrip.dto.UserDto;
 import com.cap.fatrip.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
