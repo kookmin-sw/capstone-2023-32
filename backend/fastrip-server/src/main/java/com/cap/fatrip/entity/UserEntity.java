@@ -15,25 +15,25 @@ public class UserEntity {
     private Long u_key;
 
     @Column(length = 20)
-    private char u_id;
+    private String u_id;
 
     @Column(length = 20)
-    private char u_pw;
+    private String u_pw;
 
     @Column(length = 20)
-    private char u_name;
+    private String u_name;
 
     @Column(length=1)    // M or W로 성별 보기
-    private char u_gender;
+    private String u_gender;
 
     @Column(length = 8)
-    private char u_birth_day;
+    private String u_birth_day;
 
     @Column
-    private char u_phone;
+    private String u_phone;
 
     @Column
-    private char u_email;
+    private String u_email;
 
     @Column //서비스 이용약관 동의
     private boolean u_svc_use_pcy_agmt_yn;
@@ -51,10 +51,10 @@ public class UserEntity {
     private boolean u_locked_yn;
 
     @Column
-    private char u_last_connection;
+    private String u_last_connection;
 
     @Column
-    private char u_local;
+    private String u_local;
 
     @Column
     private int u_report_cnt;
