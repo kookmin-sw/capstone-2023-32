@@ -1,10 +1,11 @@
-package com.cap.fatrip;
+package com.cap.fatrip.auth;
 
 import com.cap.fatrip.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,7 +42,7 @@ public class OAuth2Attribute {
     private static OAuth2Attribute ofGoogle(String attributeKey,
                                             Map<String, Object> attributes) {
         return OAuth2Attribute.builder()
-                .name((String) attributes.get("name"))
+                .name((String) attributes.get("given_name"))
                 .email((String) attributes.get("email"))
                 .picture((String) attributes.get("picture"))
                 .nickname((String) attributes.get("name"))
@@ -59,6 +60,7 @@ public class OAuth2Attribute {
                 .name((String) kakaoProfile.get("nickname"))
                 .email((String) kakaoAccount.get("email"))
                 .picture((String)kakaoProfile.get("profile_image_url"))
+                .nickname((String) attributes.get("nickname"))
                 .attributes(kakaoAccount)
                 .attributeKey(attributeKey)
                 .build();
@@ -72,12 +74,13 @@ public class OAuth2Attribute {
                 .name((String) response.get("name"))
                 .email((String) response.get("email"))
                 .picture((String) response.get("profile_image"))
+                .nickname((String) attributes.get("nickname"))
                 .attributes(response)
                 .attributeKey(attributeKey)
                 .build();
     }
 
-    Map<String, Object> convertToMap() {
+    public Map<String, Object> convertToMap() {
         Map<String, Object> map = new HashMap<>();
         map.put("id", attributeKey);
         map.put("key", attributeKey);
@@ -90,7 +93,9 @@ public class OAuth2Attribute {
 
     public UserEntity toEntity() {
         return UserEntity.builder()
-                .name(email)
+                .id(RandomStringUtils.random(10, true, true))
+                .password(RandomStringUtils.random(10, true, true))
+                .name(name)
                 .email(email)
                 .nickname(nickname)
                 .role(UserEntity.Role.USER)

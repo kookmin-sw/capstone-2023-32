@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -27,7 +28,6 @@ public class UserDto implements Serializable {
 	private int loc_base_svc_agmt_yn;
 	private int sub_yn;
 	private int locked_yn;
-	private Date last_connection;
 	private String location;
 	private String picture;
 	private int report_cnt;
@@ -49,11 +49,22 @@ public class UserDto implements Serializable {
 		user.loc_base_svc_agmt_yn = userEntity.getLoc_base_svc_agmt_yn();
 		user.sub_yn = userEntity.getSub_yn();
 		user.locked_yn = userEntity.getLocked_yn();
-		user.last_connection = userEntity.getLast_connection();
 		user.location = userEntity.getLocation();
 		user.report_cnt = userEntity.getReport_cnt();
 		user.role = userEntity.getRole();
 
 		return user;
+	}
+
+	public static UserDto toUserDto(OAuth2User oAuth2User) {
+		var attributes = oAuth2User.getAttributes();
+		return UserDto.builder()
+				.id((String) attributes.get("id"))
+				.role((UserEntity.Role) attributes.get("role"))
+				.email((String) attributes.get("email"))
+				.name((String) attributes.get("name"))
+				.nickname((String) attributes.get("nickname"))
+				.picture((String) attributes.get("picture"))
+				.build();
 	}
 }

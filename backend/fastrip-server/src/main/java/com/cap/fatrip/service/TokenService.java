@@ -1,6 +1,7 @@
 package com.cap.fatrip.service;
 
 import com.cap.fatrip.auth.Token;
+import com.cap.fatrip.dto.UserDto;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -20,13 +21,14 @@ public class TokenService {
 		secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
 	}
 
-//	@Override
-	public Token generateToken(String uid, String role) {
+	public Token generateToken(UserDto user) {
 		long tokenPeriod = 1000L * 60L * 10L;
 		long refreshPeriod = 1000L * 60L * 60L * 24L * 30L * 3L;
 
-		Claims claims = Jwts.claims().setSubject(uid);
-		claims.put("role", role);
+		Claims claims = Jwts.claims().setSubject(user.getId());
+		claims.put(Token.ROLE, user.getRole().getValue());
+		claims.put(Token.EMAIL, user.getEmail());
+		claims.put(Token.NICKNAME, user.getNickname());
 
 		Date now = new Date();
 		return new Token(
@@ -44,7 +46,6 @@ public class TokenService {
 						.compact());
 	}
 
-//	@Override
 	public boolean verifyToken(String token) {
 		try {
 			Jws<Claims> claims = Jwts.parser()
@@ -58,8 +59,7 @@ public class TokenService {
 		}
 	}
 
-//	@Override
-	public String getUid(String token) {
-		return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
+	public Claims getUid(String token) {
+		return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
 	}
 }

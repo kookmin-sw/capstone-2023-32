@@ -55,9 +55,6 @@ public class UserEntity extends TimeEntity {
 	@Column(name = "locked_yn", columnDefinition = "tinyint not null default 0")
 	private int locked_yn;
 
-	@Column(name = "last_connection", nullable = false)
-	private Date last_connection;
-
 	@Column(name = "location")
 	private String location;
 
@@ -96,7 +93,6 @@ public class UserEntity extends TimeEntity {
 		userEntity.name = userDto.getName();
 		userEntity.email = userDto.getEmail();
 		userEntity.phone = userDto.getPhone();
-		userEntity.last_connection = userDto.getLast_connection();
 		return userEntity;
 	}
 }

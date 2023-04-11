@@ -1,6 +1,7 @@
 package com.cap.fatrip.auth;
 
 import com.cap.fatrip.dto.UserDto;
+import com.cap.fatrip.entity.UserEntity;
 import com.cap.fatrip.service.TokenService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -20,18 +21,16 @@ import java.io.IOException;
 @Component
 public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 	private final TokenService tokenService;
-	private final UserRequestMapper userRequestMapper;
 	private final ObjectMapper objectMapper;
 
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
-			throws IOException, ServletException {
+			throws IOException {
 		OAuth2User oAuth2User = (OAuth2User)authentication.getPrincipal();
-		UserDto userDto = userRequestMapper.toDto(oAuth2User);
+		UserDto userDto = UserDto.toUserDto(oAuth2User);
 
-		// 최초 로그인이라면 회원가입 처리를 한다.
-
-		Token token = tokenService.generateToken(userDto.getEmail(), "USER");
+		// todo: specify role.
+		Token token = tokenService.generateToken(userDto);
 		log.info("{}", token);
 
 		writeTokenResponse(response, token);
