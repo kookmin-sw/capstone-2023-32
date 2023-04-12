@@ -28,7 +28,7 @@ public class JwtAuthFilter extends GenericFilterBean {
 		String token = ((HttpServletRequest)request).getHeader("Auth");
 
 		if (token != null && tokenService.verifyToken(token)) {
-			Claims claims = tokenService.getUid(token);
+			Claims claims = tokenService.getClaim(token);
 			String email = (String) claims.get(Token.EMAIL);
 			String nickname = (String) claims.get(Token.NICKNAME);
 			String role = (String) claims.get(Token.ROLE);
@@ -39,7 +39,6 @@ public class JwtAuthFilter extends GenericFilterBean {
 					.email(email)
 					.nickname(nickname)
 					.role(UserEntity.Role.valueOf(role))
-//					.picture("프로필 이미지에요")
 					.build();
 
 			Authentication auth = getAuthentication(userDto);
