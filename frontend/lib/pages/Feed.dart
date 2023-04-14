@@ -2,6 +2,8 @@ import 'package:fasttrip/Data/PostData.dart';
 import 'package:fasttrip/pages/PostDetailPage.dart';
 import 'package:flutter/material.dart';
 import 'package:fasttrip/style.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class FeedPage extends StatefulWidget {
   const FeedPage({Key? key}) : super(key: key);
@@ -59,8 +61,9 @@ class _FeedPageState extends State<FeedPage> {
           alignment: Alignment.centerLeft,
           child: Text('피드', style: heading1, textAlign: TextAlign.left),
         ),
-        Padding(
-          padding: const EdgeInsets.all(20.0),
+        Container(
+          padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10.0, top: 20.0),
+          height: MediaQuery.of(context).size.height * 0.1,
           child: TextField(
             onChanged: (value) {
               _search(value);
@@ -94,7 +97,6 @@ class _FeedPageState extends State<FeedPage> {
         Padding(
           padding: const EdgeInsets.only(
             left: 30,
-            bottom: 20,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -151,11 +153,45 @@ class _FeedPageState extends State<FeedPage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Container(
-                          width: MediaQuery.of(context).size.width * 0.2,
+                          width: MediaQuery.of(context).size.width * 0.21,
                           padding: const EdgeInsets.only(right: 40.0),
                           alignment: Alignment.center,
                           child: Text(
                             '종류',
+                            style: heading2,
+                          ),
+                        ),
+                        FilterButton(
+                          label: '여행',
+                          selected: _selectedFilters.contains('여행'),
+                          onPressed: () => _applyFilter('여행'),
+                        ),
+                        FilterButton(
+                          label: '모집',
+                          selected: _selectedFilters.contains('모집'),
+                          onPressed: () => _applyFilter('모집'),
+                        ),
+                        FilterButton(
+                          label: '최신',
+                          selected: _selectedFilters.contains('최신'),
+                          onPressed: () => _applyFilter('최신'),
+                        ),
+                        FilterButton(
+                          label: '인기',
+                          selected: _selectedFilters.contains('인기'),
+                          onPressed: () => _applyFilter('인기'),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.21,
+                          padding: const EdgeInsets.only(right: 40.0),
+                          alignment: Alignment.center,
+                          child: Text(
+                            '기타',
                             style: heading2,
                           ),
                         ),
@@ -173,40 +209,6 @@ class _FeedPageState extends State<FeedPage> {
                           label: '단체(혼성)',
                           selected: _selectedFilters.contains('단체(혼성)'),
                           onPressed: () => _applyFilter('단체(혼성)'),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.2,
-                          padding: const EdgeInsets.only(right: 40.0),
-                          alignment: Alignment.center,
-                          child: Text(
-                            '기타',
-                            style: heading2,
-                          ),
-                        ),
-                        FilterButton(
-                          label: '최신',
-                          selected: _selectedFilters.contains('최신'),
-                          onPressed: () => _applyFilter('최신'),
-                        ),
-                        FilterButton(
-                          label: '인기',
-                          selected: _selectedFilters.contains('인기'),
-                          onPressed: () => _applyFilter('인기'),
-                        ),
-                        FilterButton(
-                          label: '계획',
-                          selected: _selectedFilters.contains('계획'),
-                          onPressed: () => _applyFilter('계획'),
-                        ),
-                        FilterButton(
-                          label: '모집',
-                          selected: _selectedFilters.contains('모집'),
-                          onPressed: () => _applyFilter('모집'),
                         ),
                       ],
                     ),
@@ -238,10 +240,13 @@ class _FeedPageState extends State<FeedPage> {
                     children: [
                       Stack(
                         children: [
-                          Image.network(_filteredData[index].imageUrl,
-                              width: double.infinity,
-                              height: 200,
-                              fit: BoxFit.cover),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10.0),
+                            child: Image.network(_filteredData[index].imageUrl,
+                                width: double.infinity,
+                                height: 200,
+                                fit: BoxFit.cover),
+                          ),
                           Positioned(
                             top: 5,
                             right: 5,
@@ -262,7 +267,7 @@ class _FeedPageState extends State<FeedPage> {
                                     ? Icons.favorite
                                     : Icons.favorite_border,
                                 color: _filteredData[index].heart
-                                    ? Colors.red
+                                    ? Color(0xffFA6D6D)
                                     : Colors.white,
                               ),
                             ),
@@ -284,11 +289,11 @@ class _FeedPageState extends State<FeedPage> {
                               (tag) => Chip(
                                 label: Text(
                                   tag,
-                                  style: const TextStyle(color: Colors.blue),
+                                  style: const TextStyle(color: Color(0xff6DA5FA)),
                                 ),
                                 backgroundColor: Colors.transparent,
                                 side: const BorderSide(
-                                    color: Colors.blue, width: 1),
+                                    color: Color(0xff6DA5FA), width: 1),
                               ),
                             )
                             .toList(),
