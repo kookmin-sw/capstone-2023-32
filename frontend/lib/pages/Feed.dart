@@ -24,6 +24,7 @@ class _FeedPageState extends State<FeedPage> {
     _filteredData = data;
   }
 
+// 태그에 대한 필터만 적용
   void _applyFilter(String filter) {
     setState(() {
       if (_selectedFilters.contains(filter)) {
@@ -31,15 +32,9 @@ class _FeedPageState extends State<FeedPage> {
       } else {
         _selectedFilters.add(filter);
       }
-
-      if (_selectedFilters.isEmpty) {
-        _filteredData = data;
-      } else {
-        _filteredData = data
-            .where((post) => _selectedFilters.every((tag) => post.tags.contains(tag)))
-            .toList();
-      }
     });
+    // 현재 검색text를 호출하여 결과 확인
+    _search(_searchText);
   }
 
   void _search(String searchText) {
@@ -47,8 +42,12 @@ class _FeedPageState extends State<FeedPage> {
       _searchText = searchText;
       _filteredData = data
           .where((post) =>
-      post.title.toLowerCase().contains(_searchText.toLowerCase()) &&
-          (_selectedFilters.isEmpty || post.tags.any((tag) => _selectedFilters.contains(tag))))
+      // 검색 텍스트가 title, contents, tag에 있는지 확인
+      (post.title.toLowerCase().contains(_searchText.toLowerCase()) ||
+          post.contents.toLowerCase().contains(_searchText.toLowerCase()) ||
+          post.tags.any((tag) => tag.toLowerCase().contains(_searchText.toLowerCase()))) &&
+          // 게시물에 일치하는 태그가 있는지 확인
+          (_selectedFilters.isEmpty || _selectedFilters.any((tag) => post.tags.contains(tag))))
           .toList();
     });
   }
