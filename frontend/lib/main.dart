@@ -45,9 +45,9 @@ class BottomBar extends StatelessWidget {
         padding: const EdgeInsets.only(bottom: 10, top: 5),
         child: const TabBar(
           indicatorSize: TabBarIndicatorSize.label,
-          indicatorColor: Colors.lightBlue,
+          indicatorColor: Color(0xff9CC4FF),
           indicatorWeight: 4,
-          labelColor: Colors.black,
+          labelColor: Color(0xff9CC4FF),
           unselectedLabelColor: Colors.black38,
           labelStyle: TextStyle(
             fontSize: 10,
