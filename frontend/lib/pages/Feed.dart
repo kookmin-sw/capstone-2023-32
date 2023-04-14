@@ -3,20 +3,18 @@ import 'package:fasttrip/pages/PostDetailPage.dart';
 import 'package:flutter/material.dart';
 import 'package:fasttrip/style.dart';
 
-
-
 class FeedPage extends StatefulWidget {
+  const FeedPage({Key? key}) : super(key: key);
+
   @override
   _FeedPageState createState() => _FeedPageState();
 }
 
 class _FeedPageState extends State<FeedPage> {
-
-
   List<Post> _filteredData = [];
   String _searchText = '';
 
-  List<String> _selectedFilters = [];
+  final List<String> _selectedFilters = [];
 
   @override
   void initState() {
@@ -36,7 +34,8 @@ class _FeedPageState extends State<FeedPage> {
         _filteredData = data;
       } else {
         _filteredData = data
-            .where((post) => _selectedFilters.every((tag) => post.tags.contains(tag)))
+            .where((post) =>
+                _selectedFilters.every((tag) => post.tags.contains(tag)))
             .toList();
       }
     });
@@ -47,8 +46,9 @@ class _FeedPageState extends State<FeedPage> {
       _searchText = searchText;
       _filteredData = data
           .where((post) =>
-      post.title.toLowerCase().contains(_searchText.toLowerCase()) &&
-          (_selectedFilters.isEmpty || post.tags.any((tag) => _selectedFilters.contains(tag))))
+              post.title.toLowerCase().contains(_searchText.toLowerCase()) &&
+              (_selectedFilters.isEmpty ||
+                  post.tags.any((tag) => _selectedFilters.contains(tag))))
           .toList();
     });
   }
@@ -58,33 +58,35 @@ class _FeedPageState extends State<FeedPage> {
     return Column(
       children: [
         Container(
-          padding: const EdgeInsets.only(top:50.0, left:20.0),
+          padding: const EdgeInsets.only(top: 50.0, left: 20.0),
           alignment: Alignment.centerLeft,
           child: Text('피드', style: heading1, textAlign: TextAlign.left),
         ),
         Padding(
           padding: const EdgeInsets.all(20.0),
           child: TextField(
-
             onChanged: (value) {
               _search(value);
             },
             decoration: InputDecoration(
               hintText: '검색어를 입력해주세요',
-              prefixIcon: Icon(Icons.search, color: Colors.grey,),
-              border: OutlineInputBorder(
+              prefixIcon: const Icon(
+                Icons.search,
+                color: Colors.grey,
+              ),
+              border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(
                   Radius.circular(25.0),
                 ),
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.all(
+                borderRadius: const BorderRadius.all(
                   Radius.circular(25.0),
                 ),
-                borderSide: BorderSide(color:Colors.grey.shade400),
+                borderSide: BorderSide(color: Colors.grey.shade400),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.all(
+                borderRadius: const BorderRadius.all(
                   Radius.circular(25.0),
                 ),
                 borderSide: BorderSide(color: Colors.grey.shade400),
@@ -93,7 +95,10 @@ class _FeedPageState extends State<FeedPage> {
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(left: 30, bottom: 20,),
+          padding: const EdgeInsets.only(
+            left: 30,
+            bottom: 20,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -115,10 +120,13 @@ class _FeedPageState extends State<FeedPage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Container(
-                          width: MediaQuery.of(context).size.width*0.21,
-                          padding: const EdgeInsets.only(right:40.0),
+                          width: MediaQuery.of(context).size.width * 0.21,
+                          padding: const EdgeInsets.only(right: 40.0),
                           alignment: Alignment.center,
-                          child: Text('누구와', style: heading2, ),
+                          child: Text(
+                            '누구와',
+                            style: heading2,
+                          ),
                         ),
                         FilterButton(
                           label: '혼자',
@@ -146,10 +154,13 @@ class _FeedPageState extends State<FeedPage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Container(
-                          width: MediaQuery.of(context).size.width*0.2,
-                          padding: const EdgeInsets.only(right:40.0),
+                          width: MediaQuery.of(context).size.width * 0.2,
+                          padding: const EdgeInsets.only(right: 40.0),
                           alignment: Alignment.center,
-                          child: Text('종류', style: heading2, ),
+                          child: Text(
+                            '종류',
+                            style: heading2,
+                          ),
                         ),
                         FilterButton(
                           label: '단체(여자)',
@@ -172,10 +183,13 @@ class _FeedPageState extends State<FeedPage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Container(
-                          width: MediaQuery.of(context).size.width*0.2,
-                          padding: const EdgeInsets.only(right:40.0),
+                          width: MediaQuery.of(context).size.width * 0.2,
+                          padding: const EdgeInsets.only(right: 40.0),
                           alignment: Alignment.center,
-                          child: Text('기타', style: heading2, ),
+                          child: Text(
+                            '기타',
+                            style: heading2,
+                          ),
                         ),
                         FilterButton(
                           label: '최신',
@@ -214,37 +228,73 @@ class _FeedPageState extends State<FeedPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => PostDetailPage(post: _filteredData[index]),
+                      builder: (context) =>
+                          PostDetailPage(post: _filteredData[index]),
                     ),
                   );
                 },
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom:20.0),
+                  padding: const EdgeInsets.only(
+                      left: 20.0, right: 20.0, bottom: 20.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Image.network(
-                          _filteredData[index].imageUrl,
-                          width: double.infinity,
-                          height: 200,
-                          fit: BoxFit.cover),
-                      SizedBox(height: 10.0),
+                      Stack(
+                        children: [
+                          Image.network(_filteredData[index].imageUrl,
+                              width: double.infinity,
+                              height: 200,
+                              fit: BoxFit.cover),
+                          Positioned(
+                            top: 5,
+                            right: 5,
+                            child: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  if (_filteredData[index].heart) {
+                                    _filteredData[index].heart = false;
+                                  } else {
+                                    _filteredData[index].heart = true;
+                                  }
+                                });
+                              },
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints(),
+                              icon: Icon(
+                                _filteredData[index].heart
+                                    ? Icons.favorite
+                                    : Icons.favorite_border,
+                                color: _filteredData[index].heart
+                                    ? Colors.red
+                                    : Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10.0),
                       Text(
                         _filteredData[index].title,
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(height: 10.0),
+                      const SizedBox(height: 10.0),
                       Wrap(
                         spacing: 8.0,
-                        children: _filteredData[index].tags
-                            .map((tag) => Chip(
-                          label: Text(
-                            tag,
-                            style: TextStyle(color: Colors.blue),
-                          ),
-                          backgroundColor: Colors.transparent,
-                          side: BorderSide(color: Colors.blue, width: 1),
-                        ),).toList(),
+                        children: _filteredData[index]
+                            .tags
+                            .map(
+                              (tag) => Chip(
+                                label: Text(
+                                  tag,
+                                  style: const TextStyle(color: Colors.blue),
+                                ),
+                                backgroundColor: Colors.transparent,
+                                side: const BorderSide(
+                                    color: Colors.blue, width: 1),
+                              ),
+                            )
+                            .toList(),
                       ),
                     ],
                   ),
@@ -263,27 +313,27 @@ class FilterButton extends StatelessWidget {
   final bool selected;
   final VoidCallback onPressed;
 
-  FilterButton({
+  const FilterButton({
+    Key? key,
     required this.label,
     required this.selected,
     required this.onPressed,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: onPressed,
       style: TextButton.styleFrom(
+        foregroundColor: selected ? Colors.blue : Colors.black,
         alignment: Alignment.centerLeft,
-        primary: selected ? Colors.blue : Colors.black,
         backgroundColor: Colors.transparent,
-        padding: EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
       ),
       child: Text(
         label,
-        style: TextStyle(fontSize: 13.0),
+        style: const TextStyle(fontSize: 13.0),
       ),
     );
   }
 }
-
