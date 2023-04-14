@@ -37,6 +37,8 @@ dependencies:
   cupertino_icons: ^1.0.5
   flutter_svg: ^2.0.4
   image_picker: ^0.8.7+1
+  google_maps_flutter: ^2.2.5
+  flutter_email_sender: ^5.2.0
 
 dev_dependencies:
   flutter_test:

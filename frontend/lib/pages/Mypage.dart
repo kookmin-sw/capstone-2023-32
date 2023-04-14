@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:fasttrip/style.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'dart:io';
 
 class MyPage extends StatefulWidget {
@@ -90,19 +91,33 @@ class _MyPageState extends State<MyPage> {
                     const SizedBox(
                       height: 65,
                     ),
-                    mypageButton('내 정보'),
+                    InkWell(
+                      onTap: () {},
+                      child: mypageButton('내 정보'),
+                    ),
                     const SizedBox(
                       height: 22,
                     ),
-                    mypageButton('내가 찜한 여행/스크랩'),
+                    InkWell(
+                      onTap: () {},
+                      child: mypageButton('내가 찜한 여행/스크랩'),
+                    ),
                     const SizedBox(
                       height: 22,
                     ),
-                    mypageButton('쪽지함'),
+                    InkWell(
+                      onTap: () {},
+                      child: mypageButton('쪽지함'),
+                    ),
                     const SizedBox(
                       height: 22,
                     ),
-                    mypageButton('문의'),
+                    InkWell(
+                      onTap: () {
+                        Inquiry(context);
+                      },
+                      child: mypageButton('문의'),
+                    ),
                   ],
                 ),
               ),
@@ -219,31 +234,77 @@ class _MyPageState extends State<MyPage> {
   }
 
   Widget mypageButton(String memuName) {
-    return InkWell(
-      onTap: () {},
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 20,
-          vertical: 13,
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 20,
+        vertical: 13,
+      ),
+      width: 400,
+      height: 56,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: const Color(0xFF9CC4FF),
         ),
-        width: 400,
-        height: 56,
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: const Color(0xFF9CC4FF),
-          ),
-          borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Text(
+        memuName,
+        style: const TextStyle(
+          fontSize: 20,
+          color: Color(0xFF329EFF),
+          fontWeight: FontWeight.normal,
         ),
-        child: Text(
-          memuName,
-          style: const TextStyle(
-            fontSize: 20,
-            color: Color(0xFF329EFF),
-            fontWeight: FontWeight.normal,
-          ),
-          textAlign: TextAlign.start,
-        ),
+        textAlign: TextAlign.start,
       ),
     );
+  }
+
+  Future Inquiry(BuildContext context) async {
+    final Email email = Email(
+      body: '',
+      subject: '[페스츄리(Fast Trip) 문의]',
+      recipients: ['Fast_Trip@gmail.com'],
+      cc: [],
+      bcc: [],
+      attachmentPaths: [],
+      isHTML: false,
+    );
+
+    try {
+      await FlutterEmailSender.send(email);
+    } catch (error) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0)),
+            title: const Text('문의하기'),
+            content: const SingleChildScrollView(
+              child: Text(
+                  '기본 메일 앱을 사용할 수 없습니다.\n아래 이메일로 직접 문의해주세요!\n\nFast_Trip@gmail.com'),
+            ),
+            actions: <Widget>[
+              Column(
+                children: [
+                  const Divider(
+                    height: 1,
+                  ),
+                  Center(
+                    child: TextButton(
+                      child: const Text("확인"),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 }
