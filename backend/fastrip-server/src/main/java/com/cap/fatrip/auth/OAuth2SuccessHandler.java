@@ -1,7 +1,6 @@
 package com.cap.fatrip.auth;
 
 import com.cap.fatrip.dto.UserDto;
-import com.cap.fatrip.entity.UserEntity;
 import com.cap.fatrip.service.TokenService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +10,6 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -27,7 +25,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
 			throws IOException {
 		OAuth2User oAuth2User = (OAuth2User)authentication.getPrincipal();
-		UserDto userDto = UserDto.toUserDto(oAuth2User);
+		UserDto userDto = UserDto.of(oAuth2User);
 
 		// todo: specify role.
 		Token token = tokenService.generateToken(userDto);

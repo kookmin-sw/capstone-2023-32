@@ -25,7 +25,7 @@ public class UserService {
         if (user.isPresent()) {
             UserEntity userEntity = user.get();
             if (userEntity.getPassword().equals(userDto.getPassword())) {
-                return UserDto.toUserDto(userEntity);
+                return UserDto.of(userEntity);
             }
         }
         return null;
@@ -41,14 +41,14 @@ public class UserService {
         List<UserDto> userDtoList = new ArrayList<>();
 
         for (UserEntity userEntity : userEntityList) {
-            userDtoList.add(UserDto.toUserDto(userEntity));
+            userDtoList.add(UserDto.of(userEntity));
         }
         return userDtoList;
     }
 
     public UserDto findById(String id) {
         Optional<UserEntity> optionalUserEntity = userRepository.findById(id);
-        return optionalUserEntity.map(UserDto::toUserDto).orElse(null);
+        return optionalUserEntity.map(UserDto::of).orElse(null);
     }
 
     public void update(UserDto memberDto) {

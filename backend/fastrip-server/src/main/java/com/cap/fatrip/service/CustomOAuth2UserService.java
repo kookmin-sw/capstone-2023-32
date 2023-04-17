@@ -1,8 +1,10 @@
 package com.cap.fatrip.service;
 
 import com.cap.fatrip.auth.OAuth2Attribute;
+import com.cap.fatrip.dto.UserDto;
 import com.cap.fatrip.entity.UserEntity;
 import com.cap.fatrip.repository.UserRepository;
+import com.cap.fatrip.util.ServiceUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -44,14 +46,14 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         log.info("{}", attributes);
 
-        UserEntity user = saveOrUpdate(attributes);
-//        Authentication auth = new UsernamePasswordAuthenticationToken(user, "",
-//                // todo: set Authentication error. need to fix
-//                List.of(new SimpleGrantedAuthority(user.getRole().getValue())));
-//        SecurityContextHolder.getContext().setAuthentication(auth);
+        UserDto user = saveOrUpdate(attributes);
+        Authentication auth = new UsernamePasswordAuthenticationToken(user, "",
+                // todo: set Authentication error. need to fix
+                List.of(new SimpleGrantedAuthority(user.getRole().getValue())));
+        SecurityContextHolder.getContext().setAuthentication(auth);
 
         return new DefaultOAuth2User(
-                Collections.singleton(new SimpleGrantedAuthority(user.getRoleValue())),
+                Collections.singleton(new SimpleGrantedAuthority(user.getRole().getValue())),
                 attributes.convertToMap(),
 //                attributes.getNameAttributeKey());
                 "email");
@@ -59,11 +61,14 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     }
 
     /* 소셜로그인시 기존 회원이 존재하면 수정날짜 정보만 업데이트해 기존의 데이터는 그대로 보존 */
-    private UserEntity saveOrUpdate(OAuth2Attribute attributes) {
-        UserEntity user = userRepository.findByEmail(attributes.getEmail())
+    private UserDto saveOrUpdate(OAuth2Attribute attributes) {
+        UserEntity userEntity = userRepository.findByEmail(attributes.getEmail())
                 .map(UserEntity::updateModifiedDate)
                 .orElse(attributes.toEntity());
+        userEntity = userRepository.save(userEntity);
+        UserDto userDto = new UserDto();
+        ServiceUtil.copyObject(userEntity, userDto);
 
-        return userRepository.save(user);
+        return userDto;
     }
 }

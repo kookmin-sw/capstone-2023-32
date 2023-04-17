@@ -33,7 +33,7 @@ public class UserDto implements Serializable {
 	private int report_cnt;
 	private UserEntity.Role role;
 
-	public static UserDto toUserDto(UserEntity userEntity) {
+	public static UserDto of(UserEntity userEntity) {
 		UserDto user = new UserDto();
 
 		user.id = userEntity.getId();
@@ -56,7 +56,7 @@ public class UserDto implements Serializable {
 		return user;
 	}
 
-	public static UserDto toUserDto(OAuth2User oAuth2User) {
+	public static UserDto of(OAuth2User oAuth2User) {
 		var attributes = oAuth2User.getAttributes();
 		return UserDto.builder()
 				.id((String) attributes.get("id"))

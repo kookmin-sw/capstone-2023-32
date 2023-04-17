@@ -33,7 +33,6 @@ public class JwtAuthFilter extends GenericFilterBean {
 			String nickname = (String) claims.get(Token.NICKNAME);
 			String role = (String) claims.get(Token.ROLE);
 
-			// DB연동을 안했으니 이메일 정보로 유저를 만듦.
 			// todo: creating user process
 			UserDto userDto = UserDto.builder()
 					.email(email)
