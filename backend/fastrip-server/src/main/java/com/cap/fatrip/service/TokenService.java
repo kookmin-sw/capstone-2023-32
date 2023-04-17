@@ -59,7 +59,7 @@ public class TokenService {
 		}
 	}
 
-	public Claims getUid(String token) {
+	public Claims getClaim(String token) {
 		return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
 	}
 }
