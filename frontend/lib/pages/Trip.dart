@@ -1,4 +1,5 @@
 import 'package:fasttrip/Data/PostData.dart';
+import 'package:fasttrip/pages/MakePlan.dart';
 import 'package:fasttrip/pages/PostDetailPage.dart';
 import 'package:flutter/material.dart';
 import 'package:fasttrip/style.dart';
@@ -160,7 +161,7 @@ class MyTravelList extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const NewTravelPlanPage()),
+                          builder: (context) => const MakePlan()),
                     );
                   },
                   child: Container(
@@ -282,16 +283,6 @@ class _HeartListState extends State<HeartList> {
   }
 }
 
-
-// 새 여행 만들기 페이지 (임시)
-class NewTravelPlanPage extends StatelessWidget {
-  const NewTravelPlanPage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const Text('새 여행 임시 페이지');
-  }
-}
 
 class MoreButton extends StatelessWidget {
   const MoreButton({Key? key}) : super(key: key);
