@@ -1,32 +1,17 @@
 package com.cap.fatrip.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
-@ToString
+@Data
 @NoArgsConstructor
 public class ChatGptResponseDto implements Serializable {
-
 	private String id;
 	private String object;
 	private LocalDate created;
 	private String model;
 	private List<Choice> choices;
-
-	@Builder
-	public ChatGptResponseDto(String id, String object,
-							  LocalDate created, String model,
-							  List<Choice> choices) {
-		this.id = id;
-		this.object = object;
-		this.created = created;
-		this.model = model;
-		this.choices = choices;
-	}
 }

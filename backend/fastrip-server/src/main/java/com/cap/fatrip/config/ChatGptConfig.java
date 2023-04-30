@@ -9,5 +9,6 @@ public class ChatGptConfig {
 	public static final Double TEMPERATURE = 0.0;
 	public static final Double TOP_P = 1.0;
 	public static final String MEDIA_TYPE = "application/json; charset=UTF-8";
-	public static final String URL = "https://api.openai.com/v1/completions";
+	public static final String BASE_URL = "https://api.openai.com";
+	public static final String URI = "/v1/completions";
 }
