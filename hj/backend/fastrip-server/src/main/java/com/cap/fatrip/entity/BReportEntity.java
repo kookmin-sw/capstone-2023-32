@@ -5,19 +5,20 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Getter
 @Setter
 @Table(name = "breport")
-public class BReportEntity {
+public class BReportEntity implements Serializable {
     @Id
-    @OneToMany
+    @ManyToOne
     @JoinColumn(name="b_key")
     private BoardEntity board;
 
-    @OneToOne
-    @JoinColumn(name="u_key")
+    @ManyToOne
+    @JoinColumn(name="id")
     private UserEntity user;
 
     @Column(name="br_reason")

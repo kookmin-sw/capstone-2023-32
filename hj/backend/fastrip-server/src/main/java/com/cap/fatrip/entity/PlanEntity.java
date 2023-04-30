@@ -18,7 +18,7 @@ public class PlanEntity {
     private long p_id;
 
     @ManyToOne
-    @JoinColumn(name = "u_key",nullable = false)   //fk
+    @JoinColumn(name = "id",nullable = false)   //fk
     private UserEntity user;
     @Column(name="p_c_date") //계획생성일
     private Date p_c_date;

@@ -17,7 +17,7 @@ public class CommentEntity {
     private long c_key;
 
     @ManyToOne
-    @JoinColumn(name = "u_key",nullable = false)   //fk
+    @JoinColumn(name = "id",nullable = false)   //fk
     private UserEntity user;
 
     @ManyToOne

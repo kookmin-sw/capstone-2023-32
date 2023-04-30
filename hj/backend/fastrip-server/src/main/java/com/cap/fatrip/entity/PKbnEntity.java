@@ -3,19 +3,20 @@ import com.cap.fatrip.dto.PKbnDto;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.*;
 
 @Entity
 @Getter
 @Setter
 @Table(name = "pkbn") //place 구분
-public class PKbnEntity {
+public class PKbnEntity implements Serializable {
     @Id
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name="kbn_id")
     private KbnEntity kbn;
 
-    @OneToMany
+    @ManyToOne
     @JoinColumn(name="p_no")
     private PlaceEntity place;
 

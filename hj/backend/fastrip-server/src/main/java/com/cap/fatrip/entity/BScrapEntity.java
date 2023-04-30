@@ -6,15 +6,16 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Getter
 @Setter
 @Table(name = "bscrap")
-public class BScrapEntity {
+public class BScrapEntity implements Serializable {
     @Id
     @ManyToOne
-    @JoinColumn(name="u_key")
+    @JoinColumn(name="id")
     private UserEntity user;
 
     @OneToOne

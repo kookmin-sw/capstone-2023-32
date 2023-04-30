@@ -3,13 +3,14 @@ import com.cap.fatrip.dto.PPlanDto;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.*;
 
 @Entity
 @Getter
 @Setter
 @Table(name = "pplan")
-public class PPlanEntity {
+public class PPlanEntity implements Serializable {
     @Id
     @ManyToOne
     @JoinColumn(name="p_id") //계획번호

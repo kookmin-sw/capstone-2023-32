@@ -16,7 +16,7 @@ public class BoardEntity {
     private long b_key;
 
     @ManyToOne
-    @JoinColumn(name = "u_key",nullable = false)   //fk
+    @JoinColumn(name = "id",nullable = false)   //fk
     private UserEntity user;
 
     @Column(name = "b_title")
