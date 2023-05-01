@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class TestGPTController {
 	private final GPTService gptService;
-	@GetMapping(value = "/query", params = {"query"})
+	@GetMapping(params = {"query"})
 	public ChatGptResponseDto query(@RequestParam String query) {
 		return gptService.askQuestion(query);
 	}
