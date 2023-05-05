@@ -1,3 +1,4 @@
+import 'package:fasttrip/pages/Map.dart';
 import 'package:fasttrip/style.dart';
 import 'package:flutter/material.dart';
 import 'package:fasttrip/pages/SearchResult.dart';
@@ -129,7 +130,8 @@ class _SearchBarState extends State<SearchBar> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => SearchResultsPage(searchTerm: value),
+          builder: (context) => MapPage(searchQuery: value),
+
         ),
       );
     }
