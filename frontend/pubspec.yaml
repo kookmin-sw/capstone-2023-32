@@ -38,6 +38,7 @@ dependencies:
   flutter_svg: ^2.0.4
   image_picker: ^0.8.7+1
   google_maps_flutter: ^2.2.5
+  geocoding: ^2.1.0
   flutter_email_sender: ^5.2.0
   http: ^0.13.5
   intl: ^0.18.1
