@@ -7,24 +7,34 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PlanDto {
+public class PlanDto extends TimeDto {
     private long p_id;
+    private String userId;
     private UserEntity user;
-    private Date p_c_date;
     private int cost;
+    private double starTotal;
+    private int starCnt;
+    private boolean open;
 
     public static PlanDto of(PlanEntity planEntity){
         PlanDto plan = new PlanDto();
-        plan.p_id = planEntity.getP_id();
+        plan.p_id = planEntity.getId();
         plan.user = planEntity.getUser();
+        plan.userId = planEntity.getUserId();
         plan.cost = planEntity.getCost();
-        plan.p_c_date = planEntity.getP_c_date();
+		plan.starTotal = planEntity.getStarTotal();
+		plan.starCnt = planEntity.getStarCnt();
+		plan.open = planEntity.isOpen();
+        plan.createdAt = planEntity.getCreatedAt();
+		plan.updatedAt = planEntity.getUpdatedAt();
         return plan;
     }
 }

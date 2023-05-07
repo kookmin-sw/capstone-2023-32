@@ -68,7 +68,7 @@ public class UserEntity extends TimeEntity {
 	/* 소셜로그인시 이미 등록된 회원이라면 수정날짜만 업데이트하고
 	 * 기존 데이터는 그대로 보존하도록 예외처리 */
 	public UserEntity updateModifiedDate() {
-		this.onPreUpdate();
+//		this.onPreUpdate();
 		return this;
 	}
 
