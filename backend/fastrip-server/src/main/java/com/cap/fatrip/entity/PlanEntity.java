@@ -29,8 +29,8 @@ public class PlanEntity extends TimeEntity {
     @Column(name = "u_id")
     // test
     private String userId;
-    @OneToMany(mappedBy = "tag")
-    private List<PurposeEntity> purposes = new ArrayList<>();
+    @OneToMany(mappedBy = "plan", orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<PlanPurposeEntity> purposes = new ArrayList<>();
     @Column(name = "p_star_total")
     private double starTotal;
     @Column(name= "p_star_cnt")

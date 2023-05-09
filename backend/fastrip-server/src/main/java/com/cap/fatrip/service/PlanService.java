@@ -22,24 +22,4 @@ public class PlanService {
 		return planDtoStream.toList();
 	}
 
-	@PostConstruct
-	public void randomSave() {
-		if (planRepository.findAll().size() != 0) {
-			return;
-		}
-		Random random = new Random();
-		List<PlanEntity> planEntityList = new ArrayList<>();
-		for (int i = 0; i < 20; i++) {
-			planEntityList.add(
-					PlanEntity.builder()
-							.userId("jun" + (random.nextInt(20) + 1))
-							.starTotal(44 + random.nextInt(22, 46))
-							.starCnt(9)
-							.open(true)
-							.cost(random.nextInt(44, 88))
-							.build()
-			);
-		}
-		List<PlanEntity> planEntities = planRepository.saveAll(planEntityList);
-	}
 }

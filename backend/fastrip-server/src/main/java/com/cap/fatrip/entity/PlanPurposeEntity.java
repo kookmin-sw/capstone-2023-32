@@ -7,7 +7,8 @@ public class PlanPurposeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-//	@ManyToOne
-//	@JoinColumn(name = "plan_id"))
-//	private PlanEntity plan;
+	@ManyToOne(fetch = FetchType.LAZY)
+	private PlanEntity plan;
+	@ManyToOne(fetch = FetchType.LAZY)
+	private PurposeEntity purpose;
 }
