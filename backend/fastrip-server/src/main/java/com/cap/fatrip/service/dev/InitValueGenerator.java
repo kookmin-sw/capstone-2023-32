@@ -1,9 +1,9 @@
 package com.cap.fatrip.service.dev;
 
 import com.cap.fatrip.entity.PlanEntity;
-import com.cap.fatrip.entity.PurposeEntity;
+import com.cap.fatrip.entity.TagEntity;
 import com.cap.fatrip.repository.PlanRepository;
-import com.cap.fatrip.repository.PurposeRepository;
+import com.cap.fatrip.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,21 +16,21 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class InitValueGenerator {
 	private final PlanRepository planRepository;
-	private final PurposeRepository purposeRepository;
+	private final TagRepository tagRepository;
 
 	@PostConstruct
 	public void generate() {
 		generatePlan();
-		generatePurpose();
+		generateTag();
 	}
 
-	private void generatePurpose(){
-		if (purposeRepository.count() !=0) {
+	private void generateTag(){
+		if (tagRepository.count() !=0) {
 			return;
 		}
-		String[] purposes = {"activity", "tourism", "rest"};
-		List<PurposeEntity> purposeEntityList = new ArrayList<>();
-		for (String purpose : purposes) {
+		String[] tags = {"activity", "tourism", "rest"};
+		List<TagEntity> tagEntityList = new ArrayList<>();
+		for (String tag : tags) {
 
 		}
 	}
@@ -45,10 +45,8 @@ public class InitValueGenerator {
 			planEntityList.add(
 					PlanEntity.builder()
 							.userId("jun" + (random.nextInt(20) + 1))
-							.starTotal(44 + random.nextInt(22, 46))
-							.starCnt(9)
+							.like(9)
 							.open(true)
-							.cost(random.nextInt(44, 88))
 							.build()
 			);
 		}

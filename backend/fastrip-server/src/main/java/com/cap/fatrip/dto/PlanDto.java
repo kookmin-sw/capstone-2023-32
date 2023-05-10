@@ -7,8 +7,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -19,9 +17,7 @@ public class PlanDto extends TimeDto {
     private long p_id;
     private String userId;
     private UserEntity user;
-    private int cost;
-    private double starTotal;
-    private int starCnt;
+    private int like;
     private Date p_c_date; //테스트를 위한 데이터
     private boolean open;
 
@@ -30,13 +26,10 @@ public class PlanDto extends TimeDto {
         plan.p_id = planEntity.getId();
         plan.user = planEntity.getUser();
         plan.userId = planEntity.getUserId();
-        plan.cost = planEntity.getCost();
-		plan.starTotal = planEntity.getStarTotal();
-		plan.starCnt = planEntity.getStarCnt();
+		plan.like = planEntity.getLike();
 		plan.open = planEntity.isOpen();
         plan.createdAt = planEntity.getCreatedAt();
 		plan.updatedAt = planEntity.getUpdatedAt();
-        plan.p_c_date = planEntity.getP_c_date();
         return plan;
     }
 }

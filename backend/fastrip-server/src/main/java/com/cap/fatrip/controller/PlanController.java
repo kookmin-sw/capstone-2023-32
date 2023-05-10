@@ -13,8 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -78,10 +76,10 @@ public class PlanController {
 		Random random = new Random();
 
 		PlanResDto dto = new PlanResDto();
-		dto.setStar(random.nextDouble() * 3 + 2);
+		dto.setLike(random.nextInt(5, 55));
 		dto.setPlanId(random.nextInt(20000));
 		dto.setUserId("cap_user_" + random.nextInt(100));
-		dto.setPurpose(new PlanReqDto.Purpose[]{PlanReqDto.Purpose.rest, PlanReqDto.Purpose.tourism});
+		dto.setTag(new PlanReqDto.Tag[]{PlanReqDto.Tag.rest, PlanReqDto.Tag.tourism});
 		return dto;
 	}
 }

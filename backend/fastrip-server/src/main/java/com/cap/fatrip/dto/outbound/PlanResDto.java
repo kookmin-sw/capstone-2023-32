@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PlanResDto {
 	private long planId;
-	private double star;
+	private int like;
 	private String userId;
-	private PlanReqDto.Purpose[] purpose;
+	private PlanReqDto.Tag[] tag;
 }

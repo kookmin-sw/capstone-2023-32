@@ -1,15 +1,14 @@
 package com.cap.fatrip.dto.inbound;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @Getter
 public class PlanReqDto {
 	private int expense;
 	private int days;
-	private Purpose[] purpose;
+	private Tag[] tag;
 
-	public enum Purpose {
+	public enum Tag {
 		activity, tourism, rest
 	}
 }

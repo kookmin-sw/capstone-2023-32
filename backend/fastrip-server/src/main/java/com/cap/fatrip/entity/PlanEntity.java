@@ -6,7 +6,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -30,23 +29,16 @@ public class PlanEntity extends TimeEntity {
     // test
     private String userId;
     @OneToMany(mappedBy = "plan", orphanRemoval = true, cascade = CascadeType.ALL)
-    private List<PlanPurposeEntity> purposes = new ArrayList<>();
-    @Column(name = "p_star_total")
-    private double starTotal;
-    @Column(name= "p_star_cnt")
-    private int starCnt;
+    private List<PlanTagEntity> tags = new ArrayList<>();
+    @Column(name= "p_like")
+    private int like;
     @Column(name = "p_open")
     private boolean open;
-    @Column(name="p_c_date") //계획생성일
-    private Date p_c_date;
-    @Column(name="cost")
-    private int cost;
 
     public static PlanEntity toPlanEntity(PlanDto planDto){
         PlanEntity planEntity = new PlanEntity();
         planEntity.id = planDto.getP_id();
         planEntity.user = planDto.getUser();
-        planEntity.cost = planDto.getCost();
         return planEntity;
     }
 }
