@@ -22,6 +22,7 @@ public class PlanDto extends TimeDto {
     private int cost;
     private double starTotal;
     private int starCnt;
+    private Date p_c_date; //테스트를 위한 데이터
     private boolean open;
 
     public static PlanDto of(PlanEntity planEntity){
@@ -35,6 +36,7 @@ public class PlanDto extends TimeDto {
 		plan.open = planEntity.isOpen();
         plan.createdAt = planEntity.getCreatedAt();
 		plan.updatedAt = planEntity.getUpdatedAt();
+        plan.p_c_date = planEntity.getP_c_date();
         return plan;
     }
 }

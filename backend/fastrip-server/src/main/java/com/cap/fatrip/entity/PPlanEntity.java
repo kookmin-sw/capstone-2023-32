@@ -29,7 +29,7 @@ public class PPlanEntity implements Serializable {
     @Column(name="p_seq") // 계획 순서
     private int p_seq;
 
-    public PPlanEntity toPPlanEntity(PPlanDto pplanDto){
+    public static PPlanEntity toPPlanEntity(PPlanDto pplanDto){
         PPlanEntity pplanEntity = new PPlanEntity();
         pplanEntity.plan = pplanDto.getPlan();
         pplanEntity.place = pplanDto.getPlace();

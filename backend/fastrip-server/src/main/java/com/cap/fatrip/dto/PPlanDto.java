@@ -3,14 +3,12 @@ package com.cap.fatrip.dto;
 import com.cap.fatrip.entity.PPlanEntity;
 import com.cap.fatrip.entity.PlaceEntity;
 import com.cap.fatrip.entity.PlanEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

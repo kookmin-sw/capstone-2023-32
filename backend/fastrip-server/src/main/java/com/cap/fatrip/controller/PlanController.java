@@ -1,10 +1,16 @@
 package com.cap.fatrip.controller;
 
+import com.cap.fatrip.dto.PPlanDto;
+import com.cap.fatrip.dto.PlaceDto;
 import com.cap.fatrip.dto.PlanDto;
 import com.cap.fatrip.dto.inbound.PlanReqDto;
+import com.cap.fatrip.dto.inbound.savePlanDto;
 import com.cap.fatrip.dto.outbound.PlanResDto;
+import com.cap.fatrip.service.PPlanService;
+import com.cap.fatrip.service.PlaceService;
 import com.cap.fatrip.service.PlanService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
@@ -17,6 +23,15 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class PlanController {
 	private final PlanService planService;
+	private PPlanService pplanService;
+	private PlaceService placeService;
+
+	@Autowired
+	public PlanController(PlanService planService, PPlanService pplanService, PlaceService placeService) {
+		this.planService = planService;
+		this.pplanService = pplanService;
+		this.placeService = placeService;
+	}
 
 	@PostMapping
 	public List<PlanResDto> find(@RequestBody PlanReqDto planReqDto) {
@@ -29,6 +44,7 @@ public class PlanController {
 		return planService.getPlans();
 	}
 
+
 	private PlanResDto[] createDummyDtoList(PlanReqDto planReqDto) {
 		int cnt = 15;
 		PlanResDto[] dtos = new PlanResDto[cnt];
@@ -37,6 +53,25 @@ public class PlanController {
 			dtos[i] = dummyDto;
 		}
 		return dtos;
+	}
+
+	@PostMapping("/save")
+	public String save( @RequestBody savePlanDto saveDto) {
+
+		planService.savePlan(saveDto.getPlan());
+		//long p_id = saveDto.getPlan().getP_id();
+		List<PlaceDto> places = saveDto.getPlace();
+		for(PlaceDto place : places ) {
+			placeService.savePlace(place);
+		}
+
+		List<PPlanDto> pplans = saveDto.getPplan();
+		for(PPlanDto pplan : pplans ) {
+			pplanService.savePplan(pplan);
+		}
+
+		System.out.println(saveDto);
+		return "save success";
 	}
 
 	private PlanResDto createDummyDto() {

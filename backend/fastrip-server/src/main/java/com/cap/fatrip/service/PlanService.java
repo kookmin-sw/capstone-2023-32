@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.Random;
 import java.util.stream.Stream;
 
@@ -20,6 +20,10 @@ public class PlanService {
 		List<PlanEntity> planEntityList = planRepository.findAll();
 		Stream<PlanDto> planDtoStream = planEntityList.stream().map(PlanDto::of);
 		return planDtoStream.toList();
+	}
+
+	public void savePlan(PlanDto planDto) {
+		planRepository.save(PlanEntity.toPlanEntity(planDto));
 	}
 
 }

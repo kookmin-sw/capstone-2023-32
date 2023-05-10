@@ -37,6 +37,8 @@ public class PlanEntity extends TimeEntity {
     private int starCnt;
     @Column(name = "p_open")
     private boolean open;
+    @Column(name="p_c_date") //계획생성일
+    private Date p_c_date;
     @Column(name="cost")
     private int cost;
 
