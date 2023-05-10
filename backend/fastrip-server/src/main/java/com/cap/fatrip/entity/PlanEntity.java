@@ -25,6 +25,8 @@ public class PlanEntity extends TimeEntity {
 //    @JoinColumn(name = "id",nullable = false)   //fk
     @JoinColumn(name = "id", insertable = false, updatable = false)   //fk
     private UserEntity user;
+    @Column(name = "p_subject")
+    private String subject;
     @Column(name = "u_id")
     // test
     private String userId;
