@@ -5,7 +5,7 @@ import com.cap.fatrip.dto.PlaceDto;
 import com.cap.fatrip.dto.PlanDto;
 import com.cap.fatrip.entity.PPlanEntity;
 import com.cap.fatrip.entity.PlaceEntity;
-import com.cap.fatrip.repository.PPlanRepository;
+//import com.cap.fatrip.repository.PPlanRepository;
 import com.cap.fatrip.repository.PlaceRepository;
 import com.cap.fatrip.repository.PlanRepository;
 import lombok.RequiredArgsConstructor;
