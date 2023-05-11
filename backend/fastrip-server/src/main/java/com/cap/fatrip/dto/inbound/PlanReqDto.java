@@ -6,9 +6,5 @@ import lombok.Getter;
 public class PlanReqDto {
 	private int expense;
 	private int days;
-	private Tag[] tag;
-
-	public enum Tag {
-		activity, tourism, rest
-	}
+	private String[] tag;
 }

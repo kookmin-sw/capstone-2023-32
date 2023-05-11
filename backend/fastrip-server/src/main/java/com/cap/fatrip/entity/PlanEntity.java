@@ -39,7 +39,7 @@ public class PlanEntity extends TimeEntity {
 
     public static PlanEntity toPlanEntity(PlanDto planDto){
         PlanEntity planEntity = new PlanEntity();
-        planEntity.id = planDto.getP_id();
+        planEntity.id = planDto.getId();
         planEntity.user = planDto.getUser();
         return planEntity;
     }

@@ -21,29 +21,24 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class PlanController {
 	private final PlanService planService;
-	private PPlanService pplanService;
-	private PlaceService placeService;
+	private final PPlanService pplanService;
+	private final PlaceService placeService;
 
-	@Autowired
-	public PlanController(PlanService planService, PPlanService pplanService, PlaceService placeService) {
-		this.planService = planService;
-		this.pplanService = pplanService;
-		this.placeService = placeService;
-	}
-
-	@PostMapping
-	public List<PlanResDto> find(@RequestBody PlanReqDto planReqDto) {
-		PlanResDto[] dtos = createDummyDtoList(planReqDto);
+//	@PostMapping("/all")
+	@GetMapping("/all")
+//	public List<PlanResDto> find(@RequestBody PlanReqDto planReqDto) {
+	public List<PlanResDto> findAll() {
+		PlanResDto[] dtos = createDummyDtoList();
 		return List.of(dtos);
 	}
 
-	@GetMapping("/all")
-	public List<PlanDto> findAll(@RequestBody PlanReqDto planReqDto) {
+	@GetMapping("/alls")
+	public List<PlanDto> findAllsss() {
 		return planService.getPlans();
 	}
 
 
-	private PlanResDto[] createDummyDtoList(PlanReqDto planReqDto) {
+	private PlanResDto[] createDummyDtoList() {
 		int cnt = 15;
 		PlanResDto[] dtos = new PlanResDto[cnt];
 		for (int i = 0; i < cnt; i++) {
@@ -54,17 +49,17 @@ public class PlanController {
 	}
 
 	@PostMapping("/save")
-	public String save( @RequestBody savePlanDto saveDto) {
+	public String save(@RequestBody savePlanDto saveDto) {
 
 		planService.savePlan(saveDto.getPlan());
 		//long p_id = saveDto.getPlan().getP_id();
 		List<PlaceDto> places = saveDto.getPlace();
-		for(PlaceDto place : places ) {
+		for (PlaceDto place : places) {
 			placeService.savePlace(place);
 		}
 
 		List<PPlanDto> pplans = saveDto.getPplan();
-		for(PPlanDto pplan : pplans ) {
+		for (PPlanDto pplan : pplans) {
 			pplanService.savePplan(pplan);
 		}
 
@@ -73,13 +68,15 @@ public class PlanController {
 	}
 
 	private PlanResDto createDummyDto() {
+		String[] subjects = {"낭만의 도시 파리", "힐링하세요~", "이건 잘못됐어...", "신사의 나라...?"};
 		Random random = new Random();
 
 		PlanResDto dto = new PlanResDto();
 		dto.setLike(random.nextInt(5, 55));
-		dto.setPlanId(random.nextInt(20000));
+		dto.setId(random.nextInt(20000));
+		dto.setSubject(subjects[random.nextInt(100) % subjects.length] + "_" + random.nextInt(1, 10));
 		dto.setUserId("cap_user_" + random.nextInt(100));
-		dto.setTag(new PlanReqDto.Tag[]{PlanReqDto.Tag.rest, PlanReqDto.Tag.tourism});
+		dto.setTag(new String[]{"계획", "낭만", "관광"});
 		return dto;
 	}
 }

@@ -14,19 +14,23 @@ import java.util.Date;
 @NoArgsConstructor
 @Builder
 public class PlanDto extends TimeDto {
-    private long p_id;
+    private long id;
+    private String subject;
     private String userId;
     private UserEntity user;
     private int like;
-    private Date p_c_date; //테스트를 위한 데이터
+    private String[] tags;
+    private Date createDate; //테스트를 위한 데이터
     private boolean open;
 
     public static PlanDto of(PlanEntity planEntity){
         PlanDto plan = new PlanDto();
-        plan.p_id = planEntity.getId();
+        plan.id = planEntity.getId();
+        plan.subject = planEntity.getSubject();
         plan.user = planEntity.getUser();
         plan.userId = planEntity.getUserId();
 		plan.like = planEntity.getLike();
+//        plan.tag = planEntity.getTags();
 		plan.open = planEntity.isOpen();
         plan.createdAt = planEntity.getCreatedAt();
 		plan.updatedAt = planEntity.getUpdatedAt();
