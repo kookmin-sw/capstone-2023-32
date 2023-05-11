@@ -40,13 +40,13 @@ class InitValueGeneratorTest {
 		List<TagEntity> tagEntityList = new ArrayList<>();
 		for (int i = 0; i < tags.length; i++) {
 			tagEntityList.add(TagEntity.builder()
-					.plans(new ArrayList<>())
+					.planTagEntities(new ArrayList<>())
 					.name("낭만")
 					.build());
 		}
 		List<TagEntity> tagEntities = tagRepository.saveAll(tagEntityList);
 		PlanEntity planEntity = PlanEntity.builder()
-				.tags(new ArrayList<>())
+				.planTagEntities(new ArrayList<>())
 				.like(random.nextInt(5, 55))
 				.open(random.nextInt(1, 10) % 2 == 1)
 				.userId("test_id_" + random.nextInt(1, 20))

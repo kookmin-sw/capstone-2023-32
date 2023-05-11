@@ -21,5 +21,5 @@ public class TagEntity {
 	@Column
 	private String name;
 	@OneToMany(mappedBy = "tag", orphanRemoval = true, cascade = CascadeType.ALL)
-	private List<PlanTagEntity> plans;
+	private List<PlanTagEntity> planTagEntities;
 }
