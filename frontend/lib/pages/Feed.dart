@@ -5,6 +5,36 @@ import 'package:fasttrip/style.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+
+// data fetch
+// 받아올 데이터 정의
+class Plan {
+  String planId;
+  String userId;
+  String title;
+  int like;
+  List<String> tags;
+
+  Plan({
+    required this.planId,
+    required this.userId,
+    required this.title,
+    required this.like,
+    required this.tags,
+  });
+
+  factory Plan.fromJson(Map<String, dynamic> json){
+    return Plan(
+      planId: json['planId'] ?? '',
+      userId: json['userId'] ?? '',
+      title: json['title'] ?? '',
+      like: json['like'] ?? 0,
+      tags: List<String>.from(json['tags'] ?? [],),
+    );
+  }
+}
+
+
 class FeedPage extends StatefulWidget {
   const FeedPage({Key? key}) : super(key: key);
 
@@ -15,12 +45,37 @@ class FeedPage extends StatefulWidget {
 class _FeedPageState extends State<FeedPage> {
   List<Post> _filteredData = [];
   String _searchText = '';
-
   final List<String> _selectedFilters = [];
+
+  List<Plan> plans = [];
+
+  void fetchData() async {
+    var url = Uri.parse('http://3.38.99.234:8080/api/plan/all');
+    var response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body) as List;
+      setState(() {
+        plans = data.map((item) => Plan.fromJson(item)).toList();
+      });
+      print('----------------------------------------------');
+      for (Plan plan in plans) {
+        print('Plan ID: ${plan.planId}');
+        print('User ID: ${plan.userId}');
+        print('Title: ${plan.title}');
+        print('Like: ${plan.like}');
+        print('Tags: ${plan.tags.join(', ')}');
+      }
+    } else {
+      print('failed to load');
+    }
+  }
+
 
   @override
   void initState() {
     super.initState();
+    fetchData();
     _filteredData = data;
   }
 
