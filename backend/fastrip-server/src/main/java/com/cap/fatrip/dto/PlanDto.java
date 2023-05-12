@@ -30,7 +30,7 @@ public class PlanDto extends TimeDto {
         plan.user = planEntity.getUser();
         plan.userId = planEntity.getUserId();
 		plan.like = planEntity.getLike();
-//        plan.tag = planEntity.getTags();
+        //plan.tags = planEntity.getTags();
 		plan.open = planEntity.isOpen();
         plan.createdAt = planEntity.getCreatedAt();
 		plan.updatedAt = planEntity.getUpdatedAt();

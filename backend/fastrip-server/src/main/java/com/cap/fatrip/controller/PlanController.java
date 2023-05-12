@@ -79,4 +79,6 @@ public class PlanController {
 		dto.setTag(new String[]{"계획", "낭만", "관광"});
 		return dto;
 	}
+
+
 }

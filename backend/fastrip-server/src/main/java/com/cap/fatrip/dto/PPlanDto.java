@@ -15,7 +15,7 @@ import java.util.Date;
 public class PPlanDto {
     private PlanEntity plan;
     private PlaceEntity place;
-    private Date p_time;
+    private Date day;
     private String p_comment;
     private int p_seq;
 
@@ -23,7 +23,7 @@ public class PPlanDto {
         PPlanDto plan = new PPlanDto();
         plan.plan = pplanEntity.getPlan();
         plan.place = pplanEntity.getPlace();
-        plan.p_time = pplanEntity.getP_time();
+        plan.day = pplanEntity.getDay();
         plan.p_comment = pplanEntity.getP_comment();
         plan.p_seq = pplanEntity.getP_seq();
         return plan;
