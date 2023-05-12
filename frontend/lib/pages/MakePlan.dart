@@ -2,10 +2,13 @@ import 'package:fasttrip/pages/Search.dart';
 import 'package:fasttrip/style.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import 'dart:convert';
 
 var subTitle = TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
+var uuid = Uuid();
 
 class MakePlan extends StatelessWidget {
   const MakePlan({Key? key}) : super(key: key);
@@ -39,17 +42,57 @@ class MakePage extends StatefulWidget {
 
 class _MakePageState extends State<MakePage> {
   final TextEditingController _controller = TextEditingController();
-  List<String> tags = [];
+
   TextEditingController tagController = TextEditingController();
   DateTimeRange? _dateRange;
+  String planId = uuid.v4();
+  String userId = "UID";
   String title = '';
+  List<String> tags = [];
+  //장소번호
+  //day
+  //그날의 몇번째 일정
+  // 계획 코멘트(선택)
+  // 장소번호
+  // 장소이름
+  // 장소주소
+  // 장소좌표
+  // 국가
 
-  void fetchData() {
+
+
+  void sendData() async {
     setState(() {
       title = _controller.text;
     });
+
+    var url = Uri.parse('http://your-api-endpoint');
+    var response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        // body 작성
+       );
+
+    if(response.statusCode == 200){
+    print('success');
+    } else {
+    print('failed to post');
+    }
+
+    print("---------------");
+    print(planId);
+    print(userId);
     print(title);
+    print(tags);
+    print("---------------");
   }
+
+
+
+
+
 
   void _selectDateRange(BuildContext context) async {
     final DateTimeRange? picked = await showDateRangePicker(
@@ -128,7 +171,7 @@ class _MakePageState extends State<MakePage> {
                       controller: tagController,
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: '태그를 추가해주세요.',
+                        hintText: '태그를 입력해주세요.',
                         hintStyle: TextStyle(color: Colors.grey),
                       ),
                     ),
@@ -250,7 +293,8 @@ class _MakePageState extends State<MakePage> {
                             SizedBox(height:8),
                             TextButton(
                               onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => SearchPage()));
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => SearchPage(
+                                )));
                               },
                               child: Text('+', style: TextStyle(fontSize: 20, color: signatureColor),),
                             ),
@@ -263,7 +307,7 @@ class _MakePageState extends State<MakePage> {
                     ],
                   ),
               if (_dateRange != null)
-                PostRequest(fetchData: fetchData),
+                PostRequest(sendData: sendData),
             ],
           ),
         )
@@ -298,77 +342,13 @@ class SpeechBubble extends StatelessWidget {
 
 // ** 데이터 보내기 (저장 및 공유 버튼)**
 class PostRequest extends StatefulWidget {
-  final VoidCallback fetchData;
-  const PostRequest({Key? key, required this.fetchData}) : super(key: key);
+  final VoidCallback sendData;
+  const PostRequest({Key? key, required this.sendData}) : super(key: key);
 
   @override
   State<PostRequest> createState() => _PostRequestState();
 }
 
-Future<void> sendData() async {
-  var url = 'http://3.38.99.234:8080/api/plan';
-
-  var response = await http.post(
-    Uri.parse(url),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: jsonEncode(<String, dynamic>{
-      'expense': 30,
-      'days': 4,
-      'purpose': [
-        'activity',
-        'tourism'
-      ],
-    }),
-  );
-
-  print(response.statusCode);
-
-  if (response.statusCode == 200) {
-    List<dynamic> responseBody = jsonDecode(response.body);
-    responseBody.forEach((element) {
-      print('Plan ID: ${element['planId']}');
-      print('Star: ${element['star']}');
-      print('User ID: ${element['userId']}');
-      print('Purpose: ${element['purpose']}');
-      print('------------------------');
-    });
-  } else {
-    throw Exception('post error');
-  }
-}
-
-// Future<void> fetchData() async {
-//   var url = 'http://3.38.99.234:8080/api/plan';
-//
-//   var response = await http.get(
-//     Uri.parse(url),
-//   );
-//
-//   if (response.statusCode == 200) {
-//     Map<String, dynamic> responseBody = jsonDecode(response.body);
-//
-//     print('Plan ID: ${responseBody['planId']}');
-//     print('Star: ${responseBody['star']}');
-//     print('User ID: ${responseBody['userId']}');
-//     print('Purpose: ${responseBody['purpose']}');
-//
-//     List<dynamic> plans = responseBody['plan'];
-//     plans.forEach((plan) {
-//       print('Day: ${plan['day']}');
-//       print('Destination: ${plan['destination']}');
-//       print('Destination ID: ${plan['destinationId']}');
-//       print('Time: ${plan['time']}');
-//       print('Review: ${plan['review']}');
-//       print('Coordinates: ${plan['cord']}');
-//       print('Filter: ${plan['filter']}');
-//       print('------------------------');
-//     });
-//   } else {
-//     throw Exception('fetch error');
-//   }
-// }
 
 class _PostRequestState extends State<PostRequest> {
 
@@ -390,8 +370,7 @@ class _PostRequestState extends State<PostRequest> {
             ),
           ),
           onPressed: () {
-            widget.fetchData();
-            sendData();
+            widget.sendData();
           },
           child: SizedBox(
               width: double.infinity,
