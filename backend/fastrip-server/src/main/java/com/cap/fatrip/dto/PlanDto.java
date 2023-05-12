@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @AllArgsConstructor
@@ -19,9 +20,11 @@ public class PlanDto extends TimeDto {
     private String userId;
     private UserEntity user;
     private int like;
-    private String[] tags;
+    private List<String> tags;
     private Date createDate; //테스트를 위한 데이터
     private boolean open;
+
+    private String title;
 
     public static PlanDto of(PlanEntity planEntity){
         PlanDto plan = new PlanDto();
@@ -30,10 +33,11 @@ public class PlanDto extends TimeDto {
         plan.user = planEntity.getUser();
         plan.userId = planEntity.getUserId();
 		plan.like = planEntity.getLike();
-        //plan.tags = planEntity.getTags();
+        plan.tags = planEntity.getTags();
 		plan.open = planEntity.isOpen();
         plan.createdAt = planEntity.getCreatedAt();
 		plan.updatedAt = planEntity.getUpdatedAt();
+        plan.title = planEntity.getTitle();
         return plan;
     }
 }

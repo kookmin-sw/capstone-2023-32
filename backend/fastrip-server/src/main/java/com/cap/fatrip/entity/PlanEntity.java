@@ -6,6 +6,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Entity
@@ -37,10 +38,18 @@ public class PlanEntity extends TimeEntity {
     @Column(name = "p_open")
     private boolean open;
 
+    @Column(name = "tags")
+    private List<String> tags;
+
+    @Column(name = "title")
+    private String title;
+
     public static PlanEntity toPlanEntity(PlanDto planDto){
         PlanEntity planEntity = new PlanEntity();
         planEntity.id = planDto.getId();
         planEntity.user = planDto.getUser();
+        planEntity.tags = planDto.getTags();
+        planEntity.title = planDto.getTitle();
         return planEntity;
     }
 }
