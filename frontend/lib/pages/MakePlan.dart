@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart';
-import 'dart:convert';
 
 var subTitle = TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
 var uuid = Uuid();
@@ -21,7 +19,10 @@ class MakePlan extends StatelessWidget {
         backgroundColor: Colors.transparent,
         shadowColor: Colors.transparent,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black,),
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+          ),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -33,7 +34,6 @@ class MakePlan extends StatelessWidget {
 }
 
 class MakePage extends StatefulWidget {
-
   const MakePage({Key? key}) : super(key: key);
 
   @override
@@ -42,7 +42,6 @@ class MakePage extends StatefulWidget {
 
 class _MakePageState extends State<MakePage> {
   final TextEditingController _controller = TextEditingController();
-
   TextEditingController tagController = TextEditingController();
   DateTimeRange? _dateRange;
   String planId = uuid.v4();
@@ -58,8 +57,7 @@ class _MakePageState extends State<MakePage> {
   // 장소주소
   // 장소좌표
   // 국가
-
-
+  var locationData = [];
 
   void sendData() async {
     setState(() {
@@ -68,17 +66,17 @@ class _MakePageState extends State<MakePage> {
 
     var url = Uri.parse('http://your-api-endpoint');
     var response = await http.post(
-        url,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        // body 작성
-       );
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      // body 작성
+    );
 
-    if(response.statusCode == 200){
-    print('success');
+    if (response.statusCode == 200) {
+      print('success');
     } else {
-    print('failed to post');
+      print('failed to post');
     }
 
     print("---------------");
@@ -88,11 +86,6 @@ class _MakePageState extends State<MakePage> {
     print(tags);
     print("---------------");
   }
-
-
-
-
-
 
   void _selectDateRange(BuildContext context) async {
     final DateTimeRange? picked = await showDateRangePicker(
@@ -108,25 +101,25 @@ class _MakePageState extends State<MakePage> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return ListView(
       children: <Widget>[
-
         // ** 제목 **
         Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 20.0, right:20.0),
+              padding: const EdgeInsets.only(left: 20.0, right: 20.0),
               child: Align(
                   alignment: Alignment.centerLeft,
-                  child: Text('제목', style: subTitle,)
-              ),
+                  child: Text(
+                    '제목',
+                    style: subTitle,
+                  )),
             ),
             Container(
               height: 50,
-              margin: EdgeInsets.only(left: 20.0, right:20.0, top: 10),
+              margin: EdgeInsets.only(left: 20.0, right: 20.0, top: 10),
               padding: EdgeInsets.all(10.0),
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey),
@@ -139,8 +132,7 @@ class _MakePageState extends State<MakePage> {
                   hintText: '제목을 입력해주세요.',
                   hintStyle: TextStyle(color: Colors.grey),
                 ),
-                onChanged: (value) {
-                },
+                onChanged: (value) {},
               ),
             ),
           ],
@@ -150,15 +142,19 @@ class _MakePageState extends State<MakePage> {
         Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 20.0, right:20.0, top: 20.0),
+              padding:
+                  const EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0),
               child: Align(
                   alignment: Alignment.centerLeft,
-                  child: Text('태그', style: subTitle,)
-              ),
+                  child: Text(
+                    '태그',
+                    style: subTitle,
+                  )),
             ),
             Container(
               height: 50,
-              margin: EdgeInsets.only(left: 20.0, right:20.0, top: 10.0, bottom: 20.0),
+              margin: EdgeInsets.only(
+                  left: 20.0, right: 20.0, top: 10.0, bottom: 20.0),
               padding: EdgeInsets.all(10.0),
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey),
@@ -178,17 +174,21 @@ class _MakePageState extends State<MakePage> {
                   ),
                   ElevatedButton(
                       style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(signatureColor),
-                        foregroundColor: MaterialStateProperty.all(Colors.white), // 텍스트 색상
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        backgroundColor:
+                            MaterialStateProperty.all(signatureColor),
+                        foregroundColor:
+                            MaterialStateProperty.all(Colors.white), // 텍스트 색상
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
                       ),
                       onPressed: () {
-                        if (tags.isEmpty && tagController.text != '여행' && tagController.text != '모집')
-                        {
+                        if (tags.isEmpty &&
+                            tagController.text != '여행' &&
+                            tagController.text != '모집') {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
@@ -199,20 +199,19 @@ class _MakePageState extends State<MakePage> {
                               );
                             },
                           );
-                        } else{
+                        } else {
                           setState(() {
                             tags.add(tagController.text);
                             tagController.clear();
                           });
                         }
                       },
-                      child: Text('태그 추가')
-                  ),
+                      child: Text('태그 추가')),
                 ],
               ),
             ),
             Container(
-              margin:EdgeInsets.only(bottom:20.0),
+              margin: EdgeInsets.only(bottom: 20.0),
               child: Wrap(
                 alignment: WrapAlignment.start,
                 spacing: 8.0,
@@ -221,13 +220,14 @@ class _MakePageState extends State<MakePage> {
                     deleteIcon: Icon(
                       Icons.close,
                       size: 18.0,
-                      color: Color(0xff6DA5FA),),
-                    onDeleted: (){
+                      color: Color(0xff6DA5FA),
+                    ),
+                    onDeleted: () {
                       setState(() {
                         tags.remove(tag);
                       });
                     },
-                    label:Text(
+                    label: Text(
                       tag,
                       style: const TextStyle(color: Color(0xff6DA5FA)),
                     ),
@@ -240,12 +240,10 @@ class _MakePageState extends State<MakePage> {
           ],
         ),
 
-
         // ** 계획 작성 **
         Container(
-          margin: EdgeInsets.only(left:20.0, right:20.0, bottom:20.0),
-          child:
-          Column(
+          margin: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -255,48 +253,90 @@ class _MakePageState extends State<MakePage> {
                   _dateRange == null
                       ? ''
                       : '${DateFormat('MM/dd/yyyy').format(_dateRange!.start)} - ${DateFormat('MM/dd/yyyy').format(_dateRange!.end)}',
-                  style: TextStyle(fontSize: 16,),
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
                 ),
               ),
-              SizedBox(
-                  height: 20
-              ),
+              SizedBox(height: 20),
               Align(
                 alignment: Alignment.center,
                 child: OutlinedButton(
-                  child: Text('일정 선택하기', style:TextStyle(color: Color(0xff6DA5FA))),
+                  child: Text('일정 선택하기',
+                      style: TextStyle(color: Color(0xff6DA5FA))),
                   onPressed: () => _selectDateRange(context),
                 ),
               ),
-              SizedBox(
-                  height: 20
-              ),
+              SizedBox(height: 20),
               Text(
                   _dateRange == null
                       ? ''
                       : '${_dateRange!.end.difference(_dateRange!.start).inDays}박 ${_dateRange!.end.difference(_dateRange!.start).inDays + 1}일',
-                  style: subTitle
-              ),
+                  style: subTitle),
               SizedBox(
                 height: 20,
               ),
 
               // ** 1일차~n일차 **
               if (_dateRange != null)
-                for (int i = 1; i <= _dateRange!.end.difference(_dateRange!.start).inDays + 1; i++)
+                for (int i = 1;
+                    i <=
+                        _dateRange!.end.difference(_dateRange!.start).inDays +
+                            1;
+                    i++)
                   Column(
                     children: [
                       Container(
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('$i일차', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,)),
-                            SizedBox(height:8),
+                            Text(
+                              '$i일차',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 8),
                             TextButton(
                               onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => SearchPage(
-                                )));
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => SearchPage()),
+                                ).then((value) {
+                                  setState(() {
+                                    if (locationData.length >= i) {
+                                      locationData[i - 1] = value;
+                                    } else {
+                                      locationData.add(value);
+                                    }
+                                  });
+                                });
                               },
-                              child: Text('+', style: TextStyle(fontSize: 20, color: signatureColor),),
+                              child: locationData.length >= i
+                                  ? Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          locationData[i - 1].name,
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              color: signatureColor),
+                                        ),
+                                        Text(
+                                          locationData[i - 1].address,
+                                          style: TextStyle(
+                                              fontSize: 13, color: Colors.grey),
+                                        ),
+                                      ],
+                                    )
+                                  : Text(
+                                      '+',
+                                      style: TextStyle(
+                                          fontSize: 20, color: signatureColor),
+                                    ),
                             ),
                             SizedBox(
                               height: 15,
@@ -306,8 +346,7 @@ class _MakePageState extends State<MakePage> {
                       ),
                     ],
                   ),
-              if (_dateRange != null)
-                PostRequest(sendData: sendData),
+              if (_dateRange != null) PostRequest(sendData: sendData),
             ],
           ),
         )
@@ -315,7 +354,6 @@ class _MakePageState extends State<MakePage> {
     );
   }
 }
-
 
 class SpeechBubble extends StatelessWidget {
   final String message;
@@ -349,9 +387,7 @@ class PostRequest extends StatefulWidget {
   State<PostRequest> createState() => _PostRequestState();
 }
 
-
 class _PostRequestState extends State<PostRequest> {
-
   @override
   Widget build(BuildContext context) {
     return Align(
@@ -377,8 +413,10 @@ class _PostRequestState extends State<PostRequest> {
               height: 50,
               child: Align(
                   alignment: Alignment.center,
-                  child: Text('저장 하기', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold), ))
-          ),
+                  child: Text(
+                    '저장 하기',
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  ))),
         ),
       ),
     );

@@ -20,7 +20,7 @@ class _TripPageState extends State<TripPage> {
           children: [
             Container(
               padding:
-              const EdgeInsets.only(top: 50.0, left: 20.0, right: 20.0),
+                  const EdgeInsets.only(top: 50.0, left: 20.0, right: 20.0),
               alignment: Alignment.centerLeft,
               child: Row(
                 children: [
@@ -44,7 +44,7 @@ class _TripPageState extends State<TripPage> {
                 onPressed: () {
                   print('이거 어케하징');
                 },
-                child:  Row(
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(Icons.smart_toy, size: 18),
@@ -82,7 +82,6 @@ class _TripPageState extends State<TripPage> {
   }
 }
 
-
 class Travel {
   final String title;
   final DateTime lastModifiedDate;
@@ -106,87 +105,89 @@ class MyTravelList extends StatelessWidget {
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: List.generate(
-          travels.length < 3 ? travels.length + 1 : 3,
-              (index) {
-            if ((showAll || index < 3) && index < travels.length) {
-              return Padding(
-                padding: const EdgeInsets.only(left: 20.0, right:20.0, bottom: 10.0),
-                child: InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            TravelDetailPage(travel: travels[index]),
+      children:
+          List.generate(travels.length < 3 ? travels.length + 1 : 3, (index) {
+        if ((showAll || index < 3) && index < travels.length) {
+          return Padding(
+            padding:
+                const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10.0),
+            child: InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        TravelDetailPage(travel: travels[index]),
+                  ),
+                );
+              },
+              child: Container(
+                padding: const EdgeInsets.only(
+                  left: 20,
+                  right: 20,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Colors.grey.shade300, width: 1),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        travels[index].title,
+                        style: const TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       ),
-                    );
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.only(
-                      left: 20,
-                      right: 20,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Colors.grey.shade300, width: 1),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            travels[index].title,
-                            style: const TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            '최근수정일: ${travels[index].lastModifiedDate}',
-                            style: TextStyle(
-                                fontSize: 14, color: Colors.grey.shade600),
-                          ),
-                        ],
+                      const SizedBox(height: 10),
+                      Text(
+                        '최근수정일: ${travels[index].lastModifiedDate}',
+                        style: TextStyle(
+                            fontSize: 14, color: Colors.grey.shade600),
                       ),
-                    ),
+                    ],
                   ),
                 ),
-              );
-            } else if (travels.length < 3) {
-              return Padding(
-                padding: const EdgeInsets.only(left: 20.0, right:20.0, bottom: 10.0),
-                child: InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const MakePlan()),
-                    );
-                  },
-                  child: Container(
-                    height: 65,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Colors.grey.shade300, width: 1),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        '+',
-                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                      ),
-                    ),
+              ),
+            ),
+          );
+        } else if (travels.length < 3) {
+          return Padding(
+            padding:
+                const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10.0),
+            child: InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    settings: RouteSettings(name: 'make_plan'),
+                    builder: (context) => const MakePlan(),
+                  ),
+                );
+              },
+              child: Container(
+                height: 65,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Colors.grey.shade300, width: 1),
+                ),
+                child: const Center(
+                  child: Text(
+                    '+',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                 ),
-              );
-            } else {
-              return const SizedBox.shrink();
-            }
-          }),
+              ),
+            ),
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
+      }),
     );
   }
 }
-
 
 class HeartList extends StatefulWidget {
   const HeartList({Key? key}) : super(key: key);
@@ -214,7 +215,7 @@ class _HeartListState extends State<HeartList> {
           },
           child: Padding(
             padding:
-            const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
+                const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -264,14 +265,14 @@ class _HeartListState extends State<HeartList> {
                   children: filteredData[index]
                       .tags
                       .map((tag) => Chip(
-                    label: Text(
-                      tag,
-                      style: const TextStyle(color: Color(0xff6DA5FA)),
-                    ),
-                    backgroundColor: Colors.transparent,
-                    side:
-                    const BorderSide(color: Color(0xff6DA5FA), width: 1),
-                  ))
+                            label: Text(
+                              tag,
+                              style: const TextStyle(color: Color(0xff6DA5FA)),
+                            ),
+                            backgroundColor: Colors.transparent,
+                            side: const BorderSide(
+                                color: Color(0xff6DA5FA), width: 1),
+                          ))
                       .toList(),
                 ),
               ],
@@ -282,7 +283,6 @@ class _HeartListState extends State<HeartList> {
     );
   }
 }
-
 
 class MoreButton extends StatelessWidget {
   const MoreButton({Key? key}) : super(key: key);

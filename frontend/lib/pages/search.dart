@@ -1,7 +1,6 @@
 import 'package:fasttrip/pages/Map.dart';
 import 'package:fasttrip/style.dart';
 import 'package:flutter/material.dart';
-import 'package:fasttrip/pages/SearchResult.dart';
 
 class SearchPage extends StatelessWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -13,9 +12,13 @@ class SearchPage extends StatelessWidget {
         appBar: AppBar(
           elevation: 0, // Remove elevation to hide the bottom shadow
           backgroundColor: Colors.transparent, // Make the AppBar transparent
-          shadowColor: Colors.transparent, // Set AppBar shadow color to transparent
+          shadowColor:
+              Colors.transparent, // Set AppBar shadow color to transparent
           leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.black,),
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+            ),
             onPressed: () {
               Navigator.pop(context);
             },
@@ -23,11 +26,9 @@ class SearchPage extends StatelessWidget {
         ),
         body: Center(
           child: SearchBar(),
-        )
-    );
+        ));
   }
 }
-
 
 class SearchBar extends StatefulWidget {
   @override
@@ -39,7 +40,7 @@ class _SearchBarState extends State<SearchBar> {
   // 최근 검색어 리스트
   final List<String> _recentSearchTerms = [];
   // 자동완성 리스트
-  final List<String>autoComplete = [
+  final List<String> autoComplete = [
     'Flights',
     'Hotels',
     'Car Rentals',
@@ -50,8 +51,6 @@ class _SearchBarState extends State<SearchBar> {
     'Destinations',
     'Restaurants',
   ];
-
-
 
   //추천 검색어 위젯
   Widget _buildSuggestionButtons(BuildContext context) {
@@ -72,7 +71,6 @@ class _SearchBarState extends State<SearchBar> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
@@ -91,7 +89,8 @@ class _SearchBarState extends State<SearchBar> {
                 },
                 style: ButtonStyle(
                   elevation: MaterialStateProperty.all<double>(0),
-                  backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.transparent),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
@@ -99,19 +98,16 @@ class _SearchBarState extends State<SearchBar> {
                     ),
                   ),
                 ),
-                child: Text(suggestion, style: lightText,),
+                child: Text(
+                  suggestion,
+                  style: lightText,
+                ),
               );
             }).toList(),
           ),
         ],
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
   }
 
   void _handleSubmitted(BuildContext context, String value) {
@@ -131,7 +127,6 @@ class _SearchBarState extends State<SearchBar> {
         context,
         MaterialPageRoute(
           builder: (context) => MapPage(searchQuery: value),
-
         ),
       );
     }
@@ -151,11 +146,16 @@ class _SearchBarState extends State<SearchBar> {
                   return const Iterable<String>.empty();
                 }
                 return autoComplete.where((String option) {
-                  return option.toLowerCase().contains(textEditingValue.text.toLowerCase());
+                  return option
+                      .toLowerCase()
+                      .contains(textEditingValue.text.toLowerCase());
                 });
               },
               displayStringForOption: (String option) => option,
-              fieldViewBuilder: (BuildContext context, TextEditingController fieldTextEditingController, FocusNode fieldFocusNode, VoidCallback onFieldSubmitted) {
+              fieldViewBuilder: (BuildContext context,
+                  TextEditingController fieldTextEditingController,
+                  FocusNode fieldFocusNode,
+                  VoidCallback onFieldSubmitted) {
                 _searchController = fieldTextEditingController;
                 return TextField(
                   controller: fieldTextEditingController,
@@ -163,7 +163,9 @@ class _SearchBarState extends State<SearchBar> {
                   decoration: InputDecoration(
                     border: UnderlineInputBorder(),
                     focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black,),
+                      borderSide: BorderSide(
+                        color: Colors.black,
+                      ),
                     ),
                     hintText: '검색어를 입력해주세요',
                     hintStyle: TextStyle(color: Colors.grey),
@@ -174,7 +176,9 @@ class _SearchBarState extends State<SearchBar> {
                   },
                 );
               },
-              optionsViewBuilder: (BuildContext context, AutocompleteOnSelected<String> onSelected, Iterable<String> options) {
+              optionsViewBuilder: (BuildContext context,
+                  AutocompleteOnSelected<String> onSelected,
+                  Iterable<String> options) {
                 return Align(
                   alignment: Alignment.topLeft,
                   child: Material(
@@ -206,7 +210,7 @@ class _SearchBarState extends State<SearchBar> {
         Align(
           alignment: Alignment.centerLeft,
           child: Padding(
-            padding: const EdgeInsets.only(top: 50.0, left: 20, right:20),
+            padding: const EdgeInsets.only(top: 50.0, left: 20, right: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -215,20 +219,28 @@ class _SearchBarState extends State<SearchBar> {
                   children: [
                     Text(
                       '최근 검색어',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
-                    TextButton(onPressed: () {
-                      setState(() {
-                        _recentSearchTerms.clear();
-                      });
-                    }, child: Text('전체 삭제', style: lightText,)),
+                    TextButton(
+                        onPressed: () {
+                          setState(() {
+                            _recentSearchTerms.clear();
+                          });
+                        },
+                        child: Text(
+                          '전체 삭제',
+                          style: lightText,
+                        )),
                   ],
                 ),
                 SizedBox(height: 20),
-                ..._recentSearchTerms.reversed.expand((term) => [
-                  Text(term, style: TextStyle(fontSize: 16)),
-                  SizedBox(height: 5),
-                ]).toList(),
+                ..._recentSearchTerms.reversed
+                    .expand((term) => [
+                          Text(term, style: TextStyle(fontSize: 16)),
+                          SizedBox(height: 5),
+                        ])
+                    .toList(),
               ],
             ),
           ),
@@ -243,5 +255,3 @@ class _SearchBarState extends State<SearchBar> {
     );
   }
 }
-
-
