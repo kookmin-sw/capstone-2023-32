@@ -16,7 +16,6 @@ import java.util.List;
 @Builder
 public class PlanDto extends TimeDto {
     private long id;
-    private String subject;
     private String userId;
     private UserEntity user;
     private int like;
@@ -29,11 +28,9 @@ public class PlanDto extends TimeDto {
     public static PlanDto of(PlanEntity planEntity){
         PlanDto plan = new PlanDto();
         plan.id = planEntity.getId();
-        plan.subject = planEntity.getSubject();
         plan.user = planEntity.getUser();
         plan.userId = planEntity.getUserId();
 		plan.like = planEntity.getLike();
-        plan.tags = planEntity.getTags();
 		plan.open = planEntity.isOpen();
         plan.createdAt = planEntity.getCreatedAt();
 		plan.updatedAt = planEntity.getUpdatedAt();

@@ -1,8 +1,10 @@
 package com.cap.fatrip.service.dev;
 
 import com.cap.fatrip.entity.PlanEntity;
+import com.cap.fatrip.entity.PlanTagEntity;
 import com.cap.fatrip.entity.TagEntity;
 import com.cap.fatrip.repository.PlanRepository;
+import com.cap.fatrip.repository.PlanTagRepository;
 import com.cap.fatrip.repository.TagRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,34 +25,57 @@ class InitValueGeneratorTest {
 	private TagRepository tagRepository;
 	@Autowired
 	private PlanRepository planRepository;
+	@Autowired
+	private PlanTagRepository planTagRepository;
 	Random random = new Random();
 
 	@Test
-	void saveTag() {
-		TagEntity tagEntity = TagEntity.builder()
-				.name("activity")
-				.build();
-		TagEntity tag = tagRepository.save(tagEntity);
-		System.out.println(tag);
+	void saveRelationAndFind() {
+		String[] tags = {"낭만", "파리", "유럽"};
+//		TagEntity tagEntity = saveTag(tags[random.nextInt(10) % tags.length]);
+		List<TagEntity> tagEntities = saveTags();
+		PlanEntity planEntity = savePlan("이것이 파리다");
+
+		PlanTagEntity rel = new PlanTagEntity();
+		rel.setPlan(planEntity);
+		for (TagEntity tagEntity : tagEntities) {
+			rel.setTag(tagEntity);
+			planTagRepository.save(rel);
+		}
+		planTagRepository.save(rel);
+
+		List<PlanTagEntity> all = planTagRepository.findAll();
+		List<PlanEntity> planByTag1 = planRepository.findPlanByTag2(tags[0], null);
+		PlanEntity planEntity1 = planByTag1.get(0);
+		List<PlanTagEntity> planTagEntities = planEntity1.getPlanTagEntities();
+		System.out.println();
 	}
 
-	@Test
-	void savePlan() {
+	List<TagEntity> saveTags(){
 		String[] tags = {"낭만", "파리", "유럽"};
 		List<TagEntity> tagEntityList = new ArrayList<>();
-		for (int i = 0; i < tags.length; i++) {
+		for (String tag : tags) {
 			tagEntityList.add(TagEntity.builder()
-					.planTagEntities(new ArrayList<>())
-					.name("낭만")
+					.name(tag)
 					.build());
 		}
-		List<TagEntity> tagEntities = tagRepository.saveAll(tagEntityList);
+		return tagRepository.saveAll(tagEntityList);
+	}
+
+	TagEntity saveTag(String tagName) {
+		TagEntity tagEntity = TagEntity.builder()
+				.name(tagName)
+				.build();
+		return tagRepository.save(tagEntity);
+	}
+
+	PlanEntity savePlan(String title) {
 		PlanEntity planEntity = PlanEntity.builder()
-				.planTagEntities(new ArrayList<>())
+				.title(title)
 				.like(random.nextInt(5, 55))
 				.open(random.nextInt(1, 10) % 2 == 1)
 				.userId("test_id_" + random.nextInt(1, 20))
 				.build();
-		PlanEntity plan = planRepository.save(planEntity);
+		return planRepository.save(planEntity);
 	}
 }

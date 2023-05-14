@@ -1,8 +1,10 @@
 package com.cap.fatrip.service.dev;
 
 import com.cap.fatrip.entity.PlanEntity;
+import com.cap.fatrip.entity.PlanTagEntity;
 import com.cap.fatrip.entity.TagEntity;
 import com.cap.fatrip.repository.PlanRepository;
+import com.cap.fatrip.repository.PlanTagRepository;
 import com.cap.fatrip.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,39 +19,57 @@ import java.util.Random;
 public class InitValueGenerator {
 	private final PlanRepository planRepository;
 	private final TagRepository tagRepository;
+	private final PlanTagRepository planTagRepository;
 
 	@PostConstruct
 	public void generate() {
-		generatePlan();
-		generateTag();
-	}
-
-	private void generateTag(){
-		if (tagRepository.count() !=0) {
+		Random random = new Random();
+		List<PlanEntity> planEntities = generatePlan();
+		List<TagEntity> tagEntities = generateTag();
+		if (planEntities == null || tagEntities == null) {
 			return;
 		}
-		String[] tags = {"activity", "tourism", "rest"};
+
+		PlanTagEntity planTagEntity = new PlanTagEntity();
+		for (PlanEntity planEntity : planEntities) {
+			planTagEntity.setPlan(planEntity);
+			assert tagEntities != null;
+			for (int i = 0; i < random.nextInt(tagEntities.size()); i++) {
+				planTagEntity.setTag(tagEntities.get(random.nextInt(tagEntities.size())));
+				planTagRepository.save(planTagEntity);
+			}
+		}
+	}
+
+	private List<TagEntity> generateTag() {
+		if (tagRepository.count() != 0) {
+			return null;
+		}
+		String[] tags = {"낭만", "파리", "휴양", "지하철", "파리", "샌드위치"};
 		List<TagEntity> tagEntityList = new ArrayList<>();
 		for (String tag : tags) {
-
+			tagEntityList.add(TagEntity.builder()
+					.name(tag).build());
 		}
+		return tagRepository.saveAll(tagEntityList);
 	}
 
-	private void generatePlan(){
+	private List<PlanEntity> generatePlan() {
 		if (planRepository.count() != 0) {
-			return;
+			return null;
 		}
+		String[] titles = {"낭만의 도시 파리", "유럽이 좋다", "이게 맞아??", "그런데 지금...", "유럽 지하철", "파리엔 파리가 많아"};
 		Random random = new Random();
 		List<PlanEntity> planEntityList = new ArrayList<>();
 		for (int i = 0; i < 20; i++) {
 			planEntityList.add(
 					PlanEntity.builder()
+							.title(titles[random.nextInt(titles.length)] + "_" + random.nextInt(20))
 							.userId("jun" + (random.nextInt(20) + 1))
-							.like(9)
-							.open(true)
-							.build()
+							.like(random.nextInt(3, 55))
+							.open(true).build()
 			);
 		}
-		List<PlanEntity> planEntities = planRepository.saveAll(planEntityList);
+		return planRepository.saveAll(planEntityList);
 	}
 }

@@ -68,15 +68,15 @@ public class PlanController {
 	}
 
 	private PlanResDto createDummyDto() {
-		String[] subjects = {"낭만의 도시 파리", "힐링하세요~", "이건 잘못됐어...", "신사의 나라...?"};
+		String[] titles = {"낭만의 도시 파리", "힐링하세요~", "이건 잘못됐어...", "신사의 나라...?"};
 		Random random = new Random();
 
 		PlanResDto dto = new PlanResDto();
 		dto.setLike(random.nextInt(5, 55));
 		dto.setId(random.nextInt(20000));
-		dto.setSubject(subjects[random.nextInt(100) % subjects.length] + "_" + random.nextInt(1, 10));
+		dto.setTitle(titles[random.nextInt(100) % titles.length] + "_" + random.nextInt(1, 10));
 		dto.setUserId("cap_user_" + random.nextInt(100));
-		dto.setTag(new String[]{"계획", "낭만", "관광"});
+		dto.setTags(List.of(new String[]{"계획", "낭만", "관광"}));
 		return dto;
 	}
 

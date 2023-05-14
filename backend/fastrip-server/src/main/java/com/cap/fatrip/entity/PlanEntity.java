@@ -26,8 +26,6 @@ public class PlanEntity extends TimeEntity {
 //    @JoinColumn(name = "id",nullable = false)   //fk
     @JoinColumn(name = "id", insertable = false, updatable = false)   //fk
     private UserEntity user;
-    @Column(name = "p_subject")
-    private String subject;
     @Column(name = "u_id")
     // test
     private String userId;
@@ -37,10 +35,6 @@ public class PlanEntity extends TimeEntity {
     private int like;
     @Column(name = "p_open")
     private boolean open;
-
-    @Column(name = "tags")
-    private List<String> tags;
-
     @Column(name = "title")
     private String title;
 
@@ -48,7 +42,6 @@ public class PlanEntity extends TimeEntity {
         PlanEntity planEntity = new PlanEntity();
         planEntity.id = planDto.getId();
         planEntity.user = planDto.getUser();
-        planEntity.tags = planDto.getTags();
         planEntity.title = planDto.getTitle();
         return planEntity;
     }
