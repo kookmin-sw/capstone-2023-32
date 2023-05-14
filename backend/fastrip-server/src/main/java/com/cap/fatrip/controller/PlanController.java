@@ -10,7 +10,6 @@ import com.cap.fatrip.service.PPlanService;
 import com.cap.fatrip.service.PlaceService;
 import com.cap.fatrip.service.PlanService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,12 +23,17 @@ public class PlanController {
 	private final PPlanService pplanService;
 	private final PlaceService placeService;
 
-//	@PostMapping("/all")
+	//	@PostMapping("/all")
 	@GetMapping("/all")
 //	public List<PlanResDto> find(@RequestBody PlanReqDto planReqDto) {
 	public List<PlanResDto> findAll() {
 		PlanResDto[] dtos = createDummyDtoList();
 		return List.of(dtos);
+	}
+
+	@PostMapping("/all")
+	public List<PlanResDto> findAll(@RequestBody PlanReqDto planReqDto) {
+		return planService.getPlans(planReqDto);
 	}
 
 	@GetMapping("/alls")
@@ -46,6 +50,16 @@ public class PlanController {
 			dtos[i] = dummyDto;
 		}
 		return dtos;
+	}
+
+	@GetMapping(path = "savePlan", params = {"title", "tag1", "tag2"})
+	public void savePlanTest(@RequestParam String title, @RequestParam String tag1, @RequestParam String tag2) {
+		planService.savePlanTest(title, tag1, tag2);
+	}
+
+	@GetMapping(path = "findPlan", params = {"tag"})
+	public void findPlanTest(@RequestParam String tag) {
+		planService.findPlanTest(tag);
 	}
 
 	@PostMapping("/save")
