@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'Map.dart';
 
 var subTitle = TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
 var uuid = Uuid();
@@ -48,29 +50,47 @@ class _MakePageState extends State<MakePage> {
   String userId = "UID";
   String title = '';
   List<String> tags = [];
-  //장소번호
-  //day
-  //그날의 몇번째 일정
-  // 계획 코멘트(선택)
-  // 장소번호
-  // 장소이름
-  // 장소주소
-  // 장소좌표
-  // 국가
-  var locationData = [];
+  Map<int, List<MapData>> locationData = {};
+  var additionalInfo = [];
+  String comment = '';
 
   void sendData() async {
     setState(() {
       title = _controller.text;
     });
+    print(comment);
+    List<Map<String, dynamic>> pplan = [];
+    locationData.forEach((day, locations) {
+      for (int i = 0; i < locations.length; i++) {
+        pplan.add({
+          "plan": {"p_id": planId},
+          "day": day,
+          "p_seq": i + 1,
+          "p_name": locations[i].name,
+          "p_post": locations[i].address,
+          "p_locate": "${locations[i].latitude},${locations[i].longitude}",
+          "p_country": locations[i].country,
+        });
+      }
+    });
 
-    var url = Uri.parse('http://your-api-endpoint');
+    var requestBody = {
+      "plan": {
+        "p_id": planId,
+        "user": {"id": userId},
+        "tags": tags,
+        "p_comment": comment,
+      },
+      "pplan": pplan,
+    };
+
+    var url = Uri.parse('http://3.38.99.234:8080/api/plan');
     var response = await http.post(
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      // body 작성
+      body: jsonEncode(requestBody),
     );
 
     if (response.statusCode == 200) {
@@ -78,13 +98,6 @@ class _MakePageState extends State<MakePage> {
     } else {
       print('failed to post');
     }
-
-    print("---------------");
-    print(planId);
-    print(userId);
-    print(title);
-    print(tags);
-    print("---------------");
   }
 
   void _selectDateRange(BuildContext context) async {
@@ -280,10 +293,8 @@ class _MakePageState extends State<MakePage> {
               // ** 1일차~n일차 **
               if (_dateRange != null)
                 for (int i = 1;
-                    i <=
-                        _dateRange!.end.difference(_dateRange!.start).inDays +
-                            1;
-                    i++)
+                i <= _dateRange!.end.difference(_dateRange!.start).inDays + 1;
+                i++)
                   Column(
                     children: [
                       Container(
@@ -303,40 +314,41 @@ class _MakePageState extends State<MakePage> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => SearchPage()),
+                                    builder: (context) => SearchPage(),
+                                  ),
                                 ).then((value) {
-                                  setState(() {
-                                    if (locationData.length >= i) {
-                                      locationData[i - 1] = value;
-                                    } else {
-                                      locationData.add(value);
-                                    }
-                                  });
+                                  if (locationData[i] == null) {
+                                    locationData[i] = [value];
+                                  } else {
+                                    locationData[i]!.add(value);
+                                  }
+                                  setState(() {});
                                 });
                               },
-                              child: locationData.length >= i
-                                  ? Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          locationData[i - 1].name,
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              color: signatureColor),
-                                        ),
-                                        Text(
-                                          locationData[i - 1].address,
-                                          style: TextStyle(
-                                              fontSize: 13, color: Colors.grey),
-                                        ),
-                                      ],
-                                    )
-                                  : Text(
-                                      '+',
-                                      style: TextStyle(
-                                          fontSize: 20, color: signatureColor),
-                                    ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  if (locationData[i] != null)
+                                    for (int j = 0; j < locationData[i]!.length; j++)
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '${j + 1}. ${locationData[i]![j].name}',
+                                            style: TextStyle(fontSize: 20, color: signatureColor),
+                                          ),
+                                          Text(
+                                            locationData[i]![j].address,
+                                            style: TextStyle(fontSize: 13, color: Colors.grey),
+                                          ),
+                                        ],
+                                      ),
+                                  Text(
+                                    '+',
+                                    style: TextStyle(fontSize: 20, color: signatureColor),
+                                  ),
+                                ],
+                              ),
                             ),
                             SizedBox(
                               height: 15,
@@ -346,10 +358,31 @@ class _MakePageState extends State<MakePage> {
                       ),
                     ],
                   ),
-              if (_dateRange != null) PostRequest(sendData: sendData),
+              if (_dateRange != null)
+                Column(
+                  children: [
+                    TextField(
+                      maxLines: 8,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        hintText: '내용을 입력해주세요.',
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          comment = value;
+                        });
+                      },
+                    ),
+                    PostRequest(sendData: sendData),
+                  ],
+                )
+
             ],
           ),
         )
+
       ],
     );
   }
@@ -407,6 +440,7 @@ class _PostRequestState extends State<PostRequest> {
           ),
           onPressed: () {
             widget.sendData();
+            Navigator.pop(context);
           },
           child: SizedBox(
               width: double.infinity,
