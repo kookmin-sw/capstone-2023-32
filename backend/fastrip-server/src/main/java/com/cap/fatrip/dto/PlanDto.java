@@ -19,7 +19,7 @@ public class PlanDto extends TimeDto {
     private String userId;
     private UserEntity user;
     private int like;
-    private List<String> tags;
+    private String[] tags;
     private Date createDate; //테스트를 위한 데이터
     private boolean open;
 

@@ -67,10 +67,12 @@ public class PlanController {
 
 		planService.savePlan(saveDto.getPlan());
 		//long p_id = saveDto.getPlan().getP_id();
-		List<PlaceDto> places = saveDto.getPlace();
+		/*List<PlaceDto> places = saveDto.getPlace();
 		for (PlaceDto place : places) {
 			placeService.savePlace(place);
 		}
+		*/
+
 
 		List<PPlanDto> pplans = saveDto.getPplan();
 		for (PPlanDto pplan : pplans) {

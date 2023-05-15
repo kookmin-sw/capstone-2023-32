@@ -27,7 +27,7 @@ public class PlanResDto {
 		resDto.id = dto.getId();
 		resDto.title = dto.getTitle();
 		resDto.like = dto.getLike();
-		resDto.tags = dto.getTags();
+		//resDto.tags = dto.getTags();    //tag부분을 저장하는 코드가 정리가 안되서 일단 주석처리 했습니다.
 		return resDto;
 	}
 

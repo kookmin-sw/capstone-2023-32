@@ -17,7 +17,7 @@ import java.util.*;
 public class savePlanDto {
     private List<PPlanDto> pplan;
 
-    private List<PlaceDto> place;
+    //private List<PlaceDto> place;
 
     private PlanDto plan;
 }
