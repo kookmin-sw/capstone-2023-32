@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -25,34 +24,20 @@ public class SecurityConfig {
     private final OAuth2SuccessHandler successHandler;
     private final TokenService tokenService;
 
-    /* static 관련설정은 무시 */
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() throws Exception {
-        return web -> web.ignoring().antMatchers(
-                "/css/**",
-                "/js/**",
-                "/img/**",
-                "/error",
-                "/favicon.ico",
-                "/swagger-ui.html",
-                "/swagger/**",
-                "/swagger-resources/**",
-                "/webjars/**",
-                "/v2/api-docs"
-        );
-    }
-
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+
                 .authorizeRequests()
-                .antMatchers("/", "/auth/**", "/posts/read/**", "/posts/search/**").authenticated()
+                // 계획 저장 등 db에 쓰는 모든 req.
+                .antMatchers("/", "/plan/write/**", "/gather/write/**", "/comment/write").authenticated()
 //                .anyRequest().authenticated()
                 .anyRequest().permitAll()
                 .and() /* OAuth */
+
                 .addFilterBefore(new JwtAuthFilter(tokenService), UsernamePasswordAuthenticationFilter.class)
                 .oauth2Login()
                 .successHandler(successHandler)

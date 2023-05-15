@@ -25,16 +25,18 @@ public class JwtAuthFilter extends GenericFilterBean {
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-		String token = ((HttpServletRequest)request).getHeader("Auth");
+		String token = ((HttpServletRequest)request).getHeader(TokenConstants.TOKEN);
 
 		if (token != null && tokenService.verifyToken(token)) {
 			Claims claims = tokenService.getClaim(token);
-			String email = (String) claims.get(Token.EMAIL);
-			String nickname = (String) claims.get(Token.NICKNAME);
-			String role = (String) claims.get(Token.ROLE);
+			String email = (String) claims.get(TokenConstants.EMAIL);
+			String id = (String) claims.get(TokenConstants.ID);
+			String nickname = (String) claims.get(TokenConstants.NICKNAME);
+			String role = (String) claims.get(TokenConstants.ROLE);
 
 			// todo: creating user process
 			UserDto userDto = UserDto.builder()
+					.id(id)
 					.email(email)
 					.nickname(nickname)
 					.role(UserEntity.Role.valueOf(role))

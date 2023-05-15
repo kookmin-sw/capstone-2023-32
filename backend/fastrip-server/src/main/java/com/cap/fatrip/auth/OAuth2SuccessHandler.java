@@ -2,6 +2,7 @@ package com.cap.fatrip.auth;
 
 import com.cap.fatrip.dto.UserDto;
 import com.cap.fatrip.service.TokenService;
+import com.cap.fatrip.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,7 @@ import java.io.IOException;
 public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 	private final TokenService tokenService;
 	private final ObjectMapper objectMapper;
+	private final UserService userService;
 
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
@@ -28,18 +30,17 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 		UserDto userDto = UserDto.of(oAuth2User);
 
 		// todo: specify role.
-		Token token = tokenService.generateToken(userDto);
+		String token = tokenService.generateToken(userDto);
 		log.info("{}", token);
 
 		writeTokenResponse(response, token);
 	}
 
-	private void writeTokenResponse(HttpServletResponse response, Token token)
+	private void writeTokenResponse(HttpServletResponse response, String token)
 			throws IOException {
 		response.setContentType("text/html;charset=UTF-8");
 
-		response.addHeader("Auth", token.getToken());
-		response.addHeader("Refresh", token.getRefreshToken());
+		response.addHeader(TokenConstants.TOKEN, token);
 		response.setContentType("application/json;charset=UTF-8");
 
 		var writer = response.getWriter();
