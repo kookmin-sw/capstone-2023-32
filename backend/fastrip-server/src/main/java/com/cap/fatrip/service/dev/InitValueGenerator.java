@@ -33,7 +33,6 @@ public class InitValueGenerator {
 		PlanTagEntity planTagEntity = new PlanTagEntity();
 		for (PlanEntity planEntity : planEntities) {
 			planTagEntity.setPlan(planEntity);
-			assert tagEntities != null;
 			for (int i = 0; i < random.nextInt(tagEntities.size()); i++) {
 				planTagEntity.setTag(tagEntities.get(random.nextInt(tagEntities.size())));
 				planTagRepository.save(planTagEntity);

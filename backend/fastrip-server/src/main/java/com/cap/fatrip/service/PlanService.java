@@ -92,7 +92,6 @@ public class PlanService {
 		};
 		List<PlanResDto> planResDtos = new ArrayList<>();
 		for (PlanEntity planEntity : planByTagsAndTitle) {
-			planEntity.getLike();
 			planResDtos.add(PlanResDto.of(planEntity));
 		}
 		return planResDtos;
