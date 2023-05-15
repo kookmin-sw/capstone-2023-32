@@ -29,7 +29,7 @@ public class PlanEntity extends TimeEntity {
     @Column(name = "u_id")
     // test
     private String userId;
-    @OneToMany(mappedBy = "plan", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL)
     private List<PlanTagEntity> planTagEntities = new ArrayList<>();
     @Column(name= "p_like")
     private int like;

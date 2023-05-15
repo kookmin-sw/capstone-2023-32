@@ -8,7 +8,6 @@ import com.cap.fatrip.entity.PlanTagEntity;
 import com.cap.fatrip.entity.TagEntity;
 import com.cap.fatrip.repository.PlanRepository;
 import com.cap.fatrip.repository.PlanTagRepository;
-import com.cap.fatrip.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +19,8 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class PlanService {
 	private final PlanRepository planRepository;
-	private final TagRepository tagRepository;
 	private final PlanTagRepository planTagRepository;
+	private final TagService tagService;
 
 	public List<PlanDto> getPlans() {
 		List<PlanEntity> planEntityList = planRepository.findAll();
@@ -47,17 +46,10 @@ public class PlanService {
 		PlanTagEntity rel = new PlanTagEntity();
 		rel.setPlan(planEntity);
 		for (String tag : tags) {
-			TagEntity tagEntity = saveTagTest(tag);
+			TagEntity tagEntity = tagService.saveTagTest(tag);
 			rel.setTag(tagEntity);
 			planTagRepository.save(rel);
 		}
-	}
-
-	public TagEntity saveTagTest(String tag) {
-		TagEntity tagEntity = TagEntity.builder()
-				.name(tag).build();
-		Optional<TagEntity> tagEntityOptional = tagRepository.findByName(tag);
-		return tagEntityOptional.orElseGet(() -> tagRepository.save(tagEntity));
 	}
 
 	public void findPlanTest(String tag) {
@@ -95,11 +87,5 @@ public class PlanService {
 			planResDtos.add(PlanResDto.of(planEntity));
 		}
 		return planResDtos;
-	}
-
-	private void findPlans(PlanReqDto planReqDto) {
-		String title = planReqDto.getTitle();
-		List<String> tags = planReqDto.getTags();
-//		planRepository.findPlanByTagsAndTitle()
 	}
 }

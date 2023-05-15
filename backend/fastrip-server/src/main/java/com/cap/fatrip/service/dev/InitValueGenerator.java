@@ -3,6 +3,7 @@ package com.cap.fatrip.service.dev;
 import com.cap.fatrip.entity.PlanEntity;
 import com.cap.fatrip.entity.PlanTagEntity;
 import com.cap.fatrip.entity.TagEntity;
+import com.cap.fatrip.entity.id.PlanTagId;
 import com.cap.fatrip.repository.PlanRepository;
 import com.cap.fatrip.repository.PlanTagRepository;
 import com.cap.fatrip.repository.TagRepository;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -34,7 +36,14 @@ public class InitValueGenerator {
 		for (PlanEntity planEntity : planEntities) {
 			planTagEntity.setPlan(planEntity);
 			for (int i = 0; i < random.nextInt(tagEntities.size()); i++) {
-				planTagEntity.setTag(tagEntities.get(random.nextInt(tagEntities.size())));
+				TagEntity tag = tagEntities.get(random.nextInt(tagEntities.size()));
+				planTagEntity.setTag(tag);
+				Optional<PlanTagEntity> relOptional = planTagRepository.findById(new PlanTagId(planEntity.getId(), tag.getId()));
+				if (relOptional.isPresent()) {
+					continue;
+				}
+				tag.setCount(tag.getCount() + 1);
+				tagRepository.save(tag);
 				planTagRepository.save(planTagEntity);
 			}
 		}
