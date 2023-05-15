@@ -6,6 +6,10 @@ import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'Map.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart';
 
 var subTitle = TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
 var uuid = Uuid();
@@ -54,6 +58,21 @@ class _MakePageState extends State<MakePage> {
   var additionalInfo = [];
   String comment = '';
 
+  final ImagePicker _picker = ImagePicker();
+  File? _image;
+
+  Future getImage() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      _image = File(pickedFile.path);
+      setState(() {});
+    } else {
+      print('No image selected.');
+    }
+  }
+
+
   void sendData() async {
     setState(() {
       title = _controller.text;
@@ -80,6 +99,7 @@ class _MakePageState extends State<MakePage> {
         "user": {"id": userId},
         "tags": tags,
         "p_comment": comment,
+        "p_image": _image?.path,
       },
       "pplan": pplan,
     };
@@ -253,6 +273,21 @@ class _MakePageState extends State<MakePage> {
           ],
         ),
 
+        // ** 썸네일 이미지 추가 **
+        IconButton(
+          icon: _image == null
+              ? Icon(Icons.add_a_photo)
+              : Text(
+            basename(_image!.path),
+            style: TextStyle(color: Theme.of(context).iconTheme.color),
+          ),
+          onPressed: getImage,
+        ),
+        SizedBox(
+          height: 8
+        ),
+
+
         // ** 계획 작성 **
         Container(
           margin: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
@@ -267,7 +302,8 @@ class _MakePageState extends State<MakePage> {
                       ? ''
                       : '${DateFormat('MM/dd/yyyy').format(_dateRange!.start)} - ${DateFormat('MM/dd/yyyy').format(_dateRange!.end)}',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500
                   ),
                 ),
               ),
@@ -276,7 +312,7 @@ class _MakePageState extends State<MakePage> {
                 alignment: Alignment.center,
                 child: OutlinedButton(
                   child: Text('일정 선택하기',
-                      style: TextStyle(color: Color(0xff6DA5FA))),
+                      style: TextStyle(color: Color(0xff6DA5FA), fontWeight: FontWeight.bold)),
                   onPressed: () => _selectDateRange(context),
                 ),
               ),
