@@ -69,8 +69,9 @@ public class PlanService {
 
 	public List<PlanResDto> getPlans(PlanReqDto planReqDto) {
 		String title = planReqDto.getTitle() == null ? "" : planReqDto.getTitle();
-		List<String> tags = planReqDto.getTags();
+		List<String> tags = planReqDto.getTags() == null ? new ArrayList<>() : planReqDto.getTags();
 		List<PlanEntity> planByTagsAndTitle = switch (tags.size()) {
+			case 0 -> planRepository.findPlanByTagsAndTitle(title);
 			case 1 -> planRepository.findPlanByTagsAndTitle(title, tags.get(0));
 			case 2 -> planRepository.findPlanByTagsAndTitle(title, tags.get(0), tags.get(1));
 			case 3 -> planRepository.findPlanByTagsAndTitle(title, tags.get(0), tags.get(1), tags.get(2));

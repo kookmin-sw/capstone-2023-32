@@ -66,6 +66,9 @@ public interface PlanRepository extends JpaRepository<PlanEntity, Long> {
 
 
 	@Query("SELECT distinct plan FROM PlanEntity plan INNER JOIN FETCH PlanTagEntity rel ON plan = rel.plan WHERE plan.title LIKE %:title% And plan.planTagEntities.size>0" +
+			"ORDER BY plan.like DESC")
+	List<PlanEntity> findPlanByTagsAndTitle(@Param("title") String title);
+	@Query("SELECT distinct plan FROM PlanEntity plan INNER JOIN FETCH PlanTagEntity rel ON plan = rel.plan WHERE plan.title LIKE %:title% And plan.planTagEntities.size>0" +
 			"AND EXISTS (SELECT pt1 FROM PlanTagEntity pt1 WHERE pt1.plan = plan AND pt1.tag.name = :tag1)" +
 			"ORDER BY plan.like DESC")
 	List<PlanEntity> findPlanByTagsAndTitle(@Param("title") String title, @Param("tag1") String tag1);
