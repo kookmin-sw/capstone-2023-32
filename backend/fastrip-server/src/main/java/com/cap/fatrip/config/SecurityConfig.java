@@ -32,12 +32,12 @@ public class SecurityConfig {
                 .and()
 
                 .authorizeRequests()
-                // 계획 저장 등 db에 쓰는 모든 req.
+                // 계획 저장 등 db에 쓰는 모든 req. 아래는 예시
                 .antMatchers("/", "/plan/write/**", "/gather/write/**", "/comment/write").authenticated()
-//                .anyRequest().authenticated()
                 .anyRequest().permitAll()
-                .and() /* OAuth */
+                .and()
 
+                /* OAuth */
                 .addFilterBefore(new JwtAuthFilter(tokenService), UsernamePasswordAuthenticationFilter.class)
                 .oauth2Login()
                 .successHandler(successHandler)

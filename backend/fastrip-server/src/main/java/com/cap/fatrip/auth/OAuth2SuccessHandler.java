@@ -28,6 +28,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 			throws IOException {
 		OAuth2User oAuth2User = (OAuth2User)authentication.getPrincipal();
 		UserDto userDto = UserDto.of(oAuth2User);
+		userService.saveAndFindUser(userDto);
 
 		// todo: specify role.
 		String token = tokenService.generateToken(userDto);
