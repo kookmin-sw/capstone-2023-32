@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
-import java.util.List;
 
 @Getter
 @AllArgsConstructor
@@ -29,7 +28,6 @@ public class PlanDto extends TimeDto {
         PlanDto plan = new PlanDto();
         plan.id = planEntity.getId();
         plan.user = planEntity.getUser();
-        plan.userId = planEntity.getUserId();
 		plan.like = planEntity.getLike();
 		plan.open = planEntity.isOpen();
         plan.createdAt = planEntity.getCreatedAt();

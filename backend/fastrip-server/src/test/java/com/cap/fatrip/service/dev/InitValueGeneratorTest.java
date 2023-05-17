@@ -74,7 +74,6 @@ class InitValueGeneratorTest {
 				.title(title)
 				.like(random.nextInt(5, 55))
 				.open(random.nextInt(1, 10) % 2 == 1)
-				.userId("test_id_" + random.nextInt(1, 20))
 				.build();
 		return planRepository.save(planEntity);
 	}

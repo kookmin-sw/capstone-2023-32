@@ -7,6 +7,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @NoArgsConstructor //기본 생성자 만들어줌
 @AllArgsConstructor //기본 생성자 만들어줌
@@ -24,7 +25,7 @@ public class UserEntity extends TimeEntity {
 //	@Column(name = "password", nullable = false, length = 30)
 //	private String password;
 
-	@Column(name = "name", nullable = false, length = 20)
+	@Column(name = "name", length = 20)
 	private String name;
 
 	@Column(name = "nickname", nullable = false, length = 20)
@@ -62,6 +63,9 @@ public class UserEntity extends TimeEntity {
 
 	@Column(name = "report_cnt", columnDefinition = "int not null default 0")
 	private int report_cnt;
+
+	@OneToMany(mappedBy = "user")
+	private List<PlanEntity> planEntityList;
 
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)

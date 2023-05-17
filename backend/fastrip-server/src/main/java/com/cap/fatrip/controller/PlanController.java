@@ -1,8 +1,6 @@
 package com.cap.fatrip.controller;
 
 import com.cap.fatrip.dto.PPlanDto;
-import com.cap.fatrip.dto.PlaceDto;
-import com.cap.fatrip.dto.PlanDto;
 import com.cap.fatrip.dto.inbound.PlanReqDto;
 import com.cap.fatrip.dto.inbound.savePlanDto;
 import com.cap.fatrip.dto.outbound.PlanResDto;
@@ -12,7 +10,6 @@ import com.cap.fatrip.entity.TagEntity;
 import com.cap.fatrip.repository.PlanTagRepository;
 import com.cap.fatrip.repository.TagRepository;
 import com.cap.fatrip.service.PPlanService;
-import com.cap.fatrip.service.PlaceService;
 import com.cap.fatrip.service.PlanService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -43,11 +40,6 @@ public class PlanController {
 		return planService.getPlans(planReqDto);
 	}
 
-	@GetMapping("/alls")
-	public List<PlanDto> findAllsss() {
-		return planService.getPlans();
-	}
-
 
 	private PlanResDto[] createDummyDtoList() {
 		int cnt = 15;
@@ -57,16 +49,6 @@ public class PlanController {
 			dtos[i] = dummyDto;
 		}
 		return dtos;
-	}
-
-	@GetMapping(path = "savePlan", params = {"title", "tag1", "tag2"})
-	public void savePlanTest(@RequestParam String title, @RequestParam String tag1, @RequestParam String tag2) {
-		planService.savePlanTest(title, tag1, tag2);
-	}
-
-	@GetMapping(path = "findPlan", params = {"tag"})
-	public void findPlanTest(@RequestParam String tag) {
-		planService.findPlanTest(tag);
 	}
 
 	@PostMapping("/save")

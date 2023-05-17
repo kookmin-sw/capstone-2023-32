@@ -23,12 +23,8 @@ public class PlanEntity extends TimeEntity {
     private long id;
 
     @ManyToOne
-//    @JoinColumn(name = "id",nullable = false)   //fk
-    @JoinColumn(name = "id", insertable = false, updatable = false)   //fk
+    @JoinColumn(name = "user_id")   //fk
     private UserEntity user;
-    @Column(name = "u_id")
-    // test
-    private String userId;
     @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL)
     private List<PlanTagEntity> planTagEntities = new ArrayList<>();
     @Column(name= "p_like")

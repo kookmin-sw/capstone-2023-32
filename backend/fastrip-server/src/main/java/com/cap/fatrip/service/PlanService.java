@@ -4,59 +4,19 @@ import com.cap.fatrip.dto.PlanDto;
 import com.cap.fatrip.dto.inbound.PlanReqDto;
 import com.cap.fatrip.dto.outbound.PlanResDto;
 import com.cap.fatrip.entity.PlanEntity;
-import com.cap.fatrip.entity.PlanTagEntity;
-import com.cap.fatrip.entity.TagEntity;
 import com.cap.fatrip.repository.PlanRepository;
-import com.cap.fatrip.repository.PlanTagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.Random;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
 public class PlanService {
 	private final PlanRepository planRepository;
-	private final PlanTagRepository planTagRepository;
-	private final TagService tagService;
-
-	public List<PlanDto> getPlans() {
-		List<PlanEntity> planEntityList = planRepository.findAll();
-		Stream<PlanDto> planDtoStream = planEntityList.stream().map(PlanDto::of);
-		return planDtoStream.toList();
-	}
 
 	public void savePlan(PlanDto planDto) {
 		planRepository.save(PlanEntity.toPlanEntity(planDto));
-	}
-
-
-	public void savePlanTest(String title, String tag1, String tag2) {
-		Random random = new Random();
-		List<String> tags = new ArrayList<>(List.of(tag1, tag2));
-		PlanEntity planEntity = PlanEntity.builder()
-				.title(title)
-				.like(random.nextInt(5, 55))
-				.open(random.nextInt(1, 10) % 2 == 1)
-				.userId("test_id_" + random.nextInt(1, 20))
-				.build();
-		planRepository.save(planEntity);
-		PlanTagEntity rel = new PlanTagEntity();
-		rel.setPlan(planEntity);
-		for (String tag : tags) {
-			TagEntity tagEntity = tagService.saveTagTest(tag);
-			rel.setTag(tagEntity);
-			planTagRepository.save(rel);
-		}
-	}
-
-	public void findPlanTest(String tag) {
-		List<PlanEntity> planByTag1 = planRepository.findPlanByTag1(tag);
-		PlanEntity planEntity = planByTag1.get(0);
-		List<PlanTagEntity> planTagEntities = planEntity.getPlanTagEntities();
-		System.out.println();
 	}
 
 	public List<PlanResDto> getPlans(PlanReqDto planReqDto) {

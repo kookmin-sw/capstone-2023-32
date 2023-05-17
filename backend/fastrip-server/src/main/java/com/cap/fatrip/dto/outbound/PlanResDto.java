@@ -36,7 +36,7 @@ public class PlanResDto {
 		resDto.id = plan.getId();
 		resDto.title = plan.getTitle();
 		resDto.like = plan.getLike();
-		resDto.userId = plan.getUserId();
+		resDto.userId = plan.getUser().getId();
 		resDto.tags = new ArrayList<>();
 		if (plan.getPlanTagEntities().size() != 0) {
 			for (PlanTagEntity planTagEntity : plan.getPlanTagEntities()) {
