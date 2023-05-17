@@ -2,19 +2,28 @@ package com.cap.fatrip.service;
 
 import com.cap.fatrip.auth.TokenConstants;
 import com.cap.fatrip.dto.UserDto;
+import com.cap.fatrip.dto.outbound.LoginDto;
+import com.cap.fatrip.util.ServiceUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Base64;
 import java.util.Date;
 
 @Service
+@RequiredArgsConstructor
 public class TokenService {
 	private String secretKey = "awioejfasldncvknwklerj123ijr5sjadfasdf3928iklsdafkl";  // token-secret-key
+	private final ObjectMapper objectMapper;
 
 	@PostConstruct
 	protected void init() {
@@ -49,6 +58,23 @@ public class TokenService {
 			return false;
 		}
 	}
+
+	public void writeTokenResponse(HttpServletResponse response, String token, UserDto userDto)
+			throws IOException {
+		response.setContentType("text/html;charset=UTF-8");
+
+		response.addHeader(TokenConstants.TOKEN, token);
+		response.setContentType("application/json");
+		response.setCharacterEncoding("utf-8");
+		response.setStatus(HttpStatus.OK.value());
+		LoginDto loginDto = new LoginDto();
+		ServiceUtil.copyObject(userDto, loginDto);
+
+		var writer = response.getWriter();
+		writer.println(objectMapper.writeValueAsString(loginDto));
+		writer.flush();
+	}
+
 
 	public Claims getClaim(String token) {
 		return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();

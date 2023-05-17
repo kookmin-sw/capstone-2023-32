@@ -35,7 +35,8 @@ public class SecurityConfig {
 
                 .authorizeRequests()
                 // 계획 저장 등 db에 쓰는 모든 req. 아래는 예시
-                .antMatchers("/", "/plan/write/**", "/gather/write/**", "/comment/write").authenticated()
+                .antMatchers("/", "/plan/write/**", "/gather/write/**", "/comment/write"
+                , "/**/changeNickname").authenticated()
                 .anyRequest().permitAll()
                 .and()
 

@@ -8,12 +8,12 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.util.Date;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED) //기본 생성자 만들어줌
-@AllArgsConstructor(access = AccessLevel.PROTECTED) //기본 생성자 만들어줌
+@NoArgsConstructor //기본 생성자 만들어줌
+@AllArgsConstructor //기본 생성자 만들어줌
 @Builder
 @DynamicUpdate //update 할때 실제 값이 변경됨 컬럼으로만 update 쿼리를 만듬
 @Entity //JPA Entity 임을 명시
-@Getter //Lombok 어노테이션으로 getter
+@Setter @Getter //Lombok 어노테이션으로 getter
 @Table(name = "user", uniqueConstraints = {@UniqueConstraint(name = "email", columnNames = {"email"})}) //테이블 관련 설정 어노테이션
 public class UserEntity extends TimeEntity {
 	@Id @GeneratedValue(generator = "uuid2")

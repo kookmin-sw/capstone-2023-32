@@ -1,13 +1,10 @@
 package com.cap.fatrip.auth;
 
 import com.cap.fatrip.dto.UserDto;
-import com.cap.fatrip.dto.outbound.LoginDto;
 import com.cap.fatrip.entity.UserEntity;
 import com.cap.fatrip.repository.UserRepository;
 import com.cap.fatrip.service.TokenService;
-import com.cap.fatrip.service.UserService;
 import com.cap.fatrip.util.ServiceUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -23,15 +20,14 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Component
 public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
+//	http://localhost:8080/oauth2/authorization/google
 	private final TokenService tokenService;
-	private final ObjectMapper objectMapper;
-	private final UserService userService;
 	private final UserRepository userRepository;
 
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
 			throws IOException {
-		OAuth2User oAuth2User = (OAuth2User)authentication.getPrincipal();
+		OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
 		String email = oAuth2User.getAttribute("email");
 		UserEntity userEntity = userRepository.findByEmail(email).orElseThrow();
 		UserDto userDto = new UserDto();
@@ -40,21 +36,6 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 		String token = tokenService.generateToken(userDto);
 		log.info("{}", token);
 
-		writeTokenResponse(response, token, userDto);
-	}
-
-	private void writeTokenResponse(HttpServletResponse response, String token, UserDto userDto)
-			throws IOException {
-		response.setContentType("text/html;charset=UTF-8");
-
-		response.addHeader(TokenConstants.TOKEN, token);
-		response.setContentType("application/json");
-		response.setCharacterEncoding("utf-8");
-		LoginDto loginDto = new LoginDto();
-		ServiceUtil.copyObject(userDto, loginDto);
-
-		var writer = response.getWriter();
-		writer.println(objectMapper.writeValueAsString(loginDto));
-		writer.flush();
+		tokenService.writeTokenResponse(response, token, userDto);
 	}
 }

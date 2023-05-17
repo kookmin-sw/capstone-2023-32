@@ -4,6 +4,8 @@ import com.cap.fatrip.dto.UserDto;
 import com.cap.fatrip.entity.UserEntity;
 import com.cap.fatrip.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -14,6 +16,19 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
 	private final UserRepository userRepository;
+
+
+	public static UserDto getUserFromAuth() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		return (UserDto) authentication.getPrincipal();
+	}
+
+	public UserEntity changeNickname(String nickname) {
+		UserDto user = getUserFromAuth();
+		UserEntity userEntity = userRepository.findByEmail(user.getEmail()).orElse(new UserEntity());
+		userEntity.setNickname(nickname);
+		return userRepository.save(userEntity);
+	}
 
 	public void save(UserDto userDto) {
 		userRepository.save(UserEntity.of(userDto));

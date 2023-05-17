@@ -1,6 +1,7 @@
 package com.cap.fatrip.dto;
 
 import com.cap.fatrip.entity.UserEntity;
+import com.cap.fatrip.util.ServiceUtil;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,23 +36,7 @@ public class UserDto implements Serializable {
 
 	public static UserDto of(UserEntity userEntity) {
 		UserDto user = new UserDto();
-
-		user.id = userEntity.getId();
-//		user.password = userEntity.getPassword();
-		user.name = userEntity.getName();
-		user.nickname = userEntity.getNickname();
-		user.gender = userEntity.getGender();
-		user.birthday = userEntity.getBirthday();
-		user.phone = userEntity.getPhone();
-		user.email = userEntity.getEmail();
-		user.svc_use_pcy_agmt_yn = userEntity.getSvc_use_pcy_agmt_yn();
-		user.ps_info_proc_agmt_yn = userEntity.getPs_info_proc_agmt_yn();
-		user.loc_base_svc_agmt_yn = userEntity.getLoc_base_svc_agmt_yn();
-		user.sub_yn = userEntity.getSub_yn();
-		user.locked_yn = userEntity.getLocked_yn();
-		user.location = userEntity.getLocation();
-		user.report_cnt = userEntity.getReport_cnt();
-		user.role = userEntity.getRole();
+		ServiceUtil.copyObject(userEntity, user);
 
 		return user;
 	}
