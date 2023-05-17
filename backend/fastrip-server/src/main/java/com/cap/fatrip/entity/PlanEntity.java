@@ -38,14 +38,17 @@ public class PlanEntity extends TimeEntity {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "tags")
-    private String[] tags;
+    @Column(name = "comment")
+    private String comment;
+
+
 
     public static PlanEntity toPlanEntity(PlanDto planDto){
         PlanEntity planEntity = new PlanEntity();
         planEntity.id = planDto.getId();
         planEntity.user = planDto.getUser();
-        planEntity.tags = planDto.getTags();
+
+        planEntity.comment = planDto.getComment();
         planEntity.title = planDto.getTitle();
         return planEntity;
     }

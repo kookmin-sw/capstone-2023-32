@@ -19,10 +19,10 @@ public class PlanDto extends TimeDto {
     private String userId;
     private UserEntity user;
     private int like;
-    private String[] tags;
     private Date createDate; //테스트를 위한 데이터
     private boolean open;
 
+    private String comment;
     private String title;
 
     public static PlanDto of(PlanEntity planEntity){
@@ -34,6 +34,7 @@ public class PlanDto extends TimeDto {
 		plan.open = planEntity.isOpen();
         plan.createdAt = planEntity.getCreatedAt();
 		plan.updatedAt = planEntity.getUpdatedAt();
+        plan.comment = planEntity.getComment();
         plan.title = planEntity.getTitle();
         return plan;
     }

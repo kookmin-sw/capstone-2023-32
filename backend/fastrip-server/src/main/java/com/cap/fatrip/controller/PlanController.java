@@ -6,12 +6,18 @@ import com.cap.fatrip.dto.PlanDto;
 import com.cap.fatrip.dto.inbound.PlanReqDto;
 import com.cap.fatrip.dto.inbound.savePlanDto;
 import com.cap.fatrip.dto.outbound.PlanResDto;
+import com.cap.fatrip.entity.PlanEntity;
+import com.cap.fatrip.entity.PlanTagEntity;
+import com.cap.fatrip.entity.TagEntity;
+import com.cap.fatrip.repository.PlanTagRepository;
+import com.cap.fatrip.repository.TagRepository;
 import com.cap.fatrip.service.PPlanService;
 import com.cap.fatrip.service.PlaceService;
 import com.cap.fatrip.service.PlanService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -21,7 +27,8 @@ import java.util.Random;
 public class PlanController {
 	private final PlanService planService;
 	private final PPlanService pplanService;
-	private final PlaceService placeService;
+	private final TagRepository tagRepository;
+	private final PlanTagRepository planTagRepository;
 
 	//	@PostMapping("/all")
 	@GetMapping("/all")
@@ -66,17 +73,24 @@ public class PlanController {
 	public String save(@RequestBody savePlanDto saveDto) {
 
 		planService.savePlan(saveDto.getPlan());
-		//long p_id = saveDto.getPlan().getP_id();
-		/*List<PlaceDto> places = saveDto.getPlace();
-		for (PlaceDto place : places) {
-			placeService.savePlace(place);
+		List<TagEntity> tagEntityList = new ArrayList<>();
+		List<String> tags = saveDto.getTag();
+		for(String tag : tags) {
+			//if 절로 해당 tag가 안에 내용이 있는지 확인용
+			tagEntityList.add(TagEntity.builder()
+					.name(tag).build());
 		}
-		*/
-
+		tagRepository.saveAll(tagEntityList);
 
 		List<PPlanDto> pplans = saveDto.getPplan();
 		for (PPlanDto pplan : pplans) {
 			pplanService.savePplan(pplan);
+		}
+		PlanTagEntity planTagEntity = new PlanTagEntity();
+		planTagEntity.setPlan(PlanEntity.toPlanEntity(saveDto.getPlan()));
+		for(TagEntity tagList : tagEntityList) {
+			planTagEntity.setTag(tagList);
+			planTagRepository.save(planTagEntity);
 		}
 
 		System.out.println(saveDto);
