@@ -41,19 +41,6 @@ public class UserController {
         return userService.findById(id);
     }
 
-
-
-    //로그인 처리 및 세션 저장
-    @PostMapping("/login")
-    public String login(@RequestBody UserDto userDto, HttpSession session) {
-        UserDto loginResult = userService.login(userDto);
-        if (loginResult != null) {
-            session.setAttribute(NAME, loginResult.getName());
-            return "success";
-        }
-        return "fail";
-    }
-
     @PostMapping("/update")
     public String update(@RequestBody UserDto userDto) {
         boolean exist = userService.isExist(userDto.getId());

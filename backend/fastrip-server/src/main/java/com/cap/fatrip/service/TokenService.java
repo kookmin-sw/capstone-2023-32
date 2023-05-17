@@ -23,7 +23,7 @@ public class TokenService {
 
 	public String generateToken(UserDto user) {
 		Claims claims = Jwts.claims().setSubject(user.getId());
-		claims.put(TokenConstants.ROLE, user.getRole().getValue());
+		claims.put(TokenConstants.ROLE, user.getRole().name());
 		claims.put(TokenConstants.EMAIL, user.getEmail());
 		claims.put(TokenConstants.NICKNAME, user.getNickname());
 		claims.put(TokenConstants.ID, user.getId());

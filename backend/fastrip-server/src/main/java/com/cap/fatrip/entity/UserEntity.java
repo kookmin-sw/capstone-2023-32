@@ -3,6 +3,7 @@ package com.cap.fatrip.entity;
 import com.cap.fatrip.dto.UserDto;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -15,12 +16,13 @@ import java.util.Date;
 @Getter //Lombok 어노테이션으로 getter
 @Table(name = "user", uniqueConstraints = {@UniqueConstraint(name = "email", columnNames = {"email"})}) //테이블 관련 설정 어노테이션
 public class UserEntity extends TimeEntity {
-	@Id
-	@Column(name = "id")
+	@Id @GeneratedValue(generator = "uuid2")
+	@GenericGenerator(name="uuid2", strategy = "uuid2")
+	@Column(columnDefinition = "BINARY(36)")
 	private String id;
 
-	@Column(name = "password", nullable = false, length = 30)
-	private String password;
+//	@Column(name = "password", nullable = false, length = 30)
+//	private String password;
 
 	@Column(name = "name", nullable = false, length = 20)
 	private String name;
@@ -72,24 +74,15 @@ public class UserEntity extends TimeEntity {
 		return this;
 	}
 
-	public String getRoleValue() {
-		return this.role.getValue();
-	}
-
 	@Getter
-	@RequiredArgsConstructor
 	public enum Role {
-		USER("ROLE_USER"),
-		ADMIN("ROLE_ADMIN");
-	//	SOCIAL("ROLE_SOCIAL"); // OAuth
-
-		private final String value;
+		USER, ADMIN
 	}
 
-	public static UserEntity toUserEntity(UserDto userDto){
+	public static UserEntity of(UserDto userDto){
 		UserEntity userEntity = new UserEntity();
-		userEntity.id = userDto.getId();
-		userEntity.password = userDto.getPassword();
+//		userEntity.id = userDto.getId();
+//		userEntity.password = userDto.getPassword();
 		userEntity.name = userDto.getName();
 		userEntity.email = userDto.getEmail();
 		userEntity.phone = userDto.getPhone();

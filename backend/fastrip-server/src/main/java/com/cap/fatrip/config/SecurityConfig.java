@@ -2,6 +2,7 @@ package com.cap.fatrip.config;
 
 import com.cap.fatrip.auth.JwtAuthFilter;
 import com.cap.fatrip.auth.OAuth2SuccessHandler;
+import com.cap.fatrip.repository.UserRepository;
 import com.cap.fatrip.service.CustomOAuth2UserService;
 import com.cap.fatrip.service.TokenService;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuth2SuccessHandler successHandler;
     private final TokenService tokenService;
+    private final UserRepository userRepository;
 
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -38,7 +40,7 @@ public class SecurityConfig {
                 .and()
 
                 /* OAuth */
-                .addFilterBefore(new JwtAuthFilter(tokenService), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthFilter(tokenService, userRepository), UsernamePasswordAuthenticationFilter.class)
                 .oauth2Login()
                 .successHandler(successHandler)
                 .userInfoEndpoint() // OAuth2 로그인 성공 후 가져올 설정들
