@@ -16,7 +16,7 @@ import java.util.Date;
 @Builder
 public class UserDto implements Serializable {
 	private String id;
-	private String password;
+//	private String password;
 	private String name;
 	private String nickname;
 	private int gender;
@@ -37,7 +37,7 @@ public class UserDto implements Serializable {
 		UserDto user = new UserDto();
 
 		user.id = userEntity.getId();
-		user.password = userEntity.getPassword();
+//		user.password = userEntity.getPassword();
 		user.name = userEntity.getName();
 		user.nickname = userEntity.getNickname();
 		user.gender = userEntity.getGender();
@@ -59,7 +59,7 @@ public class UserDto implements Serializable {
 	public static UserDto of(OAuth2User oAuth2User) {
 		var attributes = oAuth2User.getAttributes();
 		return UserDto.builder()
-				.id((String) attributes.get("id"))
+//				.id((String) attributes.get("id"))
 				.role((UserEntity.Role) attributes.get("role"))
 				.email((String) attributes.get("email"))
 				.name((String) attributes.get("name"))

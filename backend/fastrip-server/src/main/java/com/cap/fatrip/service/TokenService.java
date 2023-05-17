@@ -1,6 +1,6 @@
 package com.cap.fatrip.service;
 
-import com.cap.fatrip.auth.Token;
+import com.cap.fatrip.auth.TokenConstants;
 import com.cap.fatrip.dto.UserDto;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -21,29 +21,20 @@ public class TokenService {
 		secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
 	}
 
-	public Token generateToken(UserDto user) {
-		long tokenPeriod = 1000L * 60L * 10L;
-		long refreshPeriod = 1000L * 60L * 60L * 24L * 30L * 3L;
-
+	public String generateToken(UserDto user) {
 		Claims claims = Jwts.claims().setSubject(user.getId());
-		claims.put(Token.ROLE, user.getRole().getValue());
-		claims.put(Token.EMAIL, user.getEmail());
-		claims.put(Token.NICKNAME, user.getNickname());
+		claims.put(TokenConstants.ROLE, user.getRole().name());
+		claims.put(TokenConstants.EMAIL, user.getEmail());
+		claims.put(TokenConstants.NICKNAME, user.getNickname());
+		claims.put(TokenConstants.ID, user.getId());
 
 		Date now = new Date();
-		return new Token(
-				Jwts.builder()
-						.setClaims(claims)
-						.setIssuedAt(now)
-						.setExpiration(new Date(now.getTime() + tokenPeriod))
-						.signWith(SignatureAlgorithm.HS256, secretKey)
-						.compact(),
-				Jwts.builder()
-						.setClaims(claims)
-						.setIssuedAt(now)
-						.setExpiration(new Date(now.getTime() + refreshPeriod))
-						.signWith(SignatureAlgorithm.HS256, secretKey)
-						.compact());
+		return Jwts.builder()
+				.setClaims(claims)
+				.setIssuedAt(now)
+				.setExpiration(new Date(now.getTime() + TokenConstants.PERIOD_MILS))
+				.signWith(SignatureAlgorithm.HS256, secretKey)
+				.compact();
 	}
 
 	public boolean verifyToken(String token) {

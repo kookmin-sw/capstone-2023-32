@@ -7,15 +7,14 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @Getter
-public class Token {
-	private String token;
-	private String refreshToken;
+public class TokenConstants {
+	// claims
+	public static final String ID = "id";
 	public static final String NICKNAME = "nickname";
 	public static final String EMAIL = "email";
 	public static final String ROLE = "role";
-
-	public Token(String token, String refreshToken) {
-		this.token = token;
-		this.refreshToken = refreshToken;
-	}
+	// header key
+	public static final String TOKEN = "Auth";
+	// period
+	public static final long PERIOD_MILS = 1000L * 60 * 60 * 24 * 30;
 }

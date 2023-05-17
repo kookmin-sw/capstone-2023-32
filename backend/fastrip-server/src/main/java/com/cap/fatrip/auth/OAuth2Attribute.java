@@ -94,7 +94,7 @@ public class OAuth2Attribute {
     public UserEntity toEntity() {
         return UserEntity.builder()
                 .id(RandomStringUtils.random(10, true, true))
-                .password(RandomStringUtils.random(10, true, true))
+//                .password(RandomStringUtils.random(10, true, true))
                 .name(name)
                 .email(email)
                 .nickname(nickname)
