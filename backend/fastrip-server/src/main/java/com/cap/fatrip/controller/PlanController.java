@@ -10,10 +10,9 @@ import com.cap.fatrip.entity.PPlanEntity;
 import com.cap.fatrip.entity.PlanEntity;
 import com.cap.fatrip.entity.PlanTagEntity;
 import com.cap.fatrip.entity.TagEntity;
-import com.cap.fatrip.repository.PlanTagRepository;
-import com.cap.fatrip.repository.TagRepository;
 import com.cap.fatrip.service.PlanService;
 import com.cap.fatrip.service.TagService;
+import com.cap.fatrip.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +31,7 @@ public class PlanController {
 	}
 
 	@GetMapping(params = {"id"})
-	public PlanDetailDto getPlanDetail(@RequestParam long id) {
+	public PlanDetailDto getPlanDetail(@RequestParam long id) throws Exception {
 		PlanDetailDto planDetailDto = new PlanDetailDto();
 		PlanEntity planDetail = planService.getPlanDetail(id);
 
@@ -41,6 +40,13 @@ public class PlanController {
 		planDetailDto.getPlan().setTags(planDetail.getPlanTagEntities().stream().map(planTagEntity -> planTagEntity.getTag().getName()).toList());
 
 		return planDetailDto;
+	}
+
+	@DeleteMapping(params = {"id"})
+	public boolean deletePlan(@RequestParam long id) throws Exception {
+		String userId = UserService.getUserFromAuth().getId();
+		planService.deletePlan(id, userId);
+		return true;
 	}
 
 	@PostMapping("/save")

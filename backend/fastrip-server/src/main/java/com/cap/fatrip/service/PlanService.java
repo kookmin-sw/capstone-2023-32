@@ -74,10 +74,21 @@ public class PlanService {
 		return planResDtos;
 	}
 
-	public PlanEntity getPlanDetail(long planId) {
-		return planRepository.findById(planId).orElseThrow(() -> {
-			log.error("there's no such plan id : {}", planId);
-			return new NoSuchElementException("there's no plan");
-		});
+	public PlanEntity getPlanDetail(long planId) throws Exception {
+		return planRepository.findById(planId).orElseThrow(() -> throwPlanException(planId));
+	}
+
+	public void deletePlan(long id, String userId) throws Exception {
+		PlanEntity planEntity = planRepository.findById(id).orElseThrow(() -> throwPlanException(id));
+		if (planEntity.getUser().getId().equals(userId)) {
+			planRepository.deleteById(id);
+		} else {
+			throw new Exception("해당 유저는 이 계획의 소유자가 아닙니다.");
+		}
+	}
+
+	public Exception throwPlanException(long planId) {
+		log.error("there's no such plan id : {}", planId);
+		return new NoSuchElementException("there's no plan");
 	}
 }
