@@ -6,22 +6,13 @@ import com.cap.fatrip.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 public class TagService {
 	private final TagRepository tagRepository;
-	// todo: plan 생성시 tag count 증가 구현.
-	//  initValueGenerator 참조.
-	public TagEntity saveTagTest(String tag) {
-		TagEntity tagEntity = TagEntity.builder()
-				.name(tag).build();
-		Optional<TagEntity> tagEntityOptional = tagRepository.findByName(tag);
-		return tagEntityOptional.orElseGet(() -> tagRepository.save(tagEntity));
-	}
+
 
 	public List<TagResDto> getPopularTags() {
 		List<TagEntity> top10Entities = tagRepository.findTop10ByOrderByCountDesc();
@@ -30,5 +21,20 @@ public class TagService {
 			tagResDtos.add(TagResDto.of(topEntity));
 		}
 		return tagResDtos;
+	}
+
+	public List<TagEntity> saveTags(List<String> tagList) {
+		Set<String> tags = new HashSet<>(tagList);
+		List<TagEntity> tagEntityList = tags.stream().map(tag -> {
+					Optional<TagEntity> tagEntityOptional = tagRepository.findByName(tag);
+					if (tagEntityOptional.isPresent()) {
+						TagEntity tagEntity = tagEntityOptional.get();
+						tagEntity.setCount(tagEntity.getCount() + 1);
+						return tagEntity;
+					}
+					return TagEntity.builder().name(tag).count(1).build();
+				}
+		).toList();
+		return tagRepository.saveAll(tagEntityList);
 	}
 }

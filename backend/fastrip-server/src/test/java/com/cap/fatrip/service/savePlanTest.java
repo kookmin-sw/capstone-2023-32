@@ -1,6 +1,6 @@
 package com.cap.fatrip.service;
 
-import com.cap.fatrip.dto.inbound.savePlanDto;
+import com.cap.fatrip.dto.inbound.PlanDetailSaveDto;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -26,7 +26,7 @@ public class savePlanTest {
         String json = "{\"plan\":{\"p_id\":\"111\"},\"pplan\":[{\"plan\":{\"id\":1},\"p_time\":\"2000\",\"p_seq\":\"1\"},{\"plan\":{\"id\":1},\"p_time\":\"20002\",\"p_seq\":\"2\"}],\"tag\":[\"japan\",\"usa\"]}";
 
         // JSON 데이터를 Java 객체로 변환
-        savePlanDto saveDto = objectMapper.readValue(json, savePlanDto.class);
+        PlanDetailSaveDto saveDto = objectMapper.readValue(json, PlanDetailSaveDto.class);
 
         // API 호출
         mockMvc.perform(MockMvcRequestBuilders.post("/api/plan/save")

@@ -72,8 +72,8 @@ class InitValueGeneratorTest {
 	PlanEntity savePlan(String title) {
 		PlanEntity planEntity = PlanEntity.builder()
 				.title(title)
-				.like(random.nextInt(5, 55))
-				.open(random.nextInt(1, 10) % 2 == 1)
+				.likes(random.nextInt(5, 55))
+//				.open(random.nextInt(1, 10) % 2 == 1)
 				.build();
 		return planRepository.save(planEntity);
 	}

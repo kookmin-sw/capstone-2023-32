@@ -6,7 +6,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
 
 @Entity
 @Getter
@@ -15,36 +14,30 @@ import java.util.Date;
 public class PPlanEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "pp_id", nullable = true)
+    @Column(name = "pp_id")
     private Long pp_id;    //없으면 에러가 발생
 
     @ManyToOne
     @JoinColumn(name="p_id") //계획번호
     private PlanEntity plan;
 
-    /*@ManyToOne
-    @JoinColumn(name="p_no") //장소번호
-    private PlaceEntity place;
-*/
-
-    @Column(name="day") //게획 날짜
-    private Date day;
-    @Column(name="p_seq") // 계획 순서
+    @Column
+    private int day;
+    @Column // 계획 순서
     private int p_seq;
 
-    @Column(name="p_name")   //place와 병합
+    @Column   //place와 병합
     private String p_name;
-    @Column(name="p_post")
+    @Column
     private String p_post;
-    @Column(name="p_locate")
+    @Column
     private String p_locate;
-    @Column(name="p_country")
+    @Column
     private String p_country;
 
 
-    public static PPlanEntity toPPlanEntity(PPlanDto pplanDto){
+    public static PPlanEntity of(PPlanDto pplanDto){
         PPlanEntity pplanEntity = new PPlanEntity();
-        //pplanEntity.place = pplanDto.getPlace();
         pplanEntity.day = pplanDto.getDay();
         pplanEntity.p_seq = pplanDto.getP_seq();
         pplanEntity.p_name = pplanDto.getP_name();

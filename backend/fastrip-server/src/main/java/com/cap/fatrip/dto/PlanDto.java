@@ -1,39 +1,36 @@
 package com.cap.fatrip.dto;
 
 import com.cap.fatrip.entity.PlanEntity;
-import com.cap.fatrip.entity.UserEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.util.Date;
+import java.util.List;
 
-@Getter
+@Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class PlanDto extends TimeDto {
     private long id;
     private String userId;
-    private UserEntity user;
     private int like;
-    private Date createDate; //테스트를 위한 데이터
-    private boolean open;
+//    private boolean open;
+    private List<String> tags;
 
     private String comment;
     private String title;
+    private String image;
 
     public static PlanDto of(PlanEntity planEntity){
         PlanDto plan = new PlanDto();
         plan.id = planEntity.getId();
-        plan.user = planEntity.getUser();
-		plan.like = planEntity.getLike();
-		plan.open = planEntity.isOpen();
+        plan.userId = planEntity.getUser().getId();
+		plan.like = planEntity.getLikes();
+//		plan.open = planEntity.isOpen();
         plan.createdAt = planEntity.getCreatedAt();
 		plan.updatedAt = planEntity.getUpdatedAt();
         plan.comment = planEntity.getComment();
         plan.title = planEntity.getTitle();
+        plan.image = planEntity.getImage();
         return plan;
     }
 }

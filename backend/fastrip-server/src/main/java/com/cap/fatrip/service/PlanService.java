@@ -1,22 +1,45 @@
 package com.cap.fatrip.service;
 
-import com.cap.fatrip.dto.PlanDto;
 import com.cap.fatrip.dto.inbound.PlanReqDto;
+import com.cap.fatrip.dto.inbound.PlanSaveDto;
 import com.cap.fatrip.dto.outbound.PlanResDto;
-import com.cap.fatrip.entity.PlanEntity;
+import com.cap.fatrip.entity.*;
+import com.cap.fatrip.repository.PPlanRepository;
 import com.cap.fatrip.repository.PlanRepository;
+import com.cap.fatrip.repository.PlanTagRepository;
+import com.cap.fatrip.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class PlanService {
 	private final PlanRepository planRepository;
+	private final PPlanRepository pplanRepository;
+	private final UserRepository userRepository;
+	private final PlanTagRepository planTagRepository;
 
-	public void savePlan(PlanDto planDto) {
-		planRepository.save(PlanEntity.toPlanEntity(planDto));
+	public List<PPlanEntity> savePplans(List<PPlanEntity> planEntityList) {
+		return pplanRepository.saveAll(planEntityList);
+	}
+
+	public List<PlanTagEntity> associateTags(PlanEntity planEntity, List<TagEntity> tagEntities) {
+		List<PlanTagEntity> planTagEntityList = tagEntities.stream().map(tagEntity -> new PlanTagEntity(planEntity, tagEntity)).toList();
+		return planTagRepository.saveAll(planTagEntityList);
+	}
+
+	public PlanEntity savePlan(PlanSaveDto planDto) {
+		PlanEntity planEntity = PlanEntity.ofForSave(planDto);
+		UserEntity userEntity = userRepository.findById(planDto.getUserId()).orElseThrow(() -> {
+			log.error("there's no such user id : {}", planDto.getUserId());
+			return new NoSuchElementException("there's no user");
+		});
+		planEntity.setUser(userEntity);
+		return planRepository.save(planEntity);
 	}
 
 //	public PlanDto
@@ -49,5 +72,12 @@ public class PlanService {
 			planResDtos.add(PlanResDto.of(planEntity));
 		}
 		return planResDtos;
+	}
+
+	public PlanEntity getPlanDetail(long planId) {
+		return planRepository.findById(planId).orElseThrow(() -> {
+			log.error("there's no such plan id : {}", planId);
+			return new NoSuchElementException("there's no plan");
+		});
 	}
 }

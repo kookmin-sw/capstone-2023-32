@@ -1,102 +1,67 @@
 package com.cap.fatrip.controller;
 
 import com.cap.fatrip.dto.PPlanDto;
+import com.cap.fatrip.dto.PlanDto;
 import com.cap.fatrip.dto.inbound.PlanReqDto;
-import com.cap.fatrip.dto.inbound.savePlanDto;
+import com.cap.fatrip.dto.inbound.PlanDetailSaveDto;
+import com.cap.fatrip.dto.outbound.PlanDetailDto;
 import com.cap.fatrip.dto.outbound.PlanResDto;
+import com.cap.fatrip.entity.PPlanEntity;
 import com.cap.fatrip.entity.PlanEntity;
 import com.cap.fatrip.entity.PlanTagEntity;
 import com.cap.fatrip.entity.TagEntity;
 import com.cap.fatrip.repository.PlanTagRepository;
 import com.cap.fatrip.repository.TagRepository;
-import com.cap.fatrip.service.PPlanService;
 import com.cap.fatrip.service.PlanService;
+import com.cap.fatrip.service.TagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 @RestController
 @RequestMapping("/api/plan")
 @RequiredArgsConstructor
 public class PlanController {
 	private final PlanService planService;
-	private final PPlanService pplanService;
-	private final TagRepository tagRepository;
-	private final PlanTagRepository planTagRepository;
-
-	//	@PostMapping("/all")
-	@GetMapping("/all")
-//	public List<PlanResDto> find(@RequestBody PlanReqDto planReqDto) {
-	public List<PlanResDto> findAll() {
-		PlanResDto[] dtos = createDummyDtoList();
-		return List.of(dtos);
-	}
+	private final TagService tagService;
 
 	@PostMapping("/all")
 	public List<PlanResDto> findAll(@RequestBody PlanReqDto planReqDto) {
 		return planService.getPlans(planReqDto);
 	}
 
+	@GetMapping(params = {"id"})
+	public PlanDetailDto getPlanDetail(@RequestParam long id) {
+		PlanDetailDto planDetailDto = new PlanDetailDto();
+		PlanEntity planDetail = planService.getPlanDetail(id);
 
-	private PlanResDto[] createDummyDtoList() {
-		int cnt = 15;
-		PlanResDto[] dtos = new PlanResDto[cnt];
-		for (int i = 0; i < cnt; i++) {
-			PlanResDto dummyDto = createDummyDto();
-			dtos[i] = dummyDto;
-		}
-		return dtos;
-	}
+		planDetailDto.setPlan(PlanDto.of(planDetail));
+		planDetailDto.setPplan(planDetail.getPPlanEntities().stream().map(PPlanDto::of).toList());
+		planDetailDto.getPlan().setTags(planDetail.getPlanTagEntities().stream().map(planTagEntity -> planTagEntity.getTag().getName()).toList());
 
-	@GetMapping(params = {"planId"})
-	public String getPlanDetail(@RequestParam String planId) {
-//		planService.get
-		return null;
+		return planDetailDto;
 	}
 
 	@PostMapping("/save")
-	public String save(@RequestBody savePlanDto saveDto) {
+	public String save(@RequestBody PlanDetailSaveDto saveDto) {
+		// plan 저장
+		PlanEntity planEntity = planService.savePlan(saveDto.getPlan());
+		// pplan 저장
+		List<PPlanEntity> pPlanEntities = saveDto.getPplan().stream().map(pPlanDto -> {
+			PPlanEntity pPlanEntity = PPlanEntity.of(pPlanDto);
+			pPlanEntity.setPlan(planEntity);
+			return pPlanEntity;
+		}).toList();
+		List<PPlanEntity> pPlanEntityList = planService.savePplans(pPlanEntities);
+		// tag 저장
+		List<TagEntity> tagEntities = tagService.saveTags(saveDto.getPlan().getTags());
 
-		planService.savePlan(saveDto.getPlan());
-		List<TagEntity> tagEntityList = new ArrayList<>();
-		List<String> tags = saveDto.getTag();
-		for (String tag : tags) {
-			//if 절로 해당 tag가 안에 내용이 있는지 확인용
-			tagEntityList.add(TagEntity.builder()
-					.name(tag).build());
-		}
-		tagRepository.saveAll(tagEntityList);
+		// plan <--> tag 연관관계 저장.
+		List<PlanTagEntity> planTagEntities = planService.associateTags(planEntity, tagEntities);
+		// plan <--> pplan 연관관계 저장은 이미 위에서 함. n : m 이 아니기 때문에 추가적인 매핑 작업 불필요.
 
-		List<PPlanDto> pplans = saveDto.getPplan();
-		for (PPlanDto pplan : pplans) {
-			pplanService.savePplan(pplan);
-		}
-		PlanTagEntity planTagEntity = new PlanTagEntity();
-		planTagEntity.setPlan(PlanEntity.toPlanEntity(saveDto.getPlan()));
-		for (TagEntity tagList : tagEntityList) {
-			planTagEntity.setTag(tagList);
-			planTagRepository.save(planTagEntity);
-		}
-
-		System.out.println(saveDto);
 		return "save success";
 	}
-
-	private PlanResDto createDummyDto() {
-		String[] titles = {"낭만의 도시 파리", "힐링하세요~", "이건 잘못됐어...", "신사의 나라...?"};
-		Random random = new Random();
-
-		PlanResDto dto = new PlanResDto();
-		dto.setLike(random.nextInt(5, 55));
-		dto.setId(random.nextInt(20000));
-		dto.setTitle(titles[random.nextInt(100) % titles.length] + "_" + random.nextInt(1, 10));
-		dto.setUserId("cap_user_" + random.nextInt(100));
-		dto.setTags(List.of(new String[]{"계획", "낭만", "관광"}));
-		return dto;
-	}
-
 
 }

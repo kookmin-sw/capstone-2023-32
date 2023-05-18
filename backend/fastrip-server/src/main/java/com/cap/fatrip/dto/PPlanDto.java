@@ -1,11 +1,8 @@
 package com.cap.fatrip.dto;
 
 import com.cap.fatrip.entity.PPlanEntity;
-import com.cap.fatrip.entity.PlaceEntity;
-import com.cap.fatrip.entity.PlanEntity;
 import lombok.*;
 
-import java.util.Date;
 
 @Getter
 @Setter
@@ -13,7 +10,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Builder
 public class PPlanDto {
-    private Date day;
+    private int day;
     private int p_seq;
 
     private String p_name; //place와 병합
@@ -24,7 +21,6 @@ public class PPlanDto {
 
     public static PPlanDto of(PPlanEntity pplanEntity){
         PPlanDto plan = new PPlanDto();
-        //plan.place = pplanEntity.getPlace();
         plan.day = pplanEntity.getDay();
         plan.p_seq = pplanEntity.getP_seq();
         plan.p_name = pplanEntity.getP_name();
