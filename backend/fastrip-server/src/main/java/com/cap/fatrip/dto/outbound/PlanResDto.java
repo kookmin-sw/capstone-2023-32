@@ -20,6 +20,8 @@ public class PlanResDto {
 	private String title;
 	private int like;
 	private String userId;
+	private String comment;
+	private String image;
 	private List<String> tags;
 
 	public static PlanResDto of(PlanDto dto) {
@@ -36,6 +38,7 @@ public class PlanResDto {
 		resDto.id = plan.getId();
 		resDto.title = plan.getTitle();
 		resDto.like = plan.getLike();
+		resDto.image = plan.getImage();
 		resDto.userId = plan.getUser().getId();
 		resDto.tags = new ArrayList<>();
 		if (plan.getPlanTagEntities().size() != 0) {

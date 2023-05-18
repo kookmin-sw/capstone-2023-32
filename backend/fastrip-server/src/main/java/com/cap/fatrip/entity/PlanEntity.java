@@ -36,6 +36,8 @@ public class PlanEntity extends TimeEntity {
 
     @Column(name = "comment")
     private String comment;
+    @Column(name = "image")
+    private String image;
 
 
 

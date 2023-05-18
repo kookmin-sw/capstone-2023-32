@@ -51,13 +51,19 @@ public class PlanController {
 		return dtos;
 	}
 
+	@GetMapping(params = {"planId"})
+	public String getPlanDetail(@RequestParam String planId) {
+//		planService.get
+		return null;
+	}
+
 	@PostMapping("/save")
 	public String save(@RequestBody savePlanDto saveDto) {
 
 		planService.savePlan(saveDto.getPlan());
 		List<TagEntity> tagEntityList = new ArrayList<>();
 		List<String> tags = saveDto.getTag();
-		for(String tag : tags) {
+		for (String tag : tags) {
 			//if 절로 해당 tag가 안에 내용이 있는지 확인용
 			tagEntityList.add(TagEntity.builder()
 					.name(tag).build());
@@ -70,7 +76,7 @@ public class PlanController {
 		}
 		PlanTagEntity planTagEntity = new PlanTagEntity();
 		planTagEntity.setPlan(PlanEntity.toPlanEntity(saveDto.getPlan()));
-		for(TagEntity tagList : tagEntityList) {
+		for (TagEntity tagList : tagEntityList) {
 			planTagEntity.setTag(tagList);
 			planTagRepository.save(planTagEntity);
 		}

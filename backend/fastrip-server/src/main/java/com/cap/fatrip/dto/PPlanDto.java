@@ -13,11 +13,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Builder
 public class PPlanDto {
-
-    private PlanEntity plan;
-    // private PlaceEntity place;
     private Date day;
-    private String p_comment;
     private int p_seq;
 
     private String p_name; //place와 병합
@@ -28,10 +24,8 @@ public class PPlanDto {
 
     public static PPlanDto of(PPlanEntity pplanEntity){
         PPlanDto plan = new PPlanDto();
-        plan.plan = pplanEntity.getPlan();
         //plan.place = pplanEntity.getPlace();
         plan.day = pplanEntity.getDay();
-        plan.p_comment = pplanEntity.getP_comment();
         plan.p_seq = pplanEntity.getP_seq();
         plan.p_name = pplanEntity.getP_name();
         plan.p_post = pplanEntity.getP_post();

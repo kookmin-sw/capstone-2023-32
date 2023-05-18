@@ -19,6 +19,8 @@ public class PlanService {
 		planRepository.save(PlanEntity.toPlanEntity(planDto));
 	}
 
+//	public PlanDto
+
 	public List<PlanResDto> getPlans(PlanReqDto planReqDto) {
 		String title = planReqDto.getTitle() == null ? "" : planReqDto.getTitle();
 		List<String> tags = planReqDto.getTags() == null ? new ArrayList<>() : planReqDto.getTags();

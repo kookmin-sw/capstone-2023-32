@@ -23,7 +23,7 @@ public class savePlanTest {
     @Test
     public void testSavePlan() throws Exception {
         // JSON 데이터 생성
-        String json = "{\"plan\":{\"p_id\":\"111\"},\"pplan\":[{\"plan\":{\"id\":1},\"p_time\":\"2000\",\"p_comment\":\"hello\",\"p_seq\":\"1\"},{\"plan\":{\"id\":1},\"p_time\":\"20002\",\"p_comment\":\"hello2\",\"p_seq\":\"2\"}],\"tag\":[\"japan\",\"usa\"]}";
+        String json = "{\"plan\":{\"p_id\":\"111\"},\"pplan\":[{\"plan\":{\"id\":1},\"p_time\":\"2000\",\"p_seq\":\"1\"},{\"plan\":{\"id\":1},\"p_time\":\"20002\",\"p_seq\":\"2\"}],\"tag\":[\"japan\",\"usa\"]}";
 
         // JSON 데이터를 Java 객체로 변환
         savePlanDto saveDto = objectMapper.readValue(json, savePlanDto.class);

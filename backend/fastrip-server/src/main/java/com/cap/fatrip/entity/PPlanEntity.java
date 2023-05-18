@@ -29,8 +29,6 @@ public class PPlanEntity implements Serializable {
 
     @Column(name="day") //게획 날짜
     private Date day;
-    @Column(name="p_comment") //계획 설명
-    private String p_comment;
     @Column(name="p_seq") // 계획 순서
     private int p_seq;
 
@@ -46,10 +44,8 @@ public class PPlanEntity implements Serializable {
 
     public static PPlanEntity toPPlanEntity(PPlanDto pplanDto){
         PPlanEntity pplanEntity = new PPlanEntity();
-        pplanEntity.plan = pplanDto.getPlan();
         //pplanEntity.place = pplanDto.getPlace();
         pplanEntity.day = pplanDto.getDay();
-        pplanEntity.p_comment = pplanDto.getP_comment();
         pplanEntity.p_seq = pplanDto.getP_seq();
         pplanEntity.p_name = pplanDto.getP_name();
         pplanEntity.p_post = pplanDto.getP_post();
