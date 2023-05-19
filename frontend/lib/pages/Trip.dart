@@ -209,7 +209,7 @@ class _HeartListState extends State<HeartList> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => PostDetailPage(post: filteredData[index]),
+                builder: (context) => PostDetailPage(planId: "",),
               ),
             );
           },

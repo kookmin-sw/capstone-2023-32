@@ -1,10 +1,8 @@
-import 'package:fasttrip/Data/PostData.dart';
 import 'package:fasttrip/pages/PostDetailPage.dart';
 import 'package:flutter/material.dart';
 import 'package:fasttrip/style.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
 
 // data fetch
 // 받아올 데이터 정의
@@ -14,6 +12,9 @@ class Plan {
   String title;
   int like;
   List<String> tags;
+  String comment;
+  String imgUrl;
+
 
   Plan({
     required this.planId,
@@ -21,15 +22,19 @@ class Plan {
     required this.title,
     required this.like,
     required this.tags,
+    required this.comment,
+    required this.imgUrl,
   });
 
   factory Plan.fromJson(Map<String, dynamic> json){
     return Plan(
-      planId: json['planId'] ?? '',
-      userId: json['userId'] ?? '',
+      planId: (json['id'] ?? '').toString(),
+      userId: (json['userId'] ?? '').toString(),
       title: json['title'] ?? '',
       like: json['like'] ?? 0,
       tags: List<String>.from(json['tags'] ?? [],),
+      comment: json['comment'] ?? '',
+      imgUrl: json['image'] ?? '',
     );
   }
 }
@@ -43,7 +48,7 @@ class FeedPage extends StatefulWidget {
 }
 
 class _FeedPageState extends State<FeedPage> {
-  List<Post> _filteredData = [];
+  List<Plan> _filteredData = [];
   String _searchText = '';
   final List<String> _selectedFilters = [];
 
@@ -51,32 +56,45 @@ class _FeedPageState extends State<FeedPage> {
 
   void fetchData() async {
     var url = Uri.parse('http://3.38.99.234:8080/api/plan/all');
-    var response = await http.get(url);
+    var requestBody = jsonEncode({
+      "title": "",
+      "tags": [],
+    });
+
+    var response = await http.post(
+      url,
+      body: requestBody,
+      headers: {"Content-Type": "application/json"},
+    );
 
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body) as List;
+      var data = jsonDecode(utf8.decode(response.bodyBytes)) as List;
       setState(() {
         plans = data.map((item) => Plan.fromJson(item)).toList();
+        _filteredData = plans; // Set _filteredData here, after successfully parsing the fetched data
       });
       print('----------------------------------------------');
       for (Plan plan in plans) {
         print('Plan ID: ${plan.planId}');
         print('User ID: ${plan.userId}');
         print('Title: ${plan.title}');
-        print('Like: ${plan.like}');
+        print('like: ${plan.like}');
         print('Tags: ${plan.tags.join(', ')}');
+        print('comment: ${plan.comment}');
+        print('imgUrl: ${plan.imgUrl}');
       }
     } else {
+      print(response.statusCode);
       print('failed to load');
     }
   }
+
 
 
   @override
   void initState() {
     super.initState();
     fetchData();
-    _filteredData = data;
   }
 
 // 태그에 대한 필터만 적용
@@ -95,11 +113,11 @@ class _FeedPageState extends State<FeedPage> {
   void _search(String searchText) {
     setState(() {
       _searchText = searchText;
-      _filteredData = data
+      _filteredData = plans
           .where((post) =>
       // 검색 텍스트가 title, contents, tag에 있는지 확인
       (post.title.toLowerCase().contains(_searchText.toLowerCase()) ||
-          post.contents.toLowerCase().contains(_searchText.toLowerCase()) ||
+          post.comment.toLowerCase().contains(_searchText.toLowerCase()) ||
           post.tags.any((tag) => tag.toLowerCase().contains(_searchText.toLowerCase()))) &&
           // 게시물에 일치하는 태그가 있는지 확인
           (_selectedFilters.isEmpty || _selectedFilters.any((tag) => post.tags.contains(tag))))
@@ -156,16 +174,6 @@ class _FeedPageState extends State<FeedPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Container(
-              //   padding: EdgeInsets.only(left: 15,),
-              //   child: Row(
-              //     children: [
-              //       Icon(Icons.filter_alt, size: 16,),
-              //       Text(' 필터', style: TextStyle(fontSize: 15, fontWeight:FontWeight.bold),),
-              //     ],
-              //   ),
-              // ),
-              // SizedBox(height:8.0),
               Container(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -283,7 +291,7 @@ class _FeedPageState extends State<FeedPage> {
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          PostDetailPage(post: _filteredData[index]),
+                          PostDetailPage(planId: _filteredData[index].planId),
                     ),
                   );
                 },
@@ -297,36 +305,36 @@ class _FeedPageState extends State<FeedPage> {
                         children: [
                           ClipRRect(
                             borderRadius: BorderRadius.circular(10.0),
-                            child: Image.network(_filteredData[index].imageUrl,
+                            child: Image.network(_filteredData[index].imgUrl,
                                 width: double.infinity,
                                 height: 200,
                                 fit: BoxFit.cover),
                           ),
-                          Positioned(
-                            top: 5,
-                            right: 5,
-                            child: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  if (_filteredData[index].heart) {
-                                    _filteredData[index].heart = false;
-                                  } else {
-                                    _filteredData[index].heart = true;
-                                  }
-                                });
-                              },
-                              padding: EdgeInsets.zero,
-                              constraints: const BoxConstraints(),
-                              icon: Icon(
-                                _filteredData[index].heart
-                                    ? Icons.favorite
-                                    : Icons.favorite_border,
-                                color: _filteredData[index].heart
-                                    ? Color(0xffFA6D6D)
-                                    : Colors.white,
-                              ),
-                            ),
-                          ),
+                          // Positioned(
+                          //   top: 5,
+                          //   right: 5,
+                          //   child: IconButton(
+                          //     onPressed: () {
+                          //       setState(() {
+                          //         if (_filteredData[index].heart) {
+                          //           _filteredData[index].heart = false;
+                          //         } else {
+                          //           _filteredData[index].heart = true;
+                          //         }
+                          //       });
+                          //     },
+                          //     padding: EdgeInsets.zero,
+                          //     constraints: const BoxConstraints(),
+                          //     icon: Icon(
+                          //       _filteredData[index].heart
+                          //           ? Icons.favorite
+                          //           : Icons.favorite_border,
+                          //       color: _filteredData[index].heart
+                          //           ? Color(0xffFA6D6D)
+                          //           : Colors.white,
+                          //     ),
+                          //   ),
+                          // ),
                         ],
                       ),
                       const SizedBox(height: 10.0),

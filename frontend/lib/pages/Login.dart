@@ -27,7 +27,7 @@ class _LogInState extends State<LogIn> {
                     height: 50,
                   ),
                   const Text(
-                    '간편하고 빠른 여행 계획\nFast Trip',
+                    '여행은 쉽고 빠르게,\n 페스츄리에 어서오세요.',
                     style: TextStyle(
                       fontSize: 30,
                       color: Colors.black,

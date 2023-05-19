@@ -10,10 +10,10 @@ class SearchPage extends StatelessWidget {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          elevation: 0, // Remove elevation to hide the bottom shadow
-          backgroundColor: Colors.transparent, // Make the AppBar transparent
+          elevation: 0,
+          backgroundColor: Colors.transparent,
           shadowColor:
-              Colors.transparent, // Set AppBar shadow color to transparent
+              Colors.transparent,
           leading: IconButton(
             icon: Icon(
               Icons.arrow_back,

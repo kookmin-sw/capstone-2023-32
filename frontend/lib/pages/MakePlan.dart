@@ -8,8 +8,10 @@ import 'dart:convert';
 import 'Map.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
+
+// https://unsplash.com/ko/%EC%82%AC%EC%A7%84/x-S6ZlJ6dP0
+
 
 var subTitle = TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
 var uuid = Uuid();
@@ -82,7 +84,6 @@ class _MakePageState extends State<MakePage> {
     locationData.forEach((day, locations) {
       for (int i = 0; i < locations.length; i++) {
         pplan.add({
-          "plan": {"p_id": planId},
           "day": day,
           "p_seq": i + 1,
           "p_name": locations[i].name,
@@ -97,9 +98,10 @@ class _MakePageState extends State<MakePage> {
       "plan": {
         "p_id": planId,
         "user": {"id": userId},
+        "title": title,
         "tags": tags,
-        "p_comment": comment,
-        "p_image": _image?.path,
+        "comment": comment,
+        "image": _image?.path,
       },
       "pplan": pplan,
     };
