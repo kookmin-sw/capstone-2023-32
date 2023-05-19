@@ -98,18 +98,15 @@ class _MyAppState extends State<MapPage> {
               bottom: 10.0,
               left: 10.0,
               right: 10.0,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0),
-                  color: Color(0xFF9CC4FF),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF9CC4FF),
                 ),
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    Navigator.pop(context, result);
-                  },
-                  child: Text("확인"),
-                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context, result);
+                },
+                child: Text("확인"),
               ),
             ),
           ],
