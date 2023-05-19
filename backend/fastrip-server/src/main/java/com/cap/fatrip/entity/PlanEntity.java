@@ -20,7 +20,7 @@ public class PlanEntity extends TimeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="p_id") //계획 id
-	private long id;
+	private String id;
 
 	@ManyToOne
 	@JoinColumn(name = "user_id")   //fk
@@ -50,4 +50,5 @@ public class PlanEntity extends TimeEntity {
 		planEntity.image = planSaveDto.getImage();
 		return planEntity;
 	}
+
 }

@@ -4,5 +4,8 @@ import com.cap.fatrip.entity.PPlanEntity;
 import com.cap.fatrip.entity.PlanEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface PPlanRepository extends JpaRepository<PPlanEntity, Long> {
+import java.util.Optional;
+
+public interface PPlanRepository extends JpaRepository<PPlanEntity, String> {
+    Optional<PPlanEntity> findByPlanAndSeq(PlanEntity plan, int seq);
 }

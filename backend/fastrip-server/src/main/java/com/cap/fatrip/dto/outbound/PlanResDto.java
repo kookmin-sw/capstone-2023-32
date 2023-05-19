@@ -16,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class PlanResDto {
-	private long id;
+	private String id;
 	private String title;
 	private int like;
 	private String userId;

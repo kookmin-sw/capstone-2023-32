@@ -22,7 +22,7 @@ public class PPlanDto {
     public static PPlanDto of(PPlanEntity pplanEntity){
         PPlanDto plan = new PPlanDto();
         plan.day = pplanEntity.getDay();
-        plan.p_seq = pplanEntity.getP_seq();
+        plan.p_seq = pplanEntity.getSeq();
         plan.p_name = pplanEntity.getP_name();
         plan.p_post = pplanEntity.getP_post();
         plan.p_locate = plan.getP_locate();

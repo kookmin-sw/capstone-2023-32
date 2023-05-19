@@ -1,5 +1,8 @@
 package com.cap.fatrip.service;
 
+import com.cap.fatrip.dto.PPlanDto;
+import com.cap.fatrip.dto.PlanDto;
+import com.cap.fatrip.dto.inbound.PlanDetailSaveDto;
 import com.cap.fatrip.dto.inbound.PlanReqDto;
 import com.cap.fatrip.dto.inbound.PlanSaveDto;
 import com.cap.fatrip.dto.outbound.PlanResDto;
@@ -26,6 +29,26 @@ public class PlanService {
 	public List<PPlanEntity> savePplans(List<PPlanEntity> planEntityList) {
 		return pplanRepository.saveAll(planEntityList);
 	}
+	public void updatePplan(PPlanDto pplanDto,PlanEntity plan) {
+		Optional<PPlanEntity> pplanEntity = pplanRepository.findByPlanAndSeq(plan, pplanDto.getP_seq());
+		if (pplanEntity.isPresent()) {
+			PPlanEntity pplan = pplanEntity.get();
+			pplan.setP_country(pplanDto.getP_country());
+			pplan.setP_post(pplanDto.getP_post());
+			pplan.setP_name(pplanDto.getP_name());
+			pplan.setP_locate(pplanDto.getP_locate());
+			pplan.setP_name(pplanDto.getP_name());
+			pplanRepository.save(pplan);
+		} else {
+			pplanRepository.save(PPlanEntity.of(pplanDto));
+		}
+
+
+
+
+
+
+	}
 
 	public List<PlanTagEntity> associateTags(PlanEntity planEntity, List<TagEntity> tagEntities) {
 		List<PlanTagEntity> planTagEntityList = tagEntities.stream().map(tagEntity -> new PlanTagEntity(planEntity, tagEntity)).toList();
@@ -42,7 +65,26 @@ public class PlanService {
 		return planRepository.save(planEntity);
 	}
 
-//	public PlanDto
+	public PlanEntity updatePlan(PlanSaveDto planDto) {
+		UserEntity userEntity = userRepository.findById(planDto.getUserId()).orElseThrow(() -> {
+					log.error("there's no such user id : {}", planDto.getUserId());
+					return new NoSuchElementException("there's no user");
+		});
+		Optional<PlanEntity> planEntity = planRepository.findByUserAndTitle(userEntity,planDto.getTitle());
+
+		if(planEntity.isPresent()) {
+			PlanEntity p = planEntity.get();
+			p.setTitle(planDto.getTitle());
+			p.setComment(planDto.getComment());
+			return planRepository.save(p);
+		} else {
+			return planRepository.save(PlanEntity.ofForSave(planDto));
+		}
+
+
+
+
+	}
 
 	public List<PlanResDto> getPlans(PlanReqDto planReqDto) {
 		String title = planReqDto.getTitle() == null ? "" : planReqDto.getTitle();
@@ -74,11 +116,11 @@ public class PlanService {
 		return planResDtos;
 	}
 
-	public PlanEntity getPlanDetail(long planId) throws Exception {
+	public PlanEntity getPlanDetail(String planId) throws Exception {
 		return planRepository.findById(planId).orElseThrow(() -> throwPlanException(planId));
 	}
 
-	public void deletePlan(long id, String userId) throws Exception {
+	public void deletePlan(String id, String userId) throws Exception {
 		PlanEntity planEntity = planRepository.findById(id).orElseThrow(() -> throwPlanException(id));
 		if (planEntity.getUser().getId().equals(userId)) {
 			planRepository.deleteById(id);
@@ -87,7 +129,7 @@ public class PlanService {
 		}
 	}
 
-	public Exception throwPlanException(long planId) {
+	public Exception throwPlanException(String planId) {
 		log.error("there's no such plan id : {}", planId);
 		return new NoSuchElementException("there's no plan");
 	}

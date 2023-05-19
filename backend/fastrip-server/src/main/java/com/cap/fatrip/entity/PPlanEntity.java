@@ -24,7 +24,7 @@ public class PPlanEntity implements Serializable {
     @Column
     private int day;
     @Column // 계획 순서
-    private int p_seq;
+    private int seq;
 
     @Column   //place와 병합
     private String p_name;
@@ -39,7 +39,7 @@ public class PPlanEntity implements Serializable {
     public static PPlanEntity of(PPlanDto pplanDto){
         PPlanEntity pplanEntity = new PPlanEntity();
         pplanEntity.day = pplanDto.getDay();
-        pplanEntity.p_seq = pplanDto.getP_seq();
+        pplanEntity.seq = pplanDto.getP_seq();
         pplanEntity.p_name = pplanDto.getP_name();
         pplanEntity.p_post = pplanDto.getP_post();
         pplanEntity.p_locate = pplanDto.getP_locate();

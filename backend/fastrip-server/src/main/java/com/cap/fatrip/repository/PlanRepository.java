@@ -1,14 +1,19 @@
 package com.cap.fatrip.repository;
 
+import com.cap.fatrip.entity.PPlanEntity;
 import com.cap.fatrip.entity.PlanEntity;
+import com.cap.fatrip.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 
-public interface PlanRepository extends JpaRepository<PlanEntity, Long> {
+public interface PlanRepository extends JpaRepository<PlanEntity, String> {
+
+	Optional<PlanEntity> findByUserAndTitle(UserEntity user, String title);
 	@Query("SELECT plan FROM PlanEntity plan LEFT JOIN PlanTagEntity rel ON plan = rel.plan WHERE rel.tag.name IN (:tag1)")
 	List<PlanEntity> findPlanByTag1(@Param("tag1") String tag1);
 
