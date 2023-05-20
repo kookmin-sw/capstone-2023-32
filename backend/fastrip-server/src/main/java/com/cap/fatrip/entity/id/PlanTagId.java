@@ -10,6 +10,6 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PlanTagId implements Serializable {
-	private Long plan;
+	private String plan;
 	private Long tag;
 }
