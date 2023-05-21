@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 public class savePlanTest {
@@ -23,10 +26,9 @@ public class savePlanTest {
     @Test
     public void testSavePlan() throws Exception {
         // JSON 데이터 생성
-        String json = "{\"plan\":{\"p_id\":\"111\"},\"pplan\":[{\"plan\":{\"id\":1},\"p_time\":\"2000\",\"p_seq\":\"1\"},{\"plan\":{\"id\":1},\"p_time\":\"20002\",\"p_seq\":\"2\"}],\"tag\":[\"japan\",\"usa\"]}";
-
+        String json = new String(Files.readAllBytes(Paths.get("C:\\Users\\정해준\\OneDrive\\바탕 화면\\backend\\fastrip-server\\etc\\plansInput.json")));
         // JSON 데이터를 Java 객체로 변환
-        PlanDetailSaveDto saveDto = objectMapper.readValue(json, PlanDetailSaveDto.class);
+        PlanDetailSaveDto planDetailSaveDto = objectMapper.readValue(json, PlanDetailSaveDto.class);
 
         // API 호출
         mockMvc.perform(MockMvcRequestBuilders.post("/api/plan/save")

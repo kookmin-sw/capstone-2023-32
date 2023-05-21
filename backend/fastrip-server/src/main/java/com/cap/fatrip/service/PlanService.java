@@ -97,6 +97,20 @@ public class PlanService {
 		return planResDtos;
 	}
 
+	public List<PlanResDto> getPlansByUser(String id) {
+
+		UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> {
+			log.error("there's no such user id : {}", id);
+			return new NoSuchElementException("there's no user");
+		});
+		List<PlanEntity> planByTagsAndTitle = planRepository.findPlanByUser(userEntity);
+		List<PlanResDto> planResDtos = new ArrayList<>();
+		for (PlanEntity planEntity : planByTagsAndTitle) {
+			planResDtos.add(PlanResDto.of(planEntity));
+		}
+		return planResDtos;
+	}
+
 	public PlanEntity getPlanDetail(String planId) throws Exception {
 		return planRepository.findById(planId).orElseThrow(() -> getPlanException(planId));
 	}

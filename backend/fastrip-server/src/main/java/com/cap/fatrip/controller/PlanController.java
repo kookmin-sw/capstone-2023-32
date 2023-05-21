@@ -32,6 +32,11 @@ public class PlanController {
 		return planService.getPlans(planReqDto);
 	}
 
+	@GetMapping("/planid")
+	public List<PlanResDto> findAllByUser(@RequestParam("id") String id) throws Exception {
+		return planService.getPlansByUser(id);
+	}
+
 	@GetMapping(params = {"id"})
 	public PlanDetailDto getPlanDetail(@RequestParam String id) throws Exception {
 		PlanDetailDto planDetailDto = new PlanDetailDto();
