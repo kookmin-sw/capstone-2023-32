@@ -15,4 +15,5 @@ public class PlanSaveDto {
 	private List<String> tags;
 	private String comment;
 	private String image;
+	private String category;
 }

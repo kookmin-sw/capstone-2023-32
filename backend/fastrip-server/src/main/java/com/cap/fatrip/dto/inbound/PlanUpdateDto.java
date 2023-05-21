@@ -17,4 +17,5 @@ public class PlanUpdateDto {
 	private List<String> oldTags;
 	private String comment;
 	private String image;
+	private String category;
 }

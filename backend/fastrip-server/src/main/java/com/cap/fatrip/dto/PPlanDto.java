@@ -25,8 +25,8 @@ public class PPlanDto {
         plan.p_seq = pplanEntity.getSeq();
         plan.p_name = pplanEntity.getP_name();
         plan.p_post = pplanEntity.getP_post();
-        plan.p_locate = plan.getP_locate();
-        plan.p_country = plan.getP_country();
+        plan.p_locate = pplanEntity.getP_locate();
+        plan.p_country = pplanEntity.getP_country();
         return plan;
     }
 }

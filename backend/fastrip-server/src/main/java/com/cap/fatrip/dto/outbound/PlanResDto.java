@@ -22,6 +22,7 @@ public class PlanResDto {
 	private String userId;
 	private String comment;
 	private String image;
+	private String category;
 	private List<String> tags;
 
 	public static PlanResDto of(PlanDto dto) {
@@ -41,6 +42,7 @@ public class PlanResDto {
 		resDto.image = plan.getImage();
 		resDto.userId = plan.getUser().getId();
 		resDto.comment = plan.getComment();
+		resDto.category = plan.getCategory();
 		resDto.tags = new ArrayList<>();
 		if (plan.getPlanTagEntities().size() != 0) {
 			for (PlanTagEntity planTagEntity : plan.getPlanTagEntities()) {

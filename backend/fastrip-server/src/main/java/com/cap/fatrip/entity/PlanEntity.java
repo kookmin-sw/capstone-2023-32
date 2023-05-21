@@ -32,12 +32,14 @@ public class PlanEntity extends TimeEntity {
 	private List<PPlanEntity> pPlanEntities = new ArrayList<>();
 	@Column
 	private Integer likes;
-	@Column(name = "title")
+	@Column
 	private String title;
+	@Column
+	private String category;
 
-	@Column(name = "comment")
+	@Column
 	private String comment;
-	@Column(name = "image")
+	@Column
 	private String image;
 
 	@PrePersist
@@ -51,6 +53,7 @@ public class PlanEntity extends TimeEntity {
 		planEntity.title = planSaveDto.getTitle();
 		planEntity.comment = planSaveDto.getComment();
 		planEntity.image = planSaveDto.getImage();
+		planEntity.category = planSaveDto.getCategory();
 		return planEntity;
 	}
 
