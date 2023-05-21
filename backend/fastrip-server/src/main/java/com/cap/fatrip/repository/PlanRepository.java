@@ -14,8 +14,7 @@ import java.util.Optional;
 public interface PlanRepository extends JpaRepository<PlanEntity, String> {
 
 	Optional<PlanEntity> findByUserAndTitle(UserEntity user, String title);
-	@Query("SELECT p FROM PlanEntity p WHERE p.user = :user")
-	List<PlanEntity> findPlanByUser(UserEntity user);
+	List<PlanEntity> findAllByUser(UserEntity user);
 	@Query("SELECT plan FROM PlanEntity plan LEFT JOIN PlanTagEntity rel ON plan = rel.plan WHERE rel.tag.name IN (:tag1)")
 	List<PlanEntity> findPlanByTag1(@Param("tag1") String tag1);
 

@@ -103,9 +103,9 @@ public class PlanService {
 			log.error("there's no such user id : {}", id);
 			return new NoSuchElementException("there's no user");
 		});
-		List<PlanEntity> planByTagsAndTitle = planRepository.findPlanByUser(userEntity);
+		List<PlanEntity> planByUser = planRepository.findAllByUser(userEntity);
 		List<PlanResDto> planResDtos = new ArrayList<>();
-		for (PlanEntity planEntity : planByTagsAndTitle) {
+		for (PlanEntity planEntity : planByUser) {
 			planResDtos.add(PlanResDto.of(planEntity));
 		}
 		return planResDtos;
@@ -148,16 +148,24 @@ public class PlanService {
 		newTags.removeAll(sameTags);
 
 		List<TagEntity> updateTagList = new ArrayList<>();
+		List<TagEntity> tagsForPt = new ArrayList<>();
 		for (String oldTag : oldTags) {
 			TagEntity tagEntity = tagRepository.findByName(oldTag).get();
 			tagEntity.setCount(tagEntity.getCount() - 1);
 			updateTagList.add(tagEntity);
 		}
 		for (String newTag : newTags) {
-			updateTagList.add(TagEntity.builder().name(newTag).build());
+			TagEntity tag = TagEntity.builder().name(newTag).build();
+			updateTagList.add(tag);
+			tagsForPt.add(tag);
 		}
-		List<TagEntity> tagEntities = tagRepository.saveAll(updateTagList);
-		List<PlanTagEntity> planTagEntities = tagEntities.stream().map((tag) -> {
+		for (String sameTag : sameTags) {
+			TagEntity tagEntity = tagRepository.findByName(sameTag).get();
+			updateTagList.add(tagEntity);
+			tagsForPt.add(tagEntity);
+		}
+		tagRepository.saveAll(updateTagList);
+		List<PlanTagEntity> planTagEntities = tagsForPt.stream().map(tag -> {
 			PlanTagEntity temp = new PlanTagEntity();
 			temp.setPlan(planEntity);
 			temp.setTag(tag);

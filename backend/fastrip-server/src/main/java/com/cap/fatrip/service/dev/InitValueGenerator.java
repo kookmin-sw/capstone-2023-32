@@ -26,7 +26,7 @@ public class InitValueGenerator {
 		if (planRepository.count() != 0) {
 			return;
 		}
-		File plansFile = new File("C:\\Users\\정해준\\OneDrive\\바탕 화면\\backend\\fastrip-server\\etc\\plansInput.json");
+		File plansFile = new File("./etc/plansInput.json");
 		PlanDetailSaveDto[] planDetailSaveDtos = objectMapper.readValue(plansFile, PlanDetailSaveDto[].class);
 
 		for (PlanDetailSaveDto planDetailSaveDto : planDetailSaveDtos) {

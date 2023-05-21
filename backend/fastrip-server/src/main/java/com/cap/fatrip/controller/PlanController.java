@@ -27,14 +27,14 @@ public class PlanController {
 	private final PlanService planService;
 	private final TagService tagService;
 
-	@PostMapping("/all")
+	@PostMapping("/list")
 	public List<PlanResDto> findAll(@RequestBody PlanReqDto planReqDto) {
 		return planService.getPlans(planReqDto);
 	}
 
-	@GetMapping("/planid")
-	public List<PlanResDto> findAllByUser(@RequestParam("id") String id) throws Exception {
-		return planService.getPlansByUser(id);
+	@GetMapping("/list")
+	public List<PlanResDto> findAllByUser(@RequestParam("userId") String userId) throws Exception {
+		return planService.getPlansByUser(userId);
 	}
 
 	@GetMapping(params = {"id"})
