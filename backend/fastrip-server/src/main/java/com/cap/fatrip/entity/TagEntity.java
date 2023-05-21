@@ -18,7 +18,12 @@ public class TagEntity {
 	@Column
 	private String name;
 	@Column
-	private int count;
+	private Integer count;
 	@OneToMany(mappedBy = "tag", cascade = CascadeType.ALL)
 	private List<PlanTagEntity> planTagEntities;
+
+	@PrePersist
+	private void initCount() {
+		count = count == null ? 1 : count;
+	}
 }

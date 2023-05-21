@@ -3,7 +3,6 @@ package com.cap.fatrip.entity;
 
 import com.cap.fatrip.dto.inbound.PlanSaveDto;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -18,9 +17,10 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "plan")
 public class PlanEntity extends TimeEntity {
-	@Id@GeneratedValue(generator = "uuid2")
-	@GenericGenerator(name="uuid2", strategy = "uuid2")
-	@Column(name="p_id") //계획 id
+	@Id
+	@GeneratedValue(generator = "uuid2")
+	@GenericGenerator(name = "uuid2", strategy = "uuid2")
+	@Column(name = "p_id") //계획 id
 	private String id;
 
 	@ManyToOne
@@ -31,8 +31,7 @@ public class PlanEntity extends TimeEntity {
 	@OneToMany(mappedBy = "plan", cascade = CascadeType.ALL)
 	private List<PPlanEntity> pPlanEntities = new ArrayList<>();
 	@Column
-	@ColumnDefault("0")
-	private int likes;
+	private Integer likes;
 	@Column(name = "title")
 	private String title;
 
@@ -40,6 +39,11 @@ public class PlanEntity extends TimeEntity {
 	private String comment;
 	@Column(name = "image")
 	private String image;
+
+	@PrePersist
+	private void initLikes() {
+		likes = likes == null ? 0 : likes;
+	}
 
 
 	public static PlanEntity ofForSave(PlanSaveDto planSaveDto) {

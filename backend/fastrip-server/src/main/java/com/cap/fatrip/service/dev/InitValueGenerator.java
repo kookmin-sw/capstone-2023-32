@@ -26,7 +26,7 @@ public class InitValueGenerator {
 		if (planRepository.count() != 0) {
 			return;
 		}
-		File plansFile = new File("./target/plansInput.json");
+		File plansFile = new File("./etc/plansInput.json");
 		PlanDetailSaveDto[] planDetailSaveDtos = objectMapper.readValue(plansFile, PlanDetailSaveDto[].class);
 
 		for (PlanDetailSaveDto planDetailSaveDto : planDetailSaveDtos) {

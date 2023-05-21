@@ -32,7 +32,7 @@ public class TagService {
 						tagEntity.setCount(tagEntity.getCount() + 1);
 						return tagEntity;
 					}
-					return TagEntity.builder().name(tag).count(1).build();
+					return TagEntity.builder().name(tag).build();
 				}
 		).toList();
 		return tagRepository.saveAll(tagEntityList);
