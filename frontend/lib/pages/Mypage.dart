@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:fasttrip/style.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'dart:io';
 
@@ -23,100 +22,180 @@ class _MyPageState extends State<MyPage> {
     return MaterialApp(
       home: Scaffold(
         backgroundColor: Colors.white,
-        body: SingleChildScrollView(
+        body: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            image: DecorationImage(
+              image: AssetImage(
+                'assets/images/background_mypage.jpg',
+              ),
+              fit: BoxFit.cover,
+              opacity: 0.8,
+            ),
+          ),
           child: Column(
             children: [
               Container(
                 padding: const EdgeInsets.only(
-                  top: 50,
-                  left: 20,
+                  top: 50.0,
+                  left: 20.0,
+                  right: 20.0,
                 ),
                 alignment: Alignment.centerLeft,
                 child: Text(
                   '마이페이지',
-                  style: heading1,
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: "SUITE",
+                  ),
                   textAlign: TextAlign.left,
                 ),
+              ),
+              SizedBox(
+                height: 30,
               ),
               Padding(
                 padding: const EdgeInsets.all(40),
                 child: Column(
                   children: [
+                    imageProfile(),
+                    const SizedBox(
+                      height: 20,
+                    ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        imageProfile(),
-                        const SizedBox(
-                          width: 30,
+                        Text(
+                          _nickname,
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 25,
+                            fontWeight: FontWeight.w900,
+                          ),
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Text(
-                                  _nickname,
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.w900,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(
-                                    Icons.edit,
-                                    color: Colors.grey,
-                                    size: 22,
-                                  ),
-                                  padding: EdgeInsets.zero,
-                                  constraints: const BoxConstraints(),
-                                ),
-                              ],
-                            ),
-                            Text(
-                              '$_age / $_gender',
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 18,
-                                fontWeight: FontWeight.normal,
-                              ),
-                            ),
-                          ],
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.edit,
+                            color: Colors.grey,
+                            size: 22,
+                          ),
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
                         ),
                       ],
                     ),
+                    Text(
+                      '$_age / $_gender',
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                     const SizedBox(
-                      height: 65,
+                      height: 110,
                     ),
                     InkWell(
                       onTap: () {},
-                      child: mypageButton('내 정보'),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 11,
+                        ),
+                        width: 400,
+                        height: 55,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(
+                            color: const Color(0xFF9CC4FF),
+                          ),
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 0,
+                              blurRadius: 3,
+                              offset: Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.manage_accounts,
+                              color: Color(0xFF329EFF),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              '내 정보',
+                              style: const TextStyle(
+                                fontSize: 18,
+                                color: Color(0xFF329EFF),
+                                fontWeight: FontWeight.w600,
+                              ),
+                              textAlign: TextAlign.start,
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                     const SizedBox(
-                      height: 22,
-                    ),
-                    InkWell(
-                      onTap: () {},
-                      child: mypageButton('내가 찜한 여행/스크랩'),
-                    ),
-                    const SizedBox(
-                      height: 22,
-                    ),
-                    InkWell(
-                      onTap: () {},
-                      child: mypageButton('쪽지함'),
-                    ),
-                    const SizedBox(
-                      height: 22,
+                      height: 15,
                     ),
                     InkWell(
                       onTap: () {
                         Inquiry(context);
                       },
-                      child: mypageButton('문의'),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 11,
+                        ),
+                        width: 400,
+                        height: 55,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(
+                            color: const Color(0xFF9CC4FF),
+                          ),
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 0,
+                              blurRadius: 3,
+                              offset: Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.question_answer,
+                              color: Color(0xFF329EFF),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              '문의하기',
+                              style: const TextStyle(
+                                fontSize: 18,
+                                color: Color(0xFF329EFF),
+                                fontWeight: FontWeight.w600,
+                              ),
+                              textAlign: TextAlign.start,
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -146,7 +225,7 @@ class _MyPageState extends State<MyPage> {
             },
             child: const Icon(
               Icons.camera_alt,
-              color: Color(0xFF9CC4FF),
+              color: Colors.white,
               size: 40,
               shadows: [
                 Shadow(
@@ -231,32 +310,6 @@ class _MyPageState extends State<MyPage> {
         _imageFile = File(pickedFile.path);
       });
     }
-  }
-
-  Widget mypageButton(String memuName) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 20,
-        vertical: 13,
-      ),
-      width: 400,
-      height: 56,
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: const Color(0xFF9CC4FF),
-        ),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Text(
-        memuName,
-        style: const TextStyle(
-          fontSize: 20,
-          color: Color(0xFF329EFF),
-          fontWeight: FontWeight.normal,
-        ),
-        textAlign: TextAlign.start,
-      ),
-    );
   }
 
   Future Inquiry(BuildContext context) async {

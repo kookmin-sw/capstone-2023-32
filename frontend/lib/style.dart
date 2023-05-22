@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-var mainTheme = ThemeData();
+var mainTheme = ThemeData(
+  fontFamily: 'SUITE',
+);
 
 var heading1 = TextStyle(fontSize: 25, fontWeight: FontWeight.bold);
 var heading2 = TextStyle(fontSize: 14, fontWeight: FontWeight.bold);
