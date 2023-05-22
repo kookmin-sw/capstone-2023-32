@@ -1,61 +1,63 @@
 package com.cap.fatrip.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.cap.fatrip.dto.UserDto;
+import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.Date;
+import java.util.List;
 
-@Entity
-@Getter
-@Setter
-@Table(name = "User")
-public class UserEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long u_key;
+@NoArgsConstructor //기본 생성자 만들어줌
+@AllArgsConstructor //기본 생성자 만들어줌
+@Builder
+@DynamicUpdate //update 할때 실제 값이 변경됨 컬럼으로만 update 쿼리를 만듬
+@Entity //JPA Entity 임을 명시
+@Setter @Getter //Lombok 어노테이션으로 getter
+@Table(name = "user") //테이블 관련 설정 어노테이션
+public class UserEntity extends TimeEntity {
+	@Id@GeneratedValue(generator = "uuid2")
+	@GenericGenerator(name="uuid2", strategy = "uuid2")
+	private String id;
 
-    @Column(length = 20)
-    private String u_id;
+//	@Column(name = "password", nullable = false, length = 30)
+//	private String password;
 
-    @Column(length = 20)
-    private String u_pw;
+	@Column(name = "name", length = 20)
+	private String name;
 
-    @Column(length = 20)
-    private String u_name;
+	@Column(name = "nickname", nullable = false, length = 20)
+	private String nickname;
 
-    @Column(length=1)    // M or W로 성별 보기
-    private String u_gender;
+	@Column
+	private String email;
 
-    @Column(length = 8)
-    private String u_birth_day;
+	@OneToMany(mappedBy = "user")
+	private List<PlanEntity> planEntityList;
 
-    @Column
-    private String u_phone;
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private Role role;
 
-    @Column
-    private String u_email;
+	/* 소셜로그인시 이미 등록된 회원이라면 수정날짜만 업데이트하고
+	 * 기존 데이터는 그대로 보존하도록 예외처리 */
+	public UserEntity updateModifiedDate() {
+//		this.onPreUpdate();
+		return this;
+	}
 
-    @Column //서비스 이용약관 동의
-    private boolean u_svc_use_pcy_agmt_yn;
+	@Getter
+	public enum Role {
+		USER, ADMIN
+	}
 
-    @Column // 개인정보처리방침방침동의여부
-    private boolean u_ps_info_proc_agme_yn;
-
-    @Column  // 위치기반서비스동의여부
-    private boolean u_loc_base_svc_agmt_yn;
-
-    @Column
-    private boolean u_sub_yn;
-
-    @Column
-    private boolean u_locked_yn;
-
-    @Column
-    private String u_last_connection;
-
-    @Column
-    private String u_local;
-
-    @Column
-    private int u_report_cnt;
+	public static UserEntity of(UserDto userDto){
+		UserEntity userEntity = new UserEntity();
+//		userEntity.id = userDto.getId();
+//		userEntity.password = userDto.getPassword();
+		userEntity.name = userDto.getName();
+		userEntity.email = userDto.getEmail();
+		return userEntity;
+	}
 }
