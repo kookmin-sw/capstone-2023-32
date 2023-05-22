@@ -47,6 +47,7 @@ public class PlanController {
 	}
 
 	@GetMapping(value = "/like", params = "planId")
+	@Transactional
 	public PlanDetailDto toggleLike(@RequestParam("planId") String planId) throws Exception {
 		// 로그인 됐는지 확인
 			// 안 됐으면 그대로 return
@@ -59,12 +60,14 @@ public class PlanController {
 			// 눌렸으면 취소(삭제)
 			LikeEntity likeEntity = optionalLike.get();
 			likeRepository.delete(likeEntity);
+			planService.setPlanLike(planEntity, -1);
 		} else {
 			// 안 눌렸으면 추가
 			LikeEntity likeEntity = new LikeEntity();
 			likeEntity.setUser(userEntity);
 			likeEntity.setPlan(planEntity);
 			likeRepository.save(likeEntity);
+			planService.setPlanLike(planEntity, 1);
 		}
 		return getPlanDetail(planEntity.getId());
 	}

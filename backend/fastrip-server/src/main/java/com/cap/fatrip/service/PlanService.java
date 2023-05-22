@@ -44,6 +44,11 @@ public class PlanService {
 		return planRepository.save(planEntity);
 	}
 
+	public void setPlanLike(PlanEntity planEntity, int i) {
+		planEntity.setLikes(planEntity.getLikes() + i);
+		planRepository.save(planEntity);
+	}
+
 	public PlanEntity updatePlan(PlanUpdateDto planDto) throws Exception {
 		UserEntity userEntity = userRepository.findById(planDto.getUserId()).orElseThrow(() -> {
 			log.error("there's no such user id : {}", planDto.getUserId());
