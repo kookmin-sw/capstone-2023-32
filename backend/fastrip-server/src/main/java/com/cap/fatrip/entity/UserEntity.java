@@ -32,12 +32,15 @@ public class UserEntity extends TimeEntity {
 	@Column
 	private String email;
 
-	@OneToMany(mappedBy = "user")
-	private List<PlanEntity> planEntityList;
-
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private Role role;
+
+	@OneToMany(mappedBy = "user")
+	private List<PlanEntity> planEntityList;
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private List<LikeEntity> likeEntities;
 
 	/* 소셜로그인시 이미 등록된 회원이라면 수정날짜만 업데이트하고
 	 * 기존 데이터는 그대로 보존하도록 예외처리 */

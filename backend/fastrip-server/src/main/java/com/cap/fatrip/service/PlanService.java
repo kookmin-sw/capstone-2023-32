@@ -23,6 +23,7 @@ public class PlanService {
 	private final UserRepository userRepository;
 	private final PlanTagRepository planTagRepository;
 	private final TagRepository tagRepository;
+	private final LikeRepository likeRepository;
 
 	public List<PPlanEntity> savePplans(List<PPlanEntity> planEntityList) {
 		return pplanRepository.saveAll(planEntityList);
@@ -90,9 +91,28 @@ public class PlanService {
 					planRepository.findPlanByTagsAndTitle(title, tags.get(0), tags.get(1), tags.get(2), tags.get(3), tags.get(4), tags.get(5), tags.get(6), tags.get(7), tags.get(8), tags.get(9));
 			default -> new ArrayList<>();
 		};
+		return setLiked(planByTagsAndTitle);
+	}
+
+	private List<PlanResDto> setLiked(List<PlanEntity> planEntityList) {
 		List<PlanResDto> planResDtos = new ArrayList<>();
-		for (PlanEntity planEntity : planByTagsAndTitle) {
-			planResDtos.add(PlanResDto.of(planEntity));
+		boolean login = UserService.isLogin();
+		if (!login) {
+			for (PlanEntity planEntity : planEntityList) {
+				planResDtos.add(PlanResDto.of(planEntity));
+			}
+			return planResDtos;
+		}
+		UserDto userDto = UserService.getUserFromAuth();
+		String userId = userDto.getId();
+		UserEntity userEntity = userRepository.findById(userId).orElseThrow();
+		for (PlanEntity planEntity : planEntityList) {
+			PlanResDto dto = PlanResDto.of(planEntity);
+			Optional<LikeEntity> optionalLike = likeRepository.findByPlanAndUser(planEntity, userEntity);
+			if (optionalLike.isPresent()) {
+				dto.setLiked(true);
+			}
+			planResDtos.add(dto);
 		}
 		return planResDtos;
 	}
@@ -104,11 +124,7 @@ public class PlanService {
 			return new NoSuchElementException("there's no user");
 		});
 		List<PlanEntity> planByUser = planRepository.findAllByUser(userEntity);
-		List<PlanResDto> planResDtos = new ArrayList<>();
-		for (PlanEntity planEntity : planByUser) {
-			planResDtos.add(PlanResDto.of(planEntity));
-		}
-		return planResDtos;
+		return setLiked(planByUser);
 	}
 
 	public PlanEntity getPlanDetail(String planId) throws Exception {

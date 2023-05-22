@@ -30,6 +30,15 @@ public class UserService {
 		}
 	}
 
+	public static boolean isLogin() {
+		try {
+			getUserFromAuth();
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
 	public UserEntity changeNickname(String nickname) {
 		UserDto user = getUserFromAuth();
 		UserEntity userEntity = userRepository.findByEmail(user.getEmail()).orElse(new UserEntity());
