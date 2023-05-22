@@ -55,7 +55,7 @@ class _FeedPageState extends State<FeedPage> {
   List<Plan> plans = [];
 
   void fetchData() async {
-    var url = Uri.parse('http://3.38.99.234:8080/api/plan/all');
+    var url = Uri.parse('http://3.38.99.234:8080/api/plan/list');
     var requestBody = jsonEncode({
       "title": "",
       "tags": [],
