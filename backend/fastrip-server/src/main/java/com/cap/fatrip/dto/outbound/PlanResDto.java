@@ -1,6 +1,7 @@
 package com.cap.fatrip.dto.outbound;
 
 import com.cap.fatrip.dto.PlanDto;
+import com.cap.fatrip.dto.TimeDto;
 import com.cap.fatrip.entity.PlanEntity;
 import com.cap.fatrip.entity.PlanTagEntity;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PlanResDto {
+public class PlanResDto extends TimeDto {
 	private String id;
 	private String title;
 	private int like;
@@ -43,6 +44,8 @@ public class PlanResDto {
 		resDto.userId = plan.getUser().getId();
 		resDto.comment = plan.getComment();
 		resDto.category = plan.getCategory();
+		resDto.createdAt = plan.getCreatedAt();
+		resDto.updatedAt = plan.getUpdatedAt();
 		resDto.tags = new ArrayList<>();
 		if (plan.getPlanTagEntities().size() != 0) {
 			for (PlanTagEntity planTagEntity : plan.getPlanTagEntities()) {
