@@ -2,6 +2,7 @@ package com.cap.fatrip.controller;
 
 import com.cap.fatrip.dto.PPlanDto;
 import com.cap.fatrip.dto.PlanDto;
+import com.cap.fatrip.dto.UserDto;
 import com.cap.fatrip.dto.inbound.*;
 import com.cap.fatrip.dto.outbound.PlanDetailDto;
 import com.cap.fatrip.dto.outbound.PlanResDto;
@@ -37,8 +38,23 @@ public class PlanController {
 		return planService.getPlansByUser(userId);
 	}
 
+	@GetMapping("/myList")
+	public List<PlanResDto> findAll() throws Exception {
+		UserDto userDto = UserService.getUserFromAuth();
+		String id = userDto.getId();
+		return planService.getPlansByUser(id);
+	}
+
+	@PostMapping("/plusLike")
+	public void plusLike(@RequestBody PlanDetailDto planDetailDto) {
+		// 로그인 됐는지 확인
+			// 안 됐으면 그대로 return
+		// 됐으면
+	}
+
 	@GetMapping(params = {"id"})
 	public PlanDetailDto getPlanDetail(@RequestParam String id) throws Exception {
+		// todo: 상세보기할때 로그인 되어 있으면 좋아요 눌렀는지 여부
 		PlanDetailDto planDetailDto = new PlanDetailDto();
 		PlanEntity planDetail = planService.getPlanDetail(id);
 

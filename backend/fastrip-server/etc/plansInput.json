@@ -241,5 +241,103 @@
         "p_country": "Japan"
       }
     ]
+  },
+  {
+    "plan": {
+      "userId": "Tanziro",
+      "title": "오사카 여행!",
+      "category": "계획",
+      "tags": [
+        "모집",
+        "일본",
+        "오사카",
+        "단체"
+      ],
+      "comment": "오픈카톡방 링크 https://open.kakao.trip 부담없이 들어와주세요!",
+      "image": "https://images.unsplash.com/photo-1590253230532-a67f6bc61c9e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1431&q=80"
+    },
+    "pplan": [
+      {
+        "day": "1",
+        "p_seq": "1",
+        "p_name": "도톤보리",
+        "p_post": "1 Chome Dotonbori, Chuo Ward, Osaka, 542-0071 일본",
+        "p_locate": "Location coordinates",
+        "p_country": "Japan"
+      },
+      {
+        "day": "1",
+        "p_seq": "2",
+        "p_name": "신사이바스지 상점가",
+        "p_post": "2 Chome-2-22 Shinsaibashisuji, Chuo Ward, Osaka, 542-0085 일본",
+        "p_locate": "Location coordinates",
+        "p_country": "Japan"
+      },
+      {
+        "day": "2",
+        "p_seq": "1",
+        "p_name": "시텐노지",
+        "p_post": "1 Chome-11-18 Shitennoji, Tennoji Ward, Osaka, 543-0051 일본",
+        "p_locate": "Location coordinates",
+        "p_country": "Japan"
+      },
+      {
+        "day": "3",
+        "p_seq": "1",
+        "p_name": "유니버설 스튜디 재팬",
+        "p_post": "2 Chome-1-33 Sakurajima, Konohana Ward, Osaka, 554-0031 일본",
+        "p_locate": "Location coordinates",
+        "p_country": "Japan"
+      }
+    ]
+  },
+  {
+    "plan": {
+      "userId": "Tanziro",
+      "title": "오사카 여행2!",
+      "category": "계획",
+      "tags": [
+        "모집",
+        "일본",
+        "오사카",
+        "단체"
+      ],
+      "comment": "오픈카톡방 링크 https://open.kakao.trip 부담없이 들어와주세요!",
+      "image": "https://images.unsplash.com/photo-1590253230532-a67f6bc61c9e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1431&q=80"
+    },
+    "pplan": [
+      {
+        "day": "1",
+        "p_seq": "1",
+        "p_name": "도톤보리",
+        "p_post": "1 Chome Dotonbori, Chuo Ward, Osaka, 542-0071 일본",
+        "p_locate": "Location coordinates",
+        "p_country": "Japan"
+      },
+      {
+        "day": "1",
+        "p_seq": "2",
+        "p_name": "신사이바스지 상점가",
+        "p_post": "2 Chome-2-22 Shinsaibashisuji, Chuo Ward, Osaka, 542-0085 일본",
+        "p_locate": "Location coordinates",
+        "p_country": "Japan"
+      },
+      {
+        "day": "2",
+        "p_seq": "1",
+        "p_name": "시텐노지",
+        "p_post": "1 Chome-11-18 Shitennoji, Tennoji Ward, Osaka, 543-0051 일본",
+        "p_locate": "Location coordinates",
+        "p_country": "Japan"
+      },
+      {
+        "day": "3",
+        "p_seq": "1",
+        "p_name": "유니버설 스튜디 재팬",
+        "p_post": "2 Chome-1-33 Sakurajima, Konohana Ward, Osaka, 554-0031 일본",
+        "p_locate": "Location coordinates",
+        "p_country": "Japan"
+      }
+    ]
   }
 ]

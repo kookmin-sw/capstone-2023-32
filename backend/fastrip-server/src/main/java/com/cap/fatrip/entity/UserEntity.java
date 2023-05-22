@@ -17,8 +17,7 @@ import java.util.List;
 @Setter @Getter //Lombok 어노테이션으로 getter
 @Table(name = "user") //테이블 관련 설정 어노테이션
 public class UserEntity extends TimeEntity {
-	@Id@GeneratedValue(generator = "uuid2")
-	@GenericGenerator(name="uuid2", strategy = "uuid2")
+	@Id
 	private String id;
 
 //	@Column(name = "password", nullable = false, length = 30)
