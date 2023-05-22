@@ -1,0 +1,22 @@
+==== user : cap_user
+use fastrip;
+
+create table user(
+	id varchar(20) primary key,
+    password varchar(20) not null,
+    name varchar(20) not null,
+    nickname varchar(20) not null,
+    gender tinyint not null check(gender in (0, 1, 2)) default 0,
+    birthday date,
+    phone varchar(20),
+    email varchar(20) not null,
+    svc_use_pcy_agmt_yn tinyint not null check(svc_use_pcy_agmt_yn in (0, 1)) default 0,
+    ps_info_proc_agmt_yn tinyint not null check(ps_info_proc_agmt_yn in (0, 1)) default 0,
+    loc_base_svc_agmt_yn tinyint not null check(loc_base_svc_agmt_yn in (0, 1)) default 0,
+    sub_yn tinyint not null check(sub_yn in (0, 1)) default 0,
+    locked_yn tinyint not null check(locked_yn in (0, 1)) default 0,
+    last_connection datetime default NOW(),
+    create_time datetime not null default NOW(),
+    location varchar(50),
+    report_cnt int not null default 0
+);
