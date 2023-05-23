@@ -35,14 +35,16 @@ public class UserController {
 	@PostMapping("/testUser")
 	public String createTestUser(@RequestBody LoginDto loginDto) {
 		UserEntity userEntity = UserEntity.builder()
+				.id(loginDto.getId())
 				.nickname(loginDto.getNickname() == null ? "test_nickname" : loginDto.getNickname())
 				.role(UserEntity.Role.USER)
 				.email("test@gmail.com")
 				.build();
+		UserEntity user = userRepository.findById(loginDto.getId()).orElse(userEntity);
 		userRepository.save(userEntity);
-		UserDto user = new UserDto();
-		ServiceUtil.copyObject(userEntity, user);
-		return tokenService.generateToken(user);
+		UserDto userDto = new UserDto();
+		ServiceUtil.copyObject(user, userDto);
+		return tokenService.generateToken(userDto);
 	}
 
 	@GetMapping(path = "changeNickname", params = "nickname")

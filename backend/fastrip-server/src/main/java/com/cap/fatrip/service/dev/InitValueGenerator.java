@@ -31,7 +31,7 @@ public class InitValueGenerator {
 
 		for (PlanDetailSaveDto planDetailSaveDto : planDetailSaveDtos) {
 			String userId = planDetailSaveDto.getPlan().getUserId();
-			UserEntity user = userRepository.findById(userId).orElse(UserEntity.builder().nickname(userId).role(UserEntity.Role.USER).build());
+			UserEntity user = userRepository.findById(userId).orElse(UserEntity.builder().id(userId).nickname(userId).role(UserEntity.Role.USER).build());
 			UserEntity userEntity = userRepository.save(user);
 			planDetailSaveDto.getPlan().setUserId(userEntity.getId());
 			planController.save(planDetailSaveDto);

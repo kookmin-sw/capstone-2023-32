@@ -26,21 +26,22 @@ public class PlanEntity extends TimeEntity {
 	@ManyToOne
 	@JoinColumn(name = "user_id")   //fk
 	private UserEntity user;
-	@OneToMany(mappedBy = "plan", cascade = CascadeType.ALL)
-	private List<PlanTagEntity> planTagEntities = new ArrayList<>();
-	@OneToMany(mappedBy = "plan", cascade = CascadeType.ALL)
-	private List<PPlanEntity> pPlanEntities = new ArrayList<>();
 	@Column
 	private Integer likes;
 	@Column
 	private String title;
 	@Column
 	private String category;
-
 	@Column
 	private String comment;
 	@Column
 	private String image;
+	@OneToMany(mappedBy = "plan", cascade = CascadeType.ALL)
+	private List<PlanTagEntity> planTagEntities = new ArrayList<>();
+	@OneToMany(mappedBy = "plan", cascade = CascadeType.ALL)
+	private List<PPlanEntity> pPlanEntities = new ArrayList<>();
+	@OneToMany(mappedBy = "plan", cascade = CascadeType.ALL)
+	private List<LikeEntity> likeEntities = new ArrayList<>();
 
 	@PrePersist
 	private void initLikes() {

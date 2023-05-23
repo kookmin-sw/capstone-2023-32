@@ -18,6 +18,7 @@ public class PlanDto extends TimeDto {
     private String title;
     private String image;
     private String category;
+    private boolean liked = false;
 
     public static PlanDto of(PlanEntity planEntity){
         PlanDto plan = new PlanDto();
