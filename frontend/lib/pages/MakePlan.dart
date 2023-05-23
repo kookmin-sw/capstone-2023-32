@@ -6,9 +6,6 @@ import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'Map.dart';
-import 'dart:io';
-import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart';
 
 // https://unsplash.com/ko/%EC%82%AC%EC%A7%84/x-S6ZlJ6dP0
 
@@ -51,6 +48,7 @@ class MakePage extends StatefulWidget {
 class _MakePageState extends State<MakePage> {
   final TextEditingController _controller = TextEditingController();
   TextEditingController tagController = TextEditingController();
+  final TextEditingController imgcontroller = TextEditingController();
   DateTimeRange? _dateRange;
   String planId = uuid.v4();
   String userId = "UID";
@@ -59,25 +57,13 @@ class _MakePageState extends State<MakePage> {
   Map<int, List<MapData>> locationData = {};
   var additionalInfo = [];
   String comment = '';
-
-  final ImagePicker _picker = ImagePicker();
-  File? _image;
-
-  Future getImage() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      _image = File(pickedFile.path);
-      setState(() {});
-    } else {
-      print('No image selected.');
-    }
-  }
+  String imgUrl = '';
 
 
   void sendData() async {
     setState(() {
       title = _controller.text;
+      imgUrl = imgcontroller.text;
     });
     print(comment);
     List<Map<String, dynamic>> pplan = [];
@@ -101,7 +87,7 @@ class _MakePageState extends State<MakePage> {
         "title": title,
         "tags": tags,
         "comment": comment,
-        "image": _image?.path,
+        "image": imgUrl,
       },
       "pplan": pplan,
     };
@@ -276,17 +262,24 @@ class _MakePageState extends State<MakePage> {
         ),
 
         // ** 썸네일 이미지 추가 **
-        IconButton(
-          icon: _image == null
-              ? Icon(Icons.add_a_photo)
-              : Text(
-            basename(_image!.path),
-            style: TextStyle(color: Theme.of(context).iconTheme.color),
+        Padding(
+          padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+          child: TextField(
+            controller: imgcontroller,
+            decoration: InputDecoration(
+              hintText: '썸네일 이미지 주소를 입력해주세요.',
+              hintStyle: TextStyle(color: Colors.grey),
+              prefixIcon:
+              Icon(
+                Icons.camera,
+                color: Colors.grey,
+              ),
+
+            ),
           ),
-          onPressed: getImage,
         ),
         SizedBox(
-          height: 8
+          height: 30
         ),
 
 
@@ -373,7 +366,7 @@ class _MakePageState extends State<MakePage> {
                                         children: [
                                           Text(
                                             '${j + 1}. ${locationData[i]![j].name}',
-                                            style: TextStyle(fontSize: 20, color: signatureColor),
+                                            style: TextStyle(fontSize: 20, color: Color(0xff68a4ff)),
                                           ),
                                           Text(
                                             locationData[i]![j].address,
@@ -383,7 +376,7 @@ class _MakePageState extends State<MakePage> {
                                       ),
                                   Text(
                                     '+',
-                                    style: TextStyle(fontSize: 20, color: signatureColor),
+                                    style: TextStyle(fontSize: 20, color: Color(0xff68a4ff)),
                                   ),
                                 ],
                               ),
