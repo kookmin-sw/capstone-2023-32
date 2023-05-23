@@ -4,9 +4,16 @@ import 'package:fasttrip/pages/Mypage.dart';
 import 'package:fasttrip/pages/Trip.dart';
 import 'package:flutter/material.dart';
 import './style.dart' as theme;
+import 'package:provider/provider.dart';
+import './token_model.dart';
 
 void main() {
-  runApp(MaterialApp(theme: theme.mainTheme, home: const MyApp()));
+  runApp(
+      ChangeNotifierProvider(
+        create: (context) => TokenModel(),
+        child: MaterialApp(theme: theme.mainTheme, home: const MyApp()),
+      ),
+  );
 }
 
 class MyApp extends StatelessWidget {
