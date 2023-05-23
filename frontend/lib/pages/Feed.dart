@@ -14,7 +14,7 @@ class Plan {
   List<String> tags;
   String comment;
   String imgUrl;
-
+  bool heart;
 
   Plan({
     required this.planId,
@@ -24,17 +24,19 @@ class Plan {
     required this.tags,
     required this.comment,
     required this.imgUrl,
+    required this.heart
   });
 
   factory Plan.fromJson(Map<String, dynamic> json){
     return Plan(
-      planId: (json['id'] ?? '').toString(),
-      userId: (json['userId'] ?? '').toString(),
+      planId: (json['id'] ?? ''),
+      userId: (json['userId'] ?? ''),
       title: json['title'] ?? '',
       like: json['like'] ?? 0,
       tags: List<String>.from(json['tags'] ?? [],),
       comment: json['comment'] ?? '',
       imgUrl: json['image'] ?? '',
+      heart: false,
     );
   }
 }
@@ -69,9 +71,16 @@ class _FeedPageState extends State<FeedPage> {
 
     if (response.statusCode == 200) {
       var data = jsonDecode(utf8.decode(response.bodyBytes)) as List;
+      List<Plan> fetchedPlans = data.map((item) => Plan.fromJson(item)).toList();
+      for (var i = 0; i < fetchedPlans.length; i++) {
+        if (i == 1 || i == 2) {
+          fetchedPlans[i].heart = true;
+        }
+      }
+
       setState(() {
-        plans = data.map((item) => Plan.fromJson(item)).toList();
-        _filteredData = plans; // Set _filteredData here, after successfully parsing the fetched data
+        plans = fetchedPlans;
+        _filteredData = plans;
       });
       print('----------------------------------------------');
       for (Plan plan in plans) {
@@ -132,7 +141,13 @@ class _FeedPageState extends State<FeedPage> {
         Container(
           padding: const EdgeInsets.only(top: 50.0, left: 20.0),
           alignment: Alignment.centerLeft,
-          child: Text('피드', style: heading1, textAlign: TextAlign.left),
+          child: Row(
+          children: [
+          Icon(Icons.library_books_rounded, color: signatureColor),
+          const SizedBox(width: 6),
+          Text('피드', style: heading1, textAlign: TextAlign.left),
+          ],
+          ),
         ),
         Container(
           padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10.0, top: 20.0),
@@ -310,31 +325,31 @@ class _FeedPageState extends State<FeedPage> {
                                 height: 200,
                                 fit: BoxFit.cover),
                           ),
-                          // Positioned(
-                          //   top: 5,
-                          //   right: 5,
-                          //   child: IconButton(
-                          //     onPressed: () {
-                          //       setState(() {
-                          //         if (_filteredData[index].heart) {
-                          //           _filteredData[index].heart = false;
-                          //         } else {
-                          //           _filteredData[index].heart = true;
-                          //         }
-                          //       });
-                          //     },
-                          //     padding: EdgeInsets.zero,
-                          //     constraints: const BoxConstraints(),
-                          //     icon: Icon(
-                          //       _filteredData[index].heart
-                          //           ? Icons.favorite
-                          //           : Icons.favorite_border,
-                          //       color: _filteredData[index].heart
-                          //           ? Color(0xffFA6D6D)
-                          //           : Colors.white,
-                          //     ),
-                          //   ),
-                          // ),
+                          Positioned(
+                            top: 5,
+                            right: 5,
+                            child: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  if (_filteredData[index].heart) {
+                                    _filteredData[index].heart = false;
+                                  } else {
+                                    _filteredData[index].heart = true;
+                                  }
+                                });
+                              },
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints(),
+                              icon: Icon(
+                                _filteredData[index].heart
+                                    ? Icons.favorite
+                                    : Icons.favorite_border,
+                                color: _filteredData[index].heart
+                                    ? Color(0xffFA6D6D)
+                                    : Colors.white,
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                       const SizedBox(height: 10.0),
