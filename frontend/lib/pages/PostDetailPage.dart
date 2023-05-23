@@ -4,7 +4,7 @@ import 'package:share/share.dart';
 import 'package:fasttrip/style.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
+import 'dart:convert' as convert;
 
 class PostDetailPage extends StatefulWidget {
   final String planId;
@@ -20,152 +20,58 @@ class _PostDetailPageState extends State<PostDetailPage> {
   bool isLiked = false;
   Map<String, dynamic>? planData;
 
-  final Map<String, dynamic> dummyData = {
-    "plan": {
-      "p_id": "plan number",
-      "p_title": "사랑과 낭만의 도시 Paris",
-      "user": {"id": "Seulgi"},
-      "tags": ["계획", "프랑스", "유럽여행", "혼자"],
-      "p_comment": "최적의 동선으로 짠 코스입니다! 이 정도는 다녀야 어디가서 프랑스 가봤다고 할 수 있죠!",
-      "p_likes": 0,
-    },
-    "pplan": [
-      {
-        "plan": {"p_id": "plan number"},
-        "day": "1",
-        "p_seq": "1",
-        "p_name": "라파예트 백화점",
-        "p_post": "address 1",
-        "p_locate": "Location coordinates",
-        "p_country": "France"
-      },
-      {
-        "plan": {"p_id": "plan number"},
-        "day": "1",
-        "p_seq": "2",
-        "p_name": "에투알 광장 개선문",
-        "p_post": "address 1",
-        "p_locate": "Location coordinates",
-        "p_country": "France"
-      },
-      {
-        "plan": {"p_id": "plan number"},
-        "day": "1",
-        "p_seq": "3",
-        "p_name": "Angelina",
-        "p_post": "address 1",
-        "p_locate": "Location coordinates",
-        "p_country": "France"
-      },
-      {
-        "plan": {"p_id": "plan number"},
-        "day": "1",
-        "p_seq": "4",
-        "p_name": "알렉산더 3세 다리",
-        "p_post": "address 1",
-        "p_locate": "Location coordinates",
-        "p_country": "France"
-      },
-      {
-        "plan": {"p_id": "plan number"},
-        "day": "2",
-        "p_seq": "1",
-        "p_name": "La Main Noire",
-        "p_post": "Location address 2",
-        "p_locate": "Location coordinates",
-        "p_country": "France"
-      },
-      {
-        "plan": {"p_id": "plan number"},
-        "day": "2",
-        "p_seq": "2",
-        "p_name": "샤크레퀘르 대성당",
-        "p_post": "Location address 2",
-        "p_locate": "Location coordinates",
-        "p_country": "France"
-      },
-      {
-        "plan": {"p_id": "plan number"},
-        "day": "2",
-        "p_seq": "3",
-        "p_name": "마르스 광장 (에펠탑)",
-        "p_post": "Location address 2",
-        "p_locate": "Location coordinates",
-        "p_country": "France"
-      },
-      {
-        "plan": {"p_id": "plan number"},
-        "day": "2",
-        "p_seq": "4",
-        "p_name": "오페라",
-        "p_post": "Location address 2",
-        "p_locate": "Location coordinates",
-        "p_country": "France"
-      },
-      {
-        "plan": {"p_id": "plan number"},
-        "day": "3",
-        "p_seq": "1",
-        "p_name": "이랑",
-        "p_post": "Location address 2",
-        "p_locate": "Location coordinates",
-        "p_country": "France"
-      },
-    ]
-  };
-
   @override
   void initState() {
     super.initState();
-    // fetchPlanData();
+    fetchPlanData();
   }
-  //
-  // Future<void> fetchPlanData() async {
-  //   try {
-  //     final data = await getPlanData(widget.planId.toString());
-  //     setState(() {
-  //       planData = data;
-  //     });
-  //   } catch (e) {
-  //     print('Failed to load plan: $e');
-  //   }
-  // }
-  //
-  // Future<Map<String, dynamic>> getPlanData(String planId) async {
-  //   final response = await http.get(
-  //     Uri.parse('http://3.38.99.234:8080/api/plan?id=${planId.toString()}'),
-  //   );
-  //
-  //   if (response.statusCode == 200) {
-  //     return jsonDecode(response.body);
-  //   } else {
-  //     print(response.statusCode);
-  //     throw Exception('Failed to load plan');
-  //   }
-  // }
+
+  Future<void> fetchPlanData() async {
+    try {
+      final data = await getPlanData(widget.planId);
+      setState(() {
+        planData = data;
+      });
+    } catch (e) {
+      print('Failed to load plan: $e');
+    }
+  }
+
+  Future<Map<String, dynamic>> getPlanData(String planId) async {
+    final response = await http.get(
+      Uri.parse('http://3.38.99.234:8080/api/plan?id=${planId}'),
+    );
+
+    if (response.statusCode == 200) {
+      String body = convert.utf8.decode(response.bodyBytes);
+      Map<String, dynamic> data = convert.jsonDecode(body);
+      convert.JsonEncoder encoder = convert.JsonEncoder.withIndent('  ');
+      String prettyprint = encoder.convert(data);
+      print('Received data: $prettyprint');  // Output received data
+      return data;
+    } else {
+      print(response.statusCode);
+      throw Exception('Failed to load plan');
+    }
+  }
 
 
   Widget build(BuildContext context) {
-    if (dummyData == null) {
+    if (planData == null) {
       return Center(child: CircularProgressIndicator());
     } else {
-      var plan = dummyData!['plan'];
+      var plan = planData!['plan'];
       List<Map<String, dynamic>> pplan = List<Map<String, dynamic>>.from(
-          dummyData!['pplan']);
+          planData!['pplan']);
 
-      var pplanGroupedByDay = groupBy<Map<String, dynamic>, String>(
-          pplan, (obj) => obj['day']);
+      var pplanGroupedByDay = groupBy<Map<String, dynamic>, int>(
+        pplan,
+            (obj) => obj['day'] as int,
+      );
+
 
       var days = pplanGroupedByDay.keys.length;
       var nights = days - 1;
-
-      // var plan = dummyData['plan'];
-      //List<Map<String, dynamic>> pplan = List<Map<String, dynamic>>.from(dummyData['pplan']);
-
-      //var pplanGroupedByDay = groupBy<Map<String, dynamic>, String>(pplan, (obj) => obj['day']);
-
-      // var days = pplanGroupedByDay.keys.length;
-      // var nights = days - 1;
 
       return Scaffold(
         appBar: AppBar(
@@ -189,7 +95,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
           child: ListView(
             children: [
               Text(
-                plan['p_title'],
+                plan['title'] ?? '',
                 style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.w600,
@@ -199,7 +105,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  '작성자: ${plan['user']['id']}',
+                  '작성자: ${plan['userId'] ?? ''}',
                   style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w600
@@ -210,7 +116,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  '$nights박 $days일',
+                  '${nights.toString()}박 ${days.toString()}일',
                   style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w600
@@ -226,7 +132,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                       (int index) {
                     return Chip(
                       label: Text(
-                        '${plan['tags'][index]}',
+                        '${plan['tags'][index] ?? ''}',
                         style: const TextStyle(color: Color(0xff6DA5FA)),
                       ),
                       backgroundColor: Colors.transparent,
@@ -254,10 +160,10 @@ class _PostDetailPageState extends State<PostDetailPage> {
                     child: Text(
                       '${item['p_name']}',
                       style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w400
+                        fontSize: 20,
+                        fontWeight: FontWeight.w400,
                       ),
-                      textAlign: TextAlign.center, // Center align text
+                      textAlign: TextAlign.center,
                     ),
                   ),
                   Center(
@@ -267,17 +173,16 @@ class _PostDetailPageState extends State<PostDetailPage> {
                         fontSize: 15,
                         color: Color(0xffB4B4B4),
                       ),
-                      textAlign: TextAlign.center, // Center align text
+                      textAlign: TextAlign.center,
                     ),
                   ),
-                  SizedBox(
-                      height: 10
-                  ),
+                  SizedBox(height: 10),
                   if (item != pplanGroupedByDay[key]!.last) DottedLine(),
-                  // Add a DottedLine if it's not the last item
                 ],
-                SizedBox(height: 40), // day 경계
+                SizedBox(height: 40),
               ],
+
+
 
               Text(
                   "Comments",
@@ -294,7 +199,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                 //   borderRadius: BorderRadius.circular(8.0),
                 // ),
                 child: Text(
-                  plan['p_comment'],
+                  plan['comment'] ?? '',
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
@@ -323,14 +228,14 @@ class _PostDetailPageState extends State<PostDetailPage> {
                         setState(() {
                           isLiked = !isLiked;
                           if (isLiked) {
-                            plan['p_likes'] += 1;
+                            plan['like'] += 1;
                           } else {
-                            plan['p_likes'] -= 1;
+                            plan['like'] -= 1;
                           }
                         });
                       },
                     ),
-                    Text(plan['p_likes'].toString()),
+                    Text(plan['like'].toString()),
                   ],
                 ),
               ),
