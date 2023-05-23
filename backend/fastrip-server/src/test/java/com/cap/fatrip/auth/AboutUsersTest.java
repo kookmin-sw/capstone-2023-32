@@ -14,7 +14,7 @@ public class AboutUsersTest {
 	@Test
 	void createTestJWT() {
 		UserDto userDto = UserDto.builder()
-				.id("adf2fad5-c684-47ec-b598-a32b3eaf8f79")
+				.id("Tanziro")
 				.role(UserEntity.Role.USER)
 				.email("jun")
 				.nickname("nick")

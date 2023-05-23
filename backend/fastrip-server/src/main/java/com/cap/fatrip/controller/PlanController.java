@@ -2,13 +2,13 @@ package com.cap.fatrip.controller;
 
 import com.cap.fatrip.dto.PPlanDto;
 import com.cap.fatrip.dto.PlanDto;
+import com.cap.fatrip.dto.UserDto;
 import com.cap.fatrip.dto.inbound.*;
 import com.cap.fatrip.dto.outbound.PlanDetailDto;
 import com.cap.fatrip.dto.outbound.PlanResDto;
-import com.cap.fatrip.entity.PPlanEntity;
-import com.cap.fatrip.entity.PlanEntity;
-import com.cap.fatrip.entity.PlanTagEntity;
-import com.cap.fatrip.entity.TagEntity;
+import com.cap.fatrip.entity.*;
+import com.cap.fatrip.repository.LikeRepository;
+import com.cap.fatrip.repository.UserRepository;
 import com.cap.fatrip.service.PlanService;
 import com.cap.fatrip.service.TagService;
 import com.cap.fatrip.service.UserService;
@@ -26,6 +26,8 @@ import java.util.*;
 public class PlanController {
 	private final PlanService planService;
 	private final TagService tagService;
+	private final LikeRepository likeRepository;
+	private final UserRepository userRepository;
 
 	@PostMapping("/list")
 	public List<PlanResDto> findAll(@RequestBody PlanReqDto planReqDto) {
@@ -37,12 +39,63 @@ public class PlanController {
 		return planService.getPlansByUser(userId);
 	}
 
+	@GetMapping("/myList")
+	public List<PlanResDto> findAll() throws Exception {
+		UserDto userDto = UserService.getUserFromAuth();
+		String id = userDto.getId();
+		return planService.getPlansByUser(id);
+	}
+
+	@GetMapping("/likedList")
+	public List<PlanResDto> findLikedPlans() throws Exception {
+		UserDto userDto = UserService.getUserFromAuth();
+		String id = userDto.getId();
+		return planService.getPlansByLike(id);
+	}
+
+	@GetMapping(value = "/like", params = "planId")
+	@Transactional
+	public PlanDetailDto toggleLike(@RequestParam("planId") String planId) throws Exception {
+		// 로그인 됐는지 확인
+			// 안 됐으면 그대로 return
+		UserDto userDto = UserService.getUserFromAuth();
+		// 됐으면 해당 게시물 좋아요 눌렸는지 확인
+		PlanEntity planEntity = planService.getPlanDetail(planId);
+		UserEntity userEntity = userRepository.findById(userDto.getId()).orElseThrow();
+		Optional<LikeEntity> optionalLike = likeRepository.findByPlanAndUser(planEntity, userEntity);
+		if (optionalLike.isPresent()) {
+			// 눌렸으면 취소(삭제)
+			LikeEntity likeEntity = optionalLike.get();
+			likeRepository.delete(likeEntity);
+			planService.setPlanLike(planEntity, -1);
+		} else {
+			// 안 눌렸으면 추가
+			LikeEntity likeEntity = new LikeEntity();
+			likeEntity.setUser(userEntity);
+			likeEntity.setPlan(planEntity);
+			likeRepository.save(likeEntity);
+			planService.setPlanLike(planEntity, 1);
+		}
+		return getPlanDetail(planEntity.getId());
+	}
+
 	@GetMapping(params = {"id"})
 	public PlanDetailDto getPlanDetail(@RequestParam String id) throws Exception {
 		PlanDetailDto planDetailDto = new PlanDetailDto();
 		PlanEntity planDetail = planService.getPlanDetail(id);
+		PlanDto planDto = PlanDto.of(planDetail);
 
-		planDetailDto.setPlan(PlanDto.of(planDetail));
+		boolean login = UserService.isLogin();
+		UserDto userDto;
+		if (login) {
+			userDto = UserService.getUserFromAuth();
+			UserEntity userEntity = userRepository.findById(userDto.getId()).orElseThrow();
+			if (likeRepository.findByPlanAndUser(planDetail, userEntity).isPresent()) {
+				planDto.setLiked(true);
+			}
+		}
+
+		planDetailDto.setPlan(planDto);
 		planDetailDto.setPplan(planDetail.getPPlanEntities().stream().map(PPlanDto::of).toList());
 		planDetailDto.getPlan().setTags(planDetail.getPlanTagEntities().stream().map(planTagEntity -> planTagEntity.getTag().getName()).toList());
 

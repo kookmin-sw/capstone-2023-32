@@ -24,6 +24,7 @@ public class PlanResDto extends TimeDto {
 	private String comment;
 	private String image;
 	private String category;
+	private boolean liked = false;
 	private List<String> tags;
 
 	public static PlanResDto of(PlanDto dto) {

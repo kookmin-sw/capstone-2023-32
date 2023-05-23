@@ -36,7 +36,7 @@ public class JwtAuthFilter extends GenericFilterBean {
 			String nickname = (String) claims.get(TokenConstants.NICKNAME);
 			String role = (String) claims.get(TokenConstants.ROLE);
 
-			nickname = userRepository.findByEmail(email).map(UserEntity::getNickname).orElse(nickname);
+			nickname = userRepository.findById(id).map(UserEntity::getNickname).orElse(nickname);
 			if (nickname == null || nickname.isEmpty()) {
 				nickname = "temp_nickname";
 			}
