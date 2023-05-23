@@ -2,6 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:fasttrip/pages/Signup.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:provider/provider.dart';
+import '../token_model.dart';
+
+Future<String> sendPostRequest(String id) async {
+  final response = await http.post(
+    Uri.parse('http://3.38.99.234:8080/api/user/testUser'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{
+      'id': id,
+    }),
+  );
+
+  if (response.statusCode == 200) {
+    return response.body ?? '';
+  } else {
+    print(response.statusCode);
+    throw Exception('Failed to load post');
+  }
+}
 
 class LogIn extends StatefulWidget {
   const LogIn({Key? key}) : super(key: key);
@@ -11,6 +32,10 @@ class LogIn extends StatefulWidget {
 }
 
 class _LogInState extends State<LogIn> {
+
+  final idController = TextEditingController();
+  final passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -53,7 +78,8 @@ class _LogInState extends State<LogIn> {
                       ),
                     ),
                   ),
-                  const TextField(
+                  TextField(
+                    controller: idController,
                     decoration: InputDecoration(
                       hintText: '아이디를 입력해주세요.',
                     ),
@@ -73,7 +99,8 @@ class _LogInState extends State<LogIn> {
                       ),
                     ),
                   ),
-                  const TextField(
+                  TextField(
+                    controller: passwordController,
                     decoration: InputDecoration(
                       hintText: '비밀번호를 입력해주세요.',
                     ),
@@ -152,23 +179,12 @@ class _LogInState extends State<LogIn> {
                       width: MediaQuery.of(context).size.width * 0.9,
                       child: ElevatedButton(
                         onPressed: () async {
-                          final response = await http.get(
-                            Uri.parse('http://3.38.99.234:8080/ec2-3-38-99-234.ap-northeast-2.compute.amazonaws.com:8080'),
-                          );
-
-                          if (response.statusCode == 200) {
-                            try {
-                              Map<String, dynamic> apiResponse = jsonDecode(response.body);
-                              String? token = response.headers['Auth'];
-                              // Navigate 
-                            } catch (e) {
-                              print('Failed to parse JSON because: $e');
-                            }
-                          } else {
-                            print('Failed to load API data. Status code: ${response.statusCode}');
-                          }
+                          final enteredId = idController.text;
+                          String token = await sendPostRequest(enteredId);
+                          print(enteredId);
+                          print('Received token: $token');
+                          Provider.of<TokenModel>(context, listen: false).token = token;
                         },
-
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
                           backgroundColor: const Color(0xFF9CC4FF),
@@ -187,7 +203,7 @@ class _LogInState extends State<LogIn> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ),
+                      )
                     ),
                   ),
                 ],
