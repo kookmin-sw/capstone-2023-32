@@ -46,6 +46,13 @@ public class PlanController {
 		return planService.getPlansByUser(id);
 	}
 
+	@GetMapping("/likedList")
+	public List<PlanResDto> findLikedPlans() throws Exception {
+		UserDto userDto = UserService.getUserFromAuth();
+		String id = userDto.getId();
+		return planService.getPlansByLike(id);
+	}
+
 	@GetMapping(value = "/like", params = "planId")
 	@Transactional
 	public PlanDetailDto toggleLike(@RequestParam("planId") String planId) throws Exception {

@@ -195,4 +195,15 @@ public class PlanService {
 		planTagRepository.deleteAllByPlan(planEntity);
 		planTagRepository.saveAll(planTagEntities);
 	}
+
+	public List<PlanResDto> getPlansByLike(String id) {
+		UserEntity userEntity = userRepository.findById(id).orElseThrow();
+		List<LikeEntity> likeEntities = userEntity.getLikeEntities();
+		List<PlanEntity> plans = likeEntities.stream().map(LikeEntity::getPlan).toList();
+		return plans.stream().map(plan -> {
+			PlanResDto dto = PlanResDto.of(plan);
+			dto.setLiked(true);
+			return dto;
+		}).toList();
+	}
 }
