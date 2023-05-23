@@ -3,6 +3,81 @@ import 'package:fasttrip/pages/MakePlan.dart';
 import 'package:fasttrip/pages/PostDetailPage.dart';
 import 'package:flutter/material.dart';
 import 'package:fasttrip/style.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+import '../token_model.dart';
+
+
+// data fetch
+// 받아올 데이터 정의
+class Plan {
+  String planId;
+  String userId;
+  String title;
+  int like;
+  List<String> tags;
+  String comment;
+  String imgUrl;
+  DateTime lastModifiedDate;
+
+  Plan({
+    required this.planId,
+    required this.userId,
+    required this.title,
+    required this.like,
+    required this.tags,
+    required this.comment,
+    required this.imgUrl,
+    required this.lastModifiedDate,
+  });
+
+  factory Plan.fromJson(Map<String, dynamic> json){
+    DateTime tempDate = json['lastModifiedDate'] != null ? DateTime.parse(json['lastModifiedDate']) : DateTime.now();
+    DateTime dateWithoutMicroseconds = DateTime(tempDate.year, tempDate.month, tempDate.day, tempDate.hour, tempDate.minute, tempDate.second);
+
+    return Plan(
+      planId: (json['id'] ?? '').toString(),
+      userId: (json['userId'] ?? '').toString(),
+      title: json['title'] ?? '',
+      like: json['like'] ?? 0,
+      tags: List<String>.from(json['tags'] ?? [],),
+      comment: json['comment'] ?? '',
+      imgUrl: json['image'] ?? '',
+      lastModifiedDate: dateWithoutMicroseconds,
+    );
+  }
+}
+
+
+
+
+
+Future<List<Plan>> fetchPlans(BuildContext context) async {
+  final tokenModel = Provider.of<TokenModel>(context, listen: false);
+  final token = tokenModel.token;
+
+  final response = await http.get(
+    Uri.parse('http://3.38.99.234:8080/api/plan/myList'),
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Auth': '$token',
+    },
+  );
+
+  if (response.statusCode == 200) {
+    String responseBody = utf8.decode(response.bodyBytes);
+    List<dynamic> body = jsonDecode(responseBody);
+    List<Plan> plans = body.map((dynamic item) => Plan.fromJson(item)).toList();
+    return plans;
+  } else {
+    throw Exception('Failed to load plans');
+  }
+}
+
+
+
 
 class TripPage extends StatefulWidget {
   const TripPage({Key? key}) : super(key: key);
@@ -12,6 +87,23 @@ class TripPage extends StatefulWidget {
 }
 
 class _TripPageState extends State<TripPage> {
+  List<Plan> plans = [];
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    fetchPlans(context).then((loadedPlans) {
+      setState(() {
+        plans = loadedPlans;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,7 +125,7 @@ class _TripPageState extends State<TripPage> {
               ),
             ),
             const SizedBox(height: 20),
-            MyTravelList(),
+            MyTravelList(showAll: false, plans: plans),
             const SizedBox(height: 15),
             Padding(
               padding: const EdgeInsets.only(left: 20.0, right: 20.0),
@@ -82,45 +174,23 @@ class _TripPageState extends State<TripPage> {
   }
 }
 
-class Travel {
-  final String title;
-  final DateTime lastModifiedDate;
-
-  Travel({required this.title, required this.lastModifiedDate});
-}
-
 class MyTravelList extends StatelessWidget {
   final bool showAll;
+  final List<Plan> plans;
 
-  const MyTravelList({Key? key, this.showAll = false}) : super(key: key);
+  const MyTravelList({Key? key, this.showAll = false, required this.plans})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final List<Travel> travels = [
-      Travel(title: 'Trip 1', lastModifiedDate: DateTime.now()),
-      Travel(
-          title: 'Trip 2',
-          lastModifiedDate: DateTime.now().subtract(const Duration(days: 1))),
-    ];
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      children:
-          List.generate(travels.length < 3 ? travels.length + 1 : 3, (index) {
-        if ((showAll || index < 3) && index < travels.length) {
+      children: List.generate(plans.length < 3 ? plans.length + 1 : 3, (index) {
+        if ((showAll || index < 3) && index < plans.length) {
           return Padding(
             padding:
-                const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10.0),
+            const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10.0),
             child: InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        TravelDetailPage(travel: travels[index]),
-                  ),
-                );
-              },
               child: Container(
                 padding: const EdgeInsets.only(
                   left: 20,
@@ -136,13 +206,13 @@ class MyTravelList extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        travels[index].title,
+                        plans[index].title,
                         style: const TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 10),
                       Text(
-                        '최근수정일: ${travels[index].lastModifiedDate}',
+                        '최근 수정일 : ${plans[index].lastModifiedDate}',
                         style: TextStyle(
                             fontSize: 14, color: Colors.grey.shade600),
                       ),
@@ -152,10 +222,10 @@ class MyTravelList extends StatelessWidget {
               ),
             ),
           );
-        } else if (travels.length < 3) {
+        } else if (plans.length < 3) {
           return Padding(
             padding:
-                const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10.0),
+            const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10.0),
             child: InkWell(
               onTap: () {
                 Navigator.push(
@@ -188,6 +258,9 @@ class MyTravelList extends StatelessWidget {
     );
   }
 }
+
+
+
 
 class HeartList extends StatefulWidget {
   const HeartList({Key? key}) : super(key: key);
@@ -312,31 +385,58 @@ class AllMyTravelList extends StatefulWidget {
 }
 
 class _AllMyTravelListState extends State<AllMyTravelList> {
+  List<Plan> plans = [];
+
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('All Travel Plans'),
-      ),
-      body: const MyTravelList(showAll: true),
-    );
+  void initState() {
+    super.initState();
   }
-}
 
-// 게시물 상세페이지 (임시)
-class TravelDetailPage extends StatelessWidget {
-  final Travel travel;
-
-  const TravelDetailPage({Key? key, required this.travel}) : super(key: key);
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    fetchPlans(context).then((loadedPlans) {
+      setState(() {
+        plans = loadedPlans;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(travel.title),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        shadowColor:
+        Colors.transparent,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
-      body: Center(
-        child: Text('Travel details for ${travel.title}'),
+      body:Container(
+        padding: const EdgeInsets.only(top:10.0),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left:20.0, bottom: 20.0),
+              child: Row(
+                children: [
+                  Icon(Icons.airplanemode_active, color: signatureColor),
+                  const SizedBox(width: 6),
+                  Text('내 여행 목록', style: heading1, textAlign: TextAlign.left),
+                ],
+              ),
+            ),
+            MyTravelList(showAll: false, plans: plans),
+          ],
+      ),
       ),
     );
   }
