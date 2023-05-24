@@ -1,10 +1,19 @@
 import 'package:fasttrip/pages/Feed.dart';
 import 'package:fasttrip/pages/Home.dart';
+import 'package:fasttrip/pages/Mypage.dart';
+import 'package:fasttrip/pages/Trip.dart';
 import 'package:flutter/material.dart';
 import './style.dart' as theme;
+import 'package:provider/provider.dart';
+import './token_model.dart';
 
 void main() {
-  runApp(MaterialApp(theme: theme.mainTheme, home: const MyApp()));
+  runApp(
+      ChangeNotifierProvider(
+        create: (context) => TokenModel(),
+        child: MaterialApp(theme: theme.mainTheme, home: const MyApp()),
+      ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -18,13 +27,13 @@ class MyApp extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         body: TabBarView(
           children: [
-            HomePage(),
-            Text('여행'),
+            const HomePage(),
+            const TripPage(),
             FeedPage(),
-            Text('마이페이지'),
+            const MyPage(),
           ],
         ),
-        bottomNavigationBar: BottomBar(),
+        bottomNavigationBar: const BottomBar(),
       ),
     );
   }
@@ -43,9 +52,9 @@ class BottomBar extends StatelessWidget {
         padding: const EdgeInsets.only(bottom: 10, top: 5),
         child: const TabBar(
           indicatorSize: TabBarIndicatorSize.label,
-          indicatorColor: Colors.lightBlue,
+          indicatorColor: Color(0xff9CC4FF),
           indicatorWeight: 4,
-          labelColor: Colors.black,
+          labelColor: Color(0xff9CC4FF),
           unselectedLabelColor: Colors.black38,
           labelStyle: TextStyle(
             fontSize: 10,

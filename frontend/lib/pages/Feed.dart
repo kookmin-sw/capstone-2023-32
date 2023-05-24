@@ -1,51 +1,112 @@
+import 'package:fasttrip/pages/PostDetailPage.dart';
 import 'package:flutter/material.dart';
 import 'package:fasttrip/style.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
-class Post {
-  final String imageUrl;
-  final String title;
-  final List<String> tags;
+// data fetch
+// 받아올 데이터 정의
+class Plan {
+  String planId;
+  String userId;
+  String title;
+  int like;
+  List<String> tags;
+  String comment;
+  String imgUrl;
+  bool heart;
 
-  Post({required this.imageUrl, required this.title, required this.tags});
+  Plan({
+    required this.planId,
+    required this.userId,
+    required this.title,
+    required this.like,
+    required this.tags,
+    required this.comment,
+    required this.imgUrl,
+    required this.heart
+  });
+
+  factory Plan.fromJson(Map<String, dynamic> json){
+    return Plan(
+      planId: (json['id'] ?? ''),
+      userId: (json['userId'] ?? ''),
+      title: json['title'] ?? '',
+      like: json['like'] ?? 0,
+      tags: List<String>.from(json['tags'] ?? [],),
+      comment: json['comment'] ?? '',
+      imgUrl: json['image'] ?? '',
+      heart: false,
+    );
+  }
 }
 
+
 class FeedPage extends StatefulWidget {
+  const FeedPage({Key? key}) : super(key: key);
+
   @override
   _FeedPageState createState() => _FeedPageState();
 }
 
 class _FeedPageState extends State<FeedPage> {
-  final List<Post> _data = [
-    Post(
-      imageUrl: 'https://images.unsplash.com/photo-1583265266785-aab9e443ee68?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1374&q=80',
-      title: '파리 여행은 에펠탑부터',
-      tags: ['계획', '프랑스', '유럽여행', '혼자'],
-    ),
-    Post(
-      imageUrl: 'https://images.unsplash.com/photo-1553195029-754fbd369560?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1476&q=80',
-      title: '휴양지하면 보라카이',
-      tags: ['계획', '보라카이', '휴가', '가족'],
-    ),
-    Post(
-      imageUrl: 'https://images.unsplash.com/photo-1590253230532-a67f6bc61c9e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1431&q=80',
-      title: 'Chainsawman 님의 여행 계획',
-      tags: ['모집', '일본', '오사카', '단체(혼성)'],
-    ),
-
-    // ...
-  ];
-
-  List<Post> _filteredData = [];
+  List<Plan> _filteredData = [];
   String _searchText = '';
+  final List<String> _selectedFilters = [];
 
-  List<String> _selectedFilters = [];
+  List<Plan> plans = [];
+
+  void fetchData() async {
+    var url = Uri.parse('http://3.38.99.234:8080/api/plan/list');
+    var requestBody = jsonEncode({
+      "title": "",
+      "tags": [],
+    });
+
+    var response = await http.post(
+      url,
+      body: requestBody,
+      headers: {"Content-Type": "application/json"},
+    );
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(utf8.decode(response.bodyBytes)) as List;
+      List<Plan> fetchedPlans = data.map((item) => Plan.fromJson(item)).toList();
+      for (var i = 0; i < fetchedPlans.length; i++) {
+        if (i == 1 || i == 2) {
+          fetchedPlans[i].heart = true;
+        }
+      }
+
+      setState(() {
+        plans = fetchedPlans;
+        _filteredData = plans;
+      });
+      print('----------------------------------------------');
+      for (Plan plan in plans) {
+        print('Plan ID: ${plan.planId}');
+        print('User ID: ${plan.userId}');
+        print('Title: ${plan.title}');
+        print('like: ${plan.like}');
+        print('Tags: ${plan.tags.join(', ')}');
+        print('comment: ${plan.comment}');
+        print('imgUrl: ${plan.imgUrl}');
+      }
+    } else {
+      print(response.statusCode);
+      print('failed to load');
+    }
+  }
+
+
 
   @override
   void initState() {
     super.initState();
-    _filteredData = _data;
+    fetchData();
   }
 
+// 태그에 대한 필터만 적용
   void _applyFilter(String filter) {
     setState(() {
       if (_selectedFilters.contains(filter)) {
@@ -53,24 +114,22 @@ class _FeedPageState extends State<FeedPage> {
       } else {
         _selectedFilters.add(filter);
       }
-
-      if (_selectedFilters.isEmpty) {
-        _filteredData = _data;
-      } else {
-        _filteredData = _data
-            .where((post) => _selectedFilters.every((tag) => post.tags.contains(tag)))
-            .toList();
-      }
     });
+    // 현재 검색text를 호출하여 결과 확인
+    _search(_searchText);
   }
 
   void _search(String searchText) {
     setState(() {
       _searchText = searchText;
-      _filteredData = _data
+      _filteredData = plans
           .where((post) =>
-      post.title.toLowerCase().contains(_searchText.toLowerCase()) &&
-          (_selectedFilters.isEmpty || post.tags.any((tag) => _selectedFilters.contains(tag))))
+      // 검색 텍스트가 title, contents, tag에 있는지 확인
+      (post.title.toLowerCase().contains(_searchText.toLowerCase()) ||
+          post.comment.toLowerCase().contains(_searchText.toLowerCase()) ||
+          post.tags.any((tag) => tag.toLowerCase().contains(_searchText.toLowerCase()))) &&
+          // 게시물에 일치하는 태그가 있는지 확인
+          (_selectedFilters.isEmpty || _selectedFilters.any((tag) => post.tags.contains(tag))))
           .toList();
     });
   }
@@ -80,33 +139,42 @@ class _FeedPageState extends State<FeedPage> {
     return Column(
       children: [
         Container(
-          padding: const EdgeInsets.only(top:50.0, left:20.0),
+          padding: const EdgeInsets.only(top: 50.0, left: 20.0),
           alignment: Alignment.centerLeft,
-          child: Text('피드', style: heading1, textAlign: TextAlign.left),
+          child: Row(
+          children: [
+          Icon(Icons.library_books_rounded, color: signatureColor),
+          const SizedBox(width: 6),
+          Text('피드', style: heading1, textAlign: TextAlign.left),
+          ],
+          ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(20.0),
+        Container(
+          padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10.0, top: 20.0),
+          height: MediaQuery.of(context).size.height * 0.1,
           child: TextField(
-
             onChanged: (value) {
               _search(value);
             },
             decoration: InputDecoration(
               hintText: '검색어를 입력해주세요',
-              prefixIcon: Icon(Icons.search, color: Colors.grey,),
-              border: OutlineInputBorder(
+              prefixIcon: const Icon(
+                Icons.search,
+                color: Colors.grey,
+              ),
+              border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(
                   Radius.circular(25.0),
                 ),
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.all(
+                borderRadius: const BorderRadius.all(
                   Radius.circular(25.0),
                 ),
-                borderSide: BorderSide(color:Colors.grey.shade400),
+                borderSide: BorderSide(color: Colors.grey.shade400),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.all(
+                borderRadius: const BorderRadius.all(
                   Radius.circular(25.0),
                 ),
                 borderSide: BorderSide(color: Colors.grey.shade400),
@@ -115,20 +183,12 @@ class _FeedPageState extends State<FeedPage> {
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(left: 30, bottom: 20,),
+          padding: const EdgeInsets.only(
+            left: 30,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Container(
-              //   padding: EdgeInsets.only(left: 15,),
-              //   child: Row(
-              //     children: [
-              //       Icon(Icons.filter_alt, size: 16,),
-              //       Text(' 필터', style: TextStyle(fontSize: 15, fontWeight:FontWeight.bold),),
-              //     ],
-              //   ),
-              // ),
-              // SizedBox(height:8.0),
               Container(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -137,10 +197,13 @@ class _FeedPageState extends State<FeedPage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Container(
-                          width: MediaQuery.of(context).size.width*0.21,
-                          padding: const EdgeInsets.only(right:40.0),
+                          width: MediaQuery.of(context).size.width * 0.21,
+                          padding: const EdgeInsets.only(right: 40.0),
                           alignment: Alignment.center,
-                          child: Text('누구와', style: heading2, ),
+                          child: Text(
+                            '누구와',
+                            style: heading2,
+                          ),
                         ),
                         FilterButton(
                           label: '혼자',
@@ -168,10 +231,47 @@ class _FeedPageState extends State<FeedPage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Container(
-                          width: MediaQuery.of(context).size.width*0.2,
-                          padding: const EdgeInsets.only(right:40.0),
+                          width: MediaQuery.of(context).size.width * 0.21,
+                          padding: const EdgeInsets.only(right: 40.0),
                           alignment: Alignment.center,
-                          child: Text('종류', style: heading2, ),
+                          child: Text(
+                            '종류',
+                            style: heading2,
+                          ),
+                        ),
+                        FilterButton(
+                          label: '여행',
+                          selected: _selectedFilters.contains('여행'),
+                          onPressed: () => _applyFilter('여행'),
+                        ),
+                        FilterButton(
+                          label: '모집',
+                          selected: _selectedFilters.contains('모집'),
+                          onPressed: () => _applyFilter('모집'),
+                        ),
+                        FilterButton(
+                          label: '최신',
+                          selected: _selectedFilters.contains('최신'),
+                          onPressed: () => _applyFilter('최신'),
+                        ),
+                        FilterButton(
+                          label: '인기',
+                          selected: _selectedFilters.contains('인기'),
+                          onPressed: () => _applyFilter('인기'),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.21,
+                          padding: const EdgeInsets.only(right: 40.0),
+                          alignment: Alignment.center,
+                          child: Text(
+                            '기타',
+                            style: heading2,
+                          ),
                         ),
                         FilterButton(
                           label: '단체(여자)',
@@ -190,37 +290,6 @@ class _FeedPageState extends State<FeedPage> {
                         ),
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width*0.2,
-                          padding: const EdgeInsets.only(right:40.0),
-                          alignment: Alignment.center,
-                          child: Text('기타', style: heading2, ),
-                        ),
-                        FilterButton(
-                          label: '최신',
-                          selected: _selectedFilters.contains('최신'),
-                          onPressed: () => _applyFilter('최신'),
-                        ),
-                        FilterButton(
-                          label: '인기',
-                          selected: _selectedFilters.contains('인기'),
-                          onPressed: () => _applyFilter('인기'),
-                        ),
-                        FilterButton(
-                          label: '계획',
-                          selected: _selectedFilters.contains('계획'),
-                          onPressed: () => _applyFilter('계획'),
-                        ),
-                        FilterButton(
-                          label: '모집',
-                          selected: _selectedFilters.contains('모집'),
-                          onPressed: () => _applyFilter('모집'),
-                        ),
-                      ],
-                    ),
                   ],
                 ),
               ),
@@ -236,37 +305,76 @@ class _FeedPageState extends State<FeedPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => PostDetailPage(post: _filteredData[index]),
+                      builder: (context) =>
+                          PostDetailPage(planId: _filteredData[index].planId),
                     ),
                   );
                 },
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom:20.0),
+                  padding: const EdgeInsets.only(
+                      left: 20.0, right: 20.0, bottom: 20.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Image.network(
-                          _filteredData[index].imageUrl,
-                          width: double.infinity,
-                          height: 200,
-                          fit: BoxFit.cover),
-                      SizedBox(height: 10.0),
+                      Stack(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10.0),
+                            child: Image.network(_filteredData[index].imgUrl,
+                                width: double.infinity,
+                                height: 200,
+                                fit: BoxFit.cover),
+                          ),
+                          Positioned(
+                            top: 5,
+                            right: 5,
+                            child: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  if (_filteredData[index].heart) {
+                                    _filteredData[index].heart = false;
+                                  } else {
+                                    _filteredData[index].heart = true;
+                                  }
+                                });
+                              },
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints(),
+                              icon: Icon(
+                                _filteredData[index].heart
+                                    ? Icons.favorite
+                                    : Icons.favorite_border,
+                                color: _filteredData[index].heart
+                                    ? Color(0xffFA6D6D)
+                                    : Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10.0),
                       Text(
                         _filteredData[index].title,
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(height: 10.0),
+                      const SizedBox(height: 10.0),
                       Wrap(
                         spacing: 8.0,
-                        children: _filteredData[index].tags
-                            .map((tag) => Chip(
-                          label: Text(
-                            tag,
-                            style: TextStyle(color: Colors.blue),
-                          ),
-                          backgroundColor: Colors.transparent,
-                          side: BorderSide(color: Colors.blue, width: 1),
-                        ),).toList(),
+                        children: _filteredData[index]
+                            .tags
+                            .map(
+                              (tag) => Chip(
+                                label: Text(
+                                  tag,
+                                  style: const TextStyle(color: Color(0xff6DA5FA)),
+                                ),
+                                backgroundColor: Colors.transparent,
+                                side: const BorderSide(
+                                    color: Color(0xff6DA5FA), width: 1),
+                              ),
+                            )
+                            .toList(),
                       ),
                     ],
                   ),
@@ -285,44 +393,26 @@ class FilterButton extends StatelessWidget {
   final bool selected;
   final VoidCallback onPressed;
 
-  FilterButton({
+  const FilterButton({
+    Key? key,
     required this.label,
     required this.selected,
     required this.onPressed,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: onPressed,
       style: TextButton.styleFrom(
+        foregroundColor: selected ? Colors.blue : Colors.black,
         alignment: Alignment.centerLeft,
-        primary: selected ? Colors.blue : Colors.black,
         backgroundColor: Colors.transparent,
-        padding: EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
       ),
       child: Text(
         label,
-        style: TextStyle(fontSize: 13.0),
-      ),
-    );
-  }
-}
-
-// 게시물 상세 페이지
-class PostDetailPage extends StatelessWidget {
-  final Post post;
-
-  PostDetailPage({required this.post});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('게시물 상세'),
-      ),
-      body: Center(
-        child: Text('제목 : ${post.title}'),
+        style: const TextStyle(fontSize: 13.0),
       ),
     );
   }
