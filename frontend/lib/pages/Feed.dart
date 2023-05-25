@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:fasttrip/style.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+import '../token_model.dart';
 
 // data fetch
 // 받아올 데이터 정의
@@ -14,7 +16,7 @@ class Plan {
   List<String> tags;
   String comment;
   String imgUrl;
-  bool heart;
+  bool liked;
 
   Plan({
     required this.planId,
@@ -24,7 +26,7 @@ class Plan {
     required this.tags,
     required this.comment,
     required this.imgUrl,
-    required this.heart
+    required this.liked
   });
 
   factory Plan.fromJson(Map<String, dynamic> json){
@@ -36,7 +38,7 @@ class Plan {
       tags: List<String>.from(json['tags'] ?? [],),
       comment: json['comment'] ?? '',
       imgUrl: json['image'] ?? '',
-      heart: false,
+      liked: json['liked'] ?? false,
     );
   }
 }
@@ -57,6 +59,9 @@ class _FeedPageState extends State<FeedPage> {
   List<Plan> plans = [];
 
   void fetchData() async {
+    final tokenModel = Provider.of<TokenModel>(context, listen: false);
+    final token = tokenModel.token;
+
     var url = Uri.parse('http://3.38.99.234:8080/api/plan/list');
     var requestBody = jsonEncode({
       "title": "",
@@ -66,17 +71,16 @@ class _FeedPageState extends State<FeedPage> {
     var response = await http.post(
       url,
       body: requestBody,
-      headers: {"Content-Type": "application/json"},
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "Auth": '$token',
+      },
     );
 
     if (response.statusCode == 200) {
       var data = jsonDecode(utf8.decode(response.bodyBytes)) as List;
       List<Plan> fetchedPlans = data.map((item) => Plan.fromJson(item)).toList();
-      for (var i = 0; i < fetchedPlans.length; i++) {
-        if (i == 1 || i == 2) {
-          fetchedPlans[i].heart = true;
-        }
-      }
 
       setState(() {
         plans = fetchedPlans;
@@ -97,6 +101,7 @@ class _FeedPageState extends State<FeedPage> {
       print('failed to load');
     }
   }
+
 
 
 
@@ -331,22 +336,14 @@ class _FeedPageState extends State<FeedPage> {
                             child: IconButton(
                               onPressed: () {
                                 setState(() {
-                                  if (_filteredData[index].heart) {
-                                    _filteredData[index].heart = false;
-                                  } else {
-                                    _filteredData[index].heart = true;
-                                  }
+                                  _filteredData[index].liked = !_filteredData[index].liked;
                                 });
                               },
                               padding: EdgeInsets.zero,
                               constraints: const BoxConstraints(),
                               icon: Icon(
-                                _filteredData[index].heart
-                                    ? Icons.favorite
-                                    : Icons.favorite_border,
-                                color: _filteredData[index].heart
-                                    ? Color(0xffFA6D6D)
-                                    : Colors.white,
+                                _filteredData[index].liked ? Icons.favorite : Icons.favorite_border,
+                                color: _filteredData[index].liked ? Color(0xffFA6D6D) : Colors.white,
                               ),
                             ),
                           ),
