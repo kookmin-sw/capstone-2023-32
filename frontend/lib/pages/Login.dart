@@ -1,9 +1,11 @@
+import 'package:fasttrip/pages/Trip.dart';
 import 'package:flutter/material.dart';
 import 'package:fasttrip/pages/Signup.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:provider/provider.dart';
 import '../token_model.dart';
+
 
 Future<String> sendPostRequest(String id) async {
   final response = await http.post(
@@ -184,6 +186,7 @@ class _LogInState extends State<LogIn> {
                           print(enteredId);
                           print('Received token: $token');
                           Provider.of<TokenModel>(context, listen: false).token = token;
+                          Navigator.pop(context);
                         },
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
