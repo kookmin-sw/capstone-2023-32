@@ -60,9 +60,6 @@ class _SearchBarState extends State<SearchBar> {
       '동문시장',
       '성산일출봉',
       '흑돼지',
-      'Suggestion 6',
-      'Suggestion 7',
-      'Suggestion 8',
     ];
 
     return Container(
