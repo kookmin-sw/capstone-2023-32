@@ -1,4 +1,3 @@
-import 'package:fasttrip/Data/PostData.dart';
 import 'package:fasttrip/pages/MakePlan.dart';
 import 'package:fasttrip/pages/PostDetailPage.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +19,7 @@ class Plan {
   String comment;
   String imgUrl;
   DateTime lastModifiedDate;
+  bool liked;
 
   Plan({
     required this.planId,
@@ -30,6 +30,7 @@ class Plan {
     required this.comment,
     required this.imgUrl,
     required this.lastModifiedDate,
+    required this.liked,
   });
 
   factory Plan.fromJson(Map<String, dynamic> json){
@@ -45,6 +46,7 @@ class Plan {
       comment: json['comment'] ?? '',
       imgUrl: json['image'] ?? '',
       lastModifiedDate: dateWithoutMicroseconds,
+      liked: json['liked'] ?? false,
     );
   }
 }
@@ -259,6 +261,29 @@ class MyTravelList extends StatelessWidget {
   }
 }
 
+Future<List<Plan>> fetchPlans2(BuildContext context) async {
+  final tokenModel = Provider.of<TokenModel>(context, listen: false);
+  final token = tokenModel.token;
+
+  final response = await http.get(
+    Uri.parse('http://3.38.99.234:8080/api/plan/likedList'),
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Auth': '$token',
+    },
+  );
+
+  if (response.statusCode == 200) {
+    String responseBody = utf8.decode(response.bodyBytes);
+    List<dynamic> body = jsonDecode(responseBody);
+    List<Plan> plans = body.map((dynamic item) => Plan.fromJson(item)).toList();
+    return plans;
+  } else {
+    throw Exception('Failed to load plans');
+  }
+}
+
 
 
 
@@ -266,29 +291,40 @@ class HeartList extends StatefulWidget {
   const HeartList({Key? key}) : super(key: key);
 
   @override
-  State<HeartList> createState() => _HeartListState();
+  _HeartListState createState() => _HeartListState();
 }
 
+
 class _HeartListState extends State<HeartList> {
+  List<Plan> likedPlans = [];
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    fetchPlans2(context).then((loadedPlans) {
+      setState(() {
+        likedPlans = loadedPlans.where((Plan plan) => plan.liked).toList();
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final filteredData = data.where((post) => post.heart).toList();
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: List.generate(filteredData.length, (index) {
+      children: List.generate(likedPlans.length, (index) {
         return InkWell(
           onTap: () {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => PostDetailPage(planId: "",),
+                builder: (context) => PostDetailPage(planId: likedPlans[index].planId),
               ),
             );
           },
           child: Padding(
             padding:
-                const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
+            const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -297,7 +333,7 @@ class _HeartListState extends State<HeartList> {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(10.0),
                       child: Image.network(
-                        filteredData[index].imageUrl,
+                        likedPlans[index].imgUrl,
                         width: double.infinity,
                         height: 200,
                         fit: BoxFit.cover,
@@ -309,11 +345,7 @@ class _HeartListState extends State<HeartList> {
                       child: IconButton(
                         onPressed: () {
                           setState(() {
-                            if (filteredData[index].heart) {
-                              filteredData[index].heart = false;
-                            } else {
-                              filteredData[index].heart = true;
-                            }
+                            likedPlans[index].liked = !likedPlans[index].liked;
                           });
                         },
                         padding: EdgeInsets.zero,
@@ -328,24 +360,24 @@ class _HeartListState extends State<HeartList> {
                 ),
                 const SizedBox(height: 10.0),
                 Text(
-                  filteredData[index].title,
+                  likedPlans[index].title,
                   style: const TextStyle(
                       fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 10.0),
                 Wrap(
                   spacing: 8.0,
-                  children: filteredData[index]
+                  children: likedPlans[index]
                       .tags
                       .map((tag) => Chip(
-                            label: Text(
-                              tag,
-                              style: const TextStyle(color: Color(0xff6DA5FA)),
-                            ),
-                            backgroundColor: Colors.transparent,
-                            side: const BorderSide(
-                                color: Color(0xff6DA5FA), width: 1),
-                          ))
+                    label: Text(
+                      tag,
+                      style: const TextStyle(color: Color(0xff6DA5FA)),
+                    ),
+                    backgroundColor: Colors.transparent,
+                    side: const BorderSide(
+                        color: Color(0xff6DA5FA), width: 1),
+                  ))
                       .toList(),
                 ),
               ],
@@ -356,6 +388,7 @@ class _HeartListState extends State<HeartList> {
     );
   }
 }
+
 
 class MoreButton extends StatelessWidget {
   const MoreButton({Key? key}) : super(key: key);
