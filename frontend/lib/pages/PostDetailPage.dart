@@ -5,6 +5,8 @@ import 'package:fasttrip/style.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
+import 'package:provider/provider.dart';
+import '../token_model.dart';
 
 class PostDetailPage extends StatefulWidget {
   final String planId;
@@ -26,11 +28,35 @@ class _PostDetailPageState extends State<PostDetailPage> {
     fetchPlanData();
   }
 
+
+
+  Future<Map<String, dynamic>> getLiked(String planId) async {
+    final tokenModel = Provider.of<TokenModel>(context, listen: false);
+    final token = tokenModel.token;
+
+    final response = await http.get(
+      Uri.parse('http://3.38.99.234:8080/api/plan/like?planId=${planId}'),
+      headers: <String, String>{
+        'Auth': '$token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      print('Liked success');
+      return {'status': 'success'};
+    } else {
+      print(response.statusCode);
+      throw Exception('Failed to like plan');
+    }
+  }
+
+
   Future<void> fetchPlanData() async {
     try {
       final data = await getPlanData(widget.planId);
       setState(() {
         planData = data;
+        isLiked = data['plan']['liked'];
       });
     } catch (e) {
       print('Failed to load plan: $e');
@@ -84,8 +110,13 @@ class _PostDetailPageState extends State<PostDetailPage> {
               Icons.arrow_back,
               color: Colors.black,
             ),
-            onPressed: () {
-              Navigator.pop(context);
+            onPressed: () async {
+              if (widget.planId != null) {
+                await getLiked(widget.planId);
+                Navigator.pop(context);
+              } else {
+                print('planId is null');
+              }
             },
           ),
         ),
@@ -228,14 +259,14 @@ class _PostDetailPageState extends State<PostDetailPage> {
                         setState(() {
                           isLiked = !isLiked;
                           if (isLiked) {
-                            plan['like'] += 1;
+                            planData!['plan']['like'] += 1;
                           } else {
-                            plan['like'] -= 1;
+                            planData!['plan']['like'] -= 1;
                           }
                         });
                       },
                     ),
-                    Text(plan['like'].toString()),
+                    Text(planData!['plan']['like'].toString()),
                   ],
                 ),
               ),
