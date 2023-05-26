@@ -40,11 +40,8 @@ A well-organized travel plan saves you money and time so you can enjoy a higher 
 ####  시스템 구성도
 ![](https://cdn.discordapp.com/attachments/1078984933214781631/1092056248544919674/image.png)
 
-#### 분야별 스택 사용법
-- [Frontend]() (준비중)
-- [Backend]() (준비중)
 
 ---
 ### 📑 6. 기타
 - Co-working : Jira & Confluence
-- [API 명세서]() (준비중)
+- [API 명세서](https://www.notion.so/API-32a4f726793c4a919f100824fdfd2c8f?pvs=4)
