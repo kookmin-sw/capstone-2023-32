@@ -23,7 +23,8 @@ A well-organized travel plan saves you money and time so you can enjoy a higher 
 ### 🎥 3. 소개 영상
 
 - [figma 프로토타입](https://www.figma.com/proto/p6kOn3D1GrinGrJ9Ji9W9M/%EB%81%84%EC%A0%81%EB%81%84%EC%A0%81?page-id=0%3A1&node-id=124-516&viewport=-186%2C-41%2C0.26&scaling=scale-down&starting-point-node-id=124%3A516)
-- 영상 (준비중)
+- 영상
+- [![Video Label](http://img.youtube.com/vi/wuzrKu1xArU/0.jpg)](https:www.youtube.com/watch?v=wuzrKu1xArU)
 
 ---
 ### ✈️ 4. 팀 소개
