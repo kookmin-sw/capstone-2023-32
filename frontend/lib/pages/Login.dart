@@ -185,9 +185,10 @@ class _LogInState extends State<LogIn> {
                           String token = await sendPostRequest(enteredId);
                           print(enteredId);
                           print('Received token: $token');
-                          Provider.of<TokenModel>(context, listen: false).token = token;
+                          await Provider.of<TokenModel>(context, listen: false).setToken(token);
                           Navigator.pop(context);
                         },
+
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
                           backgroundColor: const Color(0xFF9CC4FF),
