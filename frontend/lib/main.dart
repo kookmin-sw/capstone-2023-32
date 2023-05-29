@@ -9,15 +9,69 @@ import './token_model.dart';
 
 void main() {
   runApp(
-      ChangeNotifierProvider(
-        create: (context) => TokenModel(),
-        child: MaterialApp(theme: theme.mainTheme, home: const MyApp()),
-      ),
+    ChangeNotifierProvider(
+      create: (context) => TokenModel(),
+      child: MaterialApp(theme: theme.mainTheme, home: StartUpView()),
+    ),
   );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class StartUpView extends StatefulWidget {
+  @override
+  _StartUpViewState createState() => _StartUpViewState();
+}
+
+class _StartUpViewState extends State<StartUpView> {
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
+  Future<void> loadData() async {
+    await Provider.of<TokenModel>(context, listen: false).loadToken();
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => MyApp(),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(), // Display a loading spinner
+      ),
+    );
+  }
+}
+
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance?.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance?.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      await Provider.of<TokenModel>(context, listen: false).loadToken();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
