@@ -9,7 +9,6 @@ import 'Map.dart';
 
 // https://unsplash.com/ko/%EC%82%AC%EC%A7%84/x-S6ZlJ6dP0
 
-
 var subTitle = TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
 var uuid = Uuid();
 
@@ -51,14 +50,13 @@ class _MakePageState extends State<MakePage> {
   final TextEditingController imgcontroller = TextEditingController();
   DateTimeRange? _dateRange;
   String planId = uuid.v4();
-  String userId = "UID";
+  String userId = "capstone32";
   String title = '';
   List<String> tags = [];
   Map<int, List<MapData>> locationData = {};
   var additionalInfo = [];
   String comment = '';
   String imgUrl = '';
-
 
   void sendData() async {
     setState(() {
@@ -83,7 +81,7 @@ class _MakePageState extends State<MakePage> {
     var requestBody = {
       "plan": {
         "p_id": planId,
-        "user": {"id": userId},
+        "userId": userId,
         "title": title,
         "tags": tags,
         "comment": comment,
@@ -92,7 +90,9 @@ class _MakePageState extends State<MakePage> {
       "pplan": pplan,
     };
 
-    var url = Uri.parse('http://3.38.99.234:8080/api/plan');
+    print(requestBody);
+
+    var url = Uri.parse('http://3.38.99.234:8080/api/plan/save');
     var response = await http.post(
       url,
       headers: <String, String>{
@@ -269,19 +269,14 @@ class _MakePageState extends State<MakePage> {
             decoration: InputDecoration(
               hintText: '썸네일 이미지 주소를 입력해주세요.',
               hintStyle: TextStyle(color: Colors.grey),
-              prefixIcon:
-              Icon(
+              prefixIcon: Icon(
                 Icons.camera,
                 color: Colors.grey,
               ),
-
             ),
           ),
         ),
-        SizedBox(
-          height: 30
-        ),
-
+        SizedBox(height: 30),
 
         // ** 계획 작성 **
         Container(
@@ -296,10 +291,7 @@ class _MakePageState extends State<MakePage> {
                   _dateRange == null
                       ? ''
                       : '${DateFormat('MM/dd/yyyy').format(_dateRange!.start)} - ${DateFormat('MM/dd/yyyy').format(_dateRange!.end)}',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500
-                  ),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                 ),
               ),
               SizedBox(height: 20),
@@ -307,7 +299,9 @@ class _MakePageState extends State<MakePage> {
                 alignment: Alignment.center,
                 child: OutlinedButton(
                   child: Text('일정 선택하기',
-                      style: TextStyle(color: Color(0xff6DA5FA), fontWeight: FontWeight.bold)),
+                      style: TextStyle(
+                          color: Color(0xff6DA5FA),
+                          fontWeight: FontWeight.bold)),
                   onPressed: () => _selectDateRange(context),
                 ),
               ),
@@ -324,8 +318,10 @@ class _MakePageState extends State<MakePage> {
               // ** 1일차~n일차 **
               if (_dateRange != null)
                 for (int i = 1;
-                i <= _dateRange!.end.difference(_dateRange!.start).inDays + 1;
-                i++)
+                    i <=
+                        _dateRange!.end.difference(_dateRange!.start).inDays +
+                            1;
+                    i++)
                   Column(
                     children: [
                       Container(
@@ -360,23 +356,31 @@ class _MakePageState extends State<MakePage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   if (locationData[i] != null)
-                                    for (int j = 0; j < locationData[i]!.length; j++)
+                                    for (int j = 0;
+                                        j < locationData[i]!.length;
+                                        j++)
                                       Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             '${j + 1}. ${locationData[i]![j].name}',
-                                            style: TextStyle(fontSize: 20, color: Color(0xff68a4ff)),
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                color: Color(0xff68a4ff)),
                                           ),
                                           Text(
                                             locationData[i]![j].address,
-                                            style: TextStyle(fontSize: 13, color: Colors.grey),
+                                            style: TextStyle(
+                                                fontSize: 13,
+                                                color: Colors.grey),
                                           ),
                                         ],
                                       ),
                                   Text(
                                     '+',
-                                    style: TextStyle(fontSize: 20, color: Color(0xff68a4ff)),
+                                    style: TextStyle(
+                                        fontSize: 20, color: Color(0xff68a4ff)),
                                   ),
                                 ],
                               ),
@@ -409,11 +413,9 @@ class _MakePageState extends State<MakePage> {
                     PostRequest(sendData: sendData),
                   ],
                 )
-
             ],
           ),
         )
-
       ],
     );
   }
